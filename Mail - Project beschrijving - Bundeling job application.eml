@@ -1,0 +1,655 @@
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+Return-Path: <m.mols@bundeling.com>
+Delivered-To: robert@coolwijk.nl
+Received: from black-mail.nl
+	by black-mail.nl with LMTP
+	id 8WRSJiWTIWo1KxIA2zHy5g
+	(envelope-from <m.mols@bundeling.com>)
+	for <robert@coolwijk.nl>; Thu, 04 Jun 2026 17:00:53 +0200
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazlp170110003.outbound.protection.outlook.com [IPv6:2a01:111:f403:c207::3])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp384r1 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by black-mail.nl (Postfix) with ESMTPS id 4gWSRx463gzBVFB
+	for <robert@coolwijk.nl>; Thu, 04 Jun 2026 17:00:45 +0200 (CEST)
+Authentication-Results: black-mail.nl;
+	dkim=pass header.d=clubconnect.onmicrosoft.com header.s=selector2-clubconnect-onmicrosoft-com header.b=I0O78D5b;
+	arc=pass ("microsoft.com:s=arcselector10001:i=1");
+	dmarc=pass (policy=none) header.from=bundeling.com;
+	spf=pass (black-mail.nl: domain of m.mols@bundeling.com designates 2a01:111:f403:c207::3 as permitted sender) smtp.mailfrom=m.mols@bundeling.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xhZvXMd9wkqLKIUWsC9T9YCU9JM2olHldXeE6eZdgCTjzcPCV7HbZTKwo9UBc/5qzOoOKRkb5Qe5iHjyUE7t6LRmUN/upbIpUv04ce2x5htQKrNLFcwgYzYCHEdNCc0jSwyA3qKwpbhlgF1G6D3OiLCwimCUWUO7eGE2+gzEHekz1kRQXYmG/zAEKzd1TSi9jOd4Z/RVRSejscjxin69OYkD6oDmxeexUIYnlUPlr7HoFjCTwdQS7/mtEeHTl1ot0m2/4yXqjU+Q29JKEmslE/fQDRz6McY48grI0IpnJvU98ZMxIb1y1mYnsYeZuY67b4lYO4clpnsvwJ91ZnzYQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+pkVbYlP/lhpxDvSopAEKJih9C6SnTH5j/NuIbdjuoQ=;
+ b=RotIDP/ZG1j1YOBBJQgHRdAp5ZB7Xrk2LitYA5oQN8QyKeunDlW+K0/KNkFvVXsiYinFAf/EDumouZcbY1B6XYRPKC1lHa45bdjL2nQUw4yRHVtrLK6Qko5t6JvFuyqyy5eGuQzRftVvfCM8Yk+N+wi3yQ52VdNsrdhI35ZrjCHwoGwN4edUO6yl6lnRfFVzlHuaDO7ejmIclm4saNdwQBmV0Lk4jqwb744QTXlAMVZrhSiK67aQLiY+M0nz0gh9Qo2vW7nSfGkZivfEc4F5imwL6hzHkwuFtRsCGcv8yjy/NhvZgRfHJU8VDNtPP+Bnhw48h1HbDgQ2MaE/g+/AQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bundeling.com; dmarc=pass action=none
+ header.from=bundeling.com; dkim=pass header.d=bundeling.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=clubconnect.onmicrosoft.com; s=selector2-clubconnect-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+pkVbYlP/lhpxDvSopAEKJih9C6SnTH5j/NuIbdjuoQ=;
+ b=I0O78D5bgk87SM/R6EMRsQ7UkCtrUhviHwkY8OBHrJRpDSpUy1POKguQK52XdmAum3RKh/NQAkVIQdXD+stszaifTfdaVIevwNi0vDZnWTsfHqd7B+spRiLXJdrnPwOulQ2+NC8Tc9P008LW0HREyPChOh9ocXISq6WzCZQVEbc=
+Received: from GVUPR01MB13016.eurprd01.prod.exchangelabs.com
+ (2603:10a6:150:348::22) by MRWPR01MB12852.eurprd01.prod.exchangelabs.com
+ (2603:10a6:501:84::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.92.7; Thu, 4 Jun 2026
+ 15:00:37 +0000
+Received: from GVUPR01MB13016.eurprd01.prod.exchangelabs.com
+ ([fe80::5103:ea7c:a774:4538]) by
+ GVUPR01MB13016.eurprd01.prod.exchangelabs.com ([fe80::5103:ea7c:a774:4538%5])
+ with mapi id 15.21.0092.006; Thu, 4 Jun 2026 15:00:36 +0000
+From: "Milan Mols [Bundeling]" <m.mols@bundeling.com>
+To: "robert@coolwijk.nl" <robert@coolwijk.nl>
+CC: "Erwin Spierings [Bundeling]" <e.spierings@bundeling.com>
+Subject: Bundeling job application
+Thread-Topic: Bundeling job application
+Thread-Index: AQHc9DAEJgHRdcTTEU+QA+MgVH3qOA==
+Date: Thu, 4 Jun 2026 15:00:36 +0000
+Message-ID:
+ <GVUPR01MB13016D3EB7196DDF03942D6829F102@GVUPR01MB13016.eurprd01.prod.exchangelabs.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+x-ms-reactions: allow
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: GVUPR01MB13016:EE_|MRWPR01MB12852:EE_
+x-ms-office365-filtering-correlation-id: 5144a3ba-93cd-479d-30ee-08dec24a090c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|6049299003|1800799024|366016|376014|13003099007|8096899003|4053099003|38070700021|3023799007|18002099003|56012099006;
+x-microsoft-antispam-message-info:
+ 36G6ZCxxkHfe4yRJyND9A7y1caWXzDF9qI9BuhYDMqZ8xi9ObX5o+32BTr4eoHQurW9wi9kqNVz4xhctiCf790pO7H1Hz1xI0gQ4fjesKeqOnzdAqQRCbQD6UQWFfTUU0E3X1rx9Geh1CzUSleX6S1XlWA86QXjhCNbEec8VGRtw7oB8iZDssDS4IsSnv6joqPICI5MLHpTAHV/Jllf6kXI/ehwuZh9NfveY33EclzEPkEBRdKK2QcInzP+dqmDx+jl13/HA8SU4GADEDtYUZopDPGwU1d59R8+SVFcuAZ7Han5vbj0GfnryG5VaGwK5qM/XTA4BLcntpk+kgWb0Kd6Nji4/N/S2o4CUBwvAfbWnU+VHLLU81IlS/ttKQtyDZR9UU6FGPSXt9iLmScc2TDKO5FwNGev9eL/b8njpgVsTlxUDIp/ZvtsosNVkba87reO04nP+Lo2G/eVrX4aUO1I83E2yzYwN+yuhs0nphswOeZsVm28NQjt8sjwt0tKKnPsHn45MPL9a1z4fhZiOI4WgWguagBmIVX6C1xdJIFceOTItyHZvb24dvNImsJ0gj1vQKKyV/edV9rIpMez2ZTDX+1IAMdynu9bTJbrX6pb7U4BdwiksPsRA8D87OGK0pf/GmVfJCFaqkU/eY76rQPJUVOaMRnW+pNFlYsFjBsc86mxE4r9qtOqlNGQ/MOxfPiFSY0FyzM6fbr8+yxtNEQ==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVUPR01MB13016.eurprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230040)(6049299003)(1800799024)(366016)(376014)(13003099007)(8096899003)(4053099003)(38070700021)(3023799007)(18002099003)(56012099006);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?Windows-1252?Q?MzPmq9ZiHDbydxZdRcWhZI6WMqmDXn0KziyGAx1FLH79r4kzizEaPLyo?=
+ =?Windows-1252?Q?5j3AE+f4TNJwq3UH/xRU2qIa5mkSfWgwsCnwApXln6x8ZXwE3V3T1EqX?=
+ =?Windows-1252?Q?Uf4bHvemZbXP8kRpXlpu2B8BJSUHk3rZ2nK12/7KBFgR8lThs0x9N2RQ?=
+ =?Windows-1252?Q?By+YtvoCmQwL+TSj190x1EjJN64y/nU+yOVObxh1fjw8LTzaykCL1tkO?=
+ =?Windows-1252?Q?dytR21NMOIUkVpaKonjD3Ng0KHOxNBh70Wnk1VJqgZCwp3bttPV7fgUn?=
+ =?Windows-1252?Q?5yNL73PQ1TPhvNM58QeQhHyqXUbGiit2cdWf5sFgFxaUxMjWJxXy88PO?=
+ =?Windows-1252?Q?g5jKnIDrPldasOlWPq45VMvzG4N6NCU4nfigxuvP0d8LHglJGnArxOka?=
+ =?Windows-1252?Q?SYJYDqBM38j6rqcDPd5T3G6EWauTMeKeKuoAPkOPNji8sgvnCD2WXmil?=
+ =?Windows-1252?Q?n9BhfN+cC7DyfyGNdL1Vv3odMuolpR3Q0+7ZQL86bob3YvO2wbtqa/Er?=
+ =?Windows-1252?Q?c3l/ypjMN43h+7jJT7Y5Fz8cM7LFiTsnXGbeqksZ5MW7vjmdhrlxyFQe?=
+ =?Windows-1252?Q?Y94CqlyKtzNk+yobyNdSXO0qWT0Pih8Dj6l6IZ/hvFuZMYNZKWNbtFIq?=
+ =?Windows-1252?Q?H2cszUz6TDwGxRhT9QIslCe8RGrTgXTnon6ux2KQ4ooW4nHR0pZbOaCg?=
+ =?Windows-1252?Q?Jdw2f0lx5fVKNebvOyqBGM4JB+BnT+oRupYDKHW/ySZPWgqQPdYoFobB?=
+ =?Windows-1252?Q?OrfX3VucYsqw5U498PN0hSfUIDFJoWZ3E3VQkyuvq2FN/IJHMRBV5B71?=
+ =?Windows-1252?Q?vTnxlZuEj24Bnnn6qIuPSp6zVfeht/diJGheaN5OcZNO6gYKUF61m7Wc?=
+ =?Windows-1252?Q?1L4Q6tBi9zJTF6EcXnvIeQWB7+aG92FMnCjOMZ8W0iQr4/tKfzw89zyK?=
+ =?Windows-1252?Q?SuSpgxyQtFMhY0dI3VkB0k9bG1+tfOmEPWtektgEoLRh/SfB+5VGaKZ1?=
+ =?Windows-1252?Q?4lZBDqlmOp0FzuC5KPZIesvyFB6w0usg0ZqFm1tBu4i61P8L78cnXf/b?=
+ =?Windows-1252?Q?tN7AQkS8EULZxFzXSM7Js6d7U/6I13GtPjq9T8BOJnuPa02tMexy2Twi?=
+ =?Windows-1252?Q?gKZI0/JUKvQVkwKMHokdoRDfPtxqj66/mDUid4rbwAFTNJ/xEyvGydlw?=
+ =?Windows-1252?Q?Pc25a58Zq9Z5UMT36Hx10uePPsJj2RT6Ra9rQDbVMJXvZn7WETm4WwvI?=
+ =?Windows-1252?Q?d8mBmfUfjrs5ras7yMy1KhGsjUQqs5KawtA0FZea826OpI41DpFHqbuP?=
+ =?Windows-1252?Q?cyJJ2LpcixdsS8egtA+zebJBUqRGef5CSrGMYlkfbMlZP76cFzwQdOui?=
+ =?Windows-1252?Q?jiunCeZ4QdwK07asD6w4e4mClbDGTNH5G/+SWAalAu20ncrjz/DEnRgS?=
+ =?Windows-1252?Q?wjyQfKmDvhNHVjpCGKibouqiZ72RfnjbPCU792jF0ny28P8cZXh2jwSC?=
+ =?Windows-1252?Q?NmkxrzGkObDDg3mryGZbRqUGRC49y2E/qfPq7Qddbn5pIHX+/ZbWSvcv?=
+ =?Windows-1252?Q?hbPnfkOcJN7hkRoIslptM5UG0Jaxel4WifREzlnK9smMtgrxhakqBWAs?=
+ =?Windows-1252?Q?Mw5rrLwWoMwNNsPINjfWqWJIgTdtA0hiORJs+nhUp9ltqIDDUPzzkzFl?=
+ =?Windows-1252?Q?UNaIfEIzfeN6nb01ruTDoDz2W4SewFEWdOk7bbcnPwGgVeCcLeyLt5RU?=
+ =?Windows-1252?Q?ZjNWJbW3Y76vQWiW9hmXqY/RqAMnS2z/Q8gE3fXC0AeicANX1ey+/sts?=
+ =?Windows-1252?Q?rs3z5WXieZ5oBFhuJgEgkxJ61eW7MJK3nZz+7QkkyPJo80JzSL5xNXSd?=
+ =?Windows-1252?Q?UmvYXmfA7NRWx1srDRFX1b9IGsbknVrajfE=3D?=
+Content-Type: multipart/related;
+	boundary="_004_GVUPR01MB13016D3EB7196DDF03942D6829F102GVUPR01MB13016eu_";
+	type="multipart/alternative"
+MIME-Version: 1.0
+X-OriginatorOrg: bundeling.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: GVUPR01MB13016.eurprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5144a3ba-93cd-479d-30ee-08dec24a090c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jun 2026 15:00:36.7925
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3806c96a-c37e-410d-aaae-08c72c5c8134
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 54RKnGIFuyheT6jPbUuTP4zo3CQFPuff6DNfeZ2GHRqdm4OabJPzaNw8qiz4azU3DQZJNYuB+OsOPpyW5KxKaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRWPR01MB12852
+X-Spamd-Result: default: False [-2.01 / 50.00];
+	ARC_ALLOW(-1.00)[microsoft.com:s=arcselector10001:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[bundeling.com,none];
+	R_DKIM_ALLOW(-0.20)[clubconnect.onmicrosoft.com:s=selector2-clubconnect-onmicrosoft-com];
+	R_SPF_ALLOW(-0.20)[+ip6:2a01:111:f403:c000::/51];
+	MIME_GOOD(-0.10)[multipart/related,multipart/alternative,text/plain];
+	MX_GOOD(-0.01)[];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+,1:+,2:+,3:~,4:~];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	ASN(0.00)[asn:8075, ipnet:2a01:111:f000::/36, country:US];
+	RCPT_COUNT_TWO(0.00)[2];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RSPAMD_URIBL_FAIL(0.00)[bundeling.com:query timed out,gvupr01mb13016.eurprd01.prod.exchangelabs.com:query timed out];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DKIM_TRACE(0.00)[clubconnect.onmicrosoft.com:+]
+X-Rspamd-Action: no action
+X-Rspamd-Server: black-mail
+X-Rspamd-Queue-Id: 4gWSRx463gzBVFB
+X-Virus: Clean
+X-Spam-Status: No, score=-2.01
+X-Spamd-Bar: --
+
+--_004_GVUPR01MB13016D3EB7196DDF03942D6829F102GVUPR01MB13016eu_
+Content-Type: multipart/alternative;
+	boundary="_000_GVUPR01MB13016D3EB7196DDF03942D6829F102GVUPR01MB13016eu_"
+
+--_000_GVUPR01MB13016D3EB7196DDF03942D6829F102GVUPR01MB13016eu_
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+
+Hey Robert.
+
+Thank you again for your interest in joining our team!
+
+As part of our interview process, we=92d like you to implement a small text=
+-based dungeon crawler game. The goal is not to create a perfect or product=
+ion-ready product, but to demonstrate your coding style, problem-solving, a=
+nd ability to structure a small project.
+
+Requirements
+
+  *   Gameplay
+     *   The game is played in turns.
+     *   The dungeon should be a series of connected rooms.
+     *   The player starts in a given room.
+     *   Each turn, the player can enter a command (e.g., north, south, eas=
+t, west) to move.
+     *   Some rooms should contain monsters, treasure, or be empty.
+     *   If the player encounters a monster, a simple combat mechanic shoul=
+d resolve (e.g., player and monster both have hit points; each round they d=
+eal damage until one is defeated).
+     *   If the player finds treasure, it is collected and added to the sco=
+re/inventory.
+     *   The game ends when:
+        *   The player dies,
+        *
+Or the player finds the =93exit=94 tile.
+
+  *
+Technology
+     *
+The game must be written in PHP.
+     *
+It can be implemented however you prefer (e.g., as a CLI script, or with a =
+simple backend + frontend).
+     *
+The state of the game should be maintained consistently between turns.
+
+  *   What We=92re Looking For
+     *   Clear and maintainable code structure.
+     *   A reasonable separation between logic (game state, rules, combat, =
+dungeon generation) and in/output (display, user input).
+     *   Thoughtful handling of state and interactions.
+     *   Simplicity over complexity, don=92t over-engineer.
+
+Optional Enhancements (if you have extra time)
+
+  *   Randomly generated dungeon layouts.
+  *   Multiple monster types with different strengths.
+  *   Items (e.g., potions, weapons).
+  *   A simple map display showing visited rooms.
+  *   Save/load functionality.
+
+Deliverables
+
+  *   A small PHP project we can run locally.
+  *   Short instructions on how to install and run the game.
+
+
+
+You will have 1 week to complete this assignment (until Friday the 19th of =
+June, 13:00). If you need more time, please let us know before the deadline=
+.
+
+When you=92re done, please send us the code along with your README, or a li=
+nk to a repository.
+
+We=92re looking forward to seeing your solution!
+
+
+
+Milan Mols
+
+Lead developer Web Team
+
+
+
+[signature_3558066537]
+
+Bundeling
+
+www.bundeling.com<http://www.bundeling.com/>
+
+Protonenlaan 2a
+
+5405NE Uden
+
++31 (85) =96 020 0554<tel:+31%2520(85)%2520%E2%80%93%2520020%25200554>
+
+
+
+The content of this email is confidential and intended for the recipient sp=
+ecified in message only. It is strictly forbidden to share any part of this=
+ message with any third party, without a written consent of the sender. If =
+you received this message by mistake, please reply to this message and foll=
+ow with its deletion, so that we can ensure such a mistake does not occur i=
+n the future.
+
+
+
+--_000_GVUPR01MB13016D3EB7196DDF03942D6829F102GVUPR01MB13016eu_
+Content-Type: text/html; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DWindows-1=
+252">
+</head>
+<body>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: white;">
+<span style=3D"font-family: Aptos; font-size: 12pt; color: black;">Hey Robe=
+rt.</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: white; margin: 0cm;">
+<span style=3D"font-family: Aptos, sans-serif; font-size: 12pt; color: blac=
+k;">Thank you again for your interest in joining our team!</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: white; margin: 0cm;">
+<span style=3D"font-family: Aptos, sans-serif; font-size: 12pt; color: blac=
+k;">As part of our interview process, we=92d like you to implement a small
+<b>text-based&nbsp;dungeon&nbsp;crawler</b>&nbsp;game. The goal is not to c=
+reate a perfect or production-ready product, but to demonstrate your coding=
+ style, problem-solving, and ability to structure a small project.</span></=
+p>
+<h3 style=3D"text-align: left; text-indent: 0px; text-transform: none; back=
+ground-color: white; margin-right: 0cm; margin-left: 0cm; font-family: Apto=
+s, sans-serif; font-size: 13.5pt; color: rgb(33, 33, 33);">
+<span style=3D"color: black;">Requirements</span></h3>
+<ul style=3D"text-align: left; margin-bottom: 0cm; background-color: rgb(25=
+5, 255, 255);">
+<li style=3D"font-family: Aptos; font-size: 16px; color: black;"><span styl=
+e=3D"text-transform: none;" role=3D"presentation"><b>Gameplay</b></span></l=
+i><ul style=3D"margin-bottom: 0cm;">
+<li style=3D"font-family: Aptos; font-size: 16px; color: black;"><span styl=
+e=3D"text-transform: none;" role=3D"presentation">The game is played in tur=
+ns.</span></li><li style=3D"font-family: Aptos; font-size: 16px; color: bla=
+ck;"><span style=3D"text-transform: none;" role=3D"presentation">The&nbsp;d=
+ungeon&nbsp;should be a series of connected rooms.</span></li><li style=3D"=
+font-family: Aptos; font-size: 16px; color: black;"><span style=3D"text-tra=
+nsform: none;" role=3D"presentation">The player starts in a given room.</sp=
+an></li><li style=3D"font-family: Aptos; font-size: 16px; color: black;"><s=
+pan style=3D"text-transform: none;" role=3D"presentation">Each turn, the pl=
+ayer can enter a command (e.g.,
+</span><span style=3D"font-family: &quot;Courier New&quot;; font-size: 10pt=
+; text-transform: none;" role=3D"presentation"><code style=3D"font-family: =
+&quot;Courier New&quot;;">north</code></span><span style=3D"text-transform:=
+ none;" role=3D"presentation">,
+</span><span style=3D"font-family: &quot;Courier New&quot;; font-size: 10pt=
+; text-transform: none;" role=3D"presentation"><code style=3D"font-family: =
+&quot;Courier New&quot;;">south</code></span><span style=3D"text-transform:=
+ none;" role=3D"presentation">,
+</span><span style=3D"font-family: &quot;Courier New&quot;; font-size: 10pt=
+; text-transform: none;" role=3D"presentation"><code style=3D"font-family: =
+&quot;Courier New&quot;;">east</code></span><span style=3D"text-transform: =
+none;" role=3D"presentation">,
+</span><span style=3D"font-family: &quot;Courier New&quot;; font-size: 10pt=
+; text-transform: none;" role=3D"presentation"><code style=3D"font-family: =
+&quot;Courier New&quot;;">west</code></span><span style=3D"text-transform: =
+none;" role=3D"presentation">) to move.</span></li><li style=3D"font-family=
+: Aptos; font-size: 16px; color: black;"><span style=3D"text-transform: non=
+e;" role=3D"presentation">Some rooms should contain
+<b>monsters</b>, <b>treasure</b>, or be <b>empty</b>.</span></li><li style=
+=3D"font-family: Aptos; font-size: 16px; color: black;"><span style=3D"text=
+-transform: none;" role=3D"presentation">If the player encounters a monster=
+, a simple combat mechanic should resolve (e.g., player and monster both ha=
+ve hit points; each round they
+ deal damage until one is defeated).</span></li><li style=3D"font-family: A=
+ptos; font-size: 16px; color: black;"><span style=3D"text-transform: none;"=
+ role=3D"presentation">If the player finds treasure, it is collected and ad=
+ded to the score/inventory.</span></li><li style=3D"font-family: Aptos; fon=
+t-size: 16px; color: black;"><span style=3D"text-transform: none;" role=3D"=
+presentation">The game ends when:</span></li><ul style=3D"margin-bottom: 0c=
+m;">
+<li style=3D"font-family: Aptos; font-size: 16px; color: black;"><span styl=
+e=3D"text-transform: none;" role=3D"presentation">The player dies,</span></=
+li><li style=3D"font-family: Aptos; font-size: 16px; color: black;">
+<div role=3D"presentation"><span style=3D"text-transform: none;">Or the pla=
+yer finds the =93exit=94&nbsp;tile.</span></div>
+<div role=3D"presentation" style=3D"direction: ltr;"><span style=3D"text-tr=
+ansform: none;"><br>
+</span></div>
+</li></ul>
+</ul>
+<li style=3D"font-family: Aptos; font-size: 16px; color: black;">
+<div role=3D"presentation"><span style=3D"text-transform: none;"><b>Technol=
+ogy</b></span></div>
+</li><ul data-editing-info=3D"{&quot;applyListStyleFromLevel&quot;:true}" s=
+tyle=3D"text-align: left; margin-bottom: 0cm; list-style-type: circle; back=
+ground-color: rgb(255, 255, 255);">
+<li style=3D"font-family: Aptos; font-size: 16px; color: black;">
+<div role=3D"presentation"><span style=3D"text-transform: none;">The game m=
+ust be written in
+<b>PHP</b>.</span></div>
+</li><li style=3D"font-family: Aptos; font-size: 16px; color: black;">
+<div role=3D"presentation"><span style=3D"text-transform: none;">It can be =
+implemented however you prefer (e.g., as a CLI script, or with a simple bac=
+kend + frontend).</span></div>
+</li><li style=3D"font-family: Aptos; font-size: 16px; color: black;">
+<div role=3D"presentation"><span style=3D"text-transform: none;">The state =
+of the game should be maintained consistently between turns.</span></div>
+<div role=3D"presentation" style=3D"direction: ltr;"><span style=3D"text-tr=
+ansform: none;"><br>
+</span></div>
+</li></ul>
+<li style=3D"font-family: Aptos; font-size: 16px; color: black;"><span styl=
+e=3D"text-transform: none;" role=3D"presentation"><b>What We=92re Looking F=
+or</b></span></li><ul style=3D"margin-bottom: 0cm;">
+<li style=3D"font-family: Aptos; font-size: 16px; color: black;"><span styl=
+e=3D"text-transform: none;" role=3D"presentation">Clear and maintainable co=
+de structure.</span></li><li style=3D"font-family: Aptos; font-size: 16px; =
+color: black;"><span style=3D"text-transform: none;" role=3D"presentation">=
+A reasonable separation between logic (game state, rules, combat,&nbsp;dung=
+eon&nbsp;generation) and in/output (display, user input).</span></li><li st=
+yle=3D"font-family: Aptos; font-size: 16px; color: black;"><span style=3D"t=
+ext-transform: none;" role=3D"presentation">Thoughtful handling of state an=
+d interactions.</span></li><li style=3D"font-family: Aptos; font-size: 16px=
+; color: black;"><span style=3D"text-transform: none;" role=3D"presentation=
+">Simplicity over complexity, don=92t over-engineer.</span></li></ul>
+</ul>
+<h3 style=3D"text-align: left; text-indent: 0px; text-transform: none; back=
+ground-color: white; margin-right: 0cm; margin-left: 0cm; font-family: Apto=
+s, sans-serif; font-size: 13.5pt; color: rgb(33, 33, 33);">
+<span style=3D"color: black;">Optional Enhancements (if you have extra time=
+)</span></h3>
+<ul style=3D"text-align: left; margin-bottom: 0cm; background-color: rgb(25=
+5, 255, 255);">
+<li style=3D"font-family: Aptos; font-size: 16px; color: black;"><span styl=
+e=3D"text-transform: none;" role=3D"presentation">Randomly generated&nbsp;d=
+ungeon&nbsp;layouts.</span></li><li style=3D"font-family: Aptos; font-size:=
+ 16px; color: black;"><span style=3D"text-transform: none;" role=3D"present=
+ation">Multiple monster types with different strengths.</span></li><li styl=
+e=3D"font-family: Aptos; font-size: 16px; color: black;"><span style=3D"tex=
+t-transform: none;" role=3D"presentation">Items (e.g., potions, weapons).</=
+span></li><li style=3D"font-family: Aptos; font-size: 16px; color: black;">=
+<span style=3D"text-transform: none;" role=3D"presentation">A simple map di=
+splay showing visited rooms.</span></li><li style=3D"font-family: Aptos; fo=
+nt-size: 16px; color: black;"><span style=3D"text-transform: none;" role=3D=
+"presentation">Save/load functionality.</span></li></ul>
+<h3 style=3D"text-align: left; text-indent: 0px; text-transform: none; back=
+ground-color: white; margin-right: 0cm; margin-left: 0cm; font-family: Apto=
+s, sans-serif; font-size: 13.5pt; color: rgb(33, 33, 33);">
+<span style=3D"color: black;">Deliverables</span></h3>
+<ul style=3D"text-align: left; margin-bottom: 0cm; background-color: rgb(25=
+5, 255, 255);">
+<li style=3D"font-family: Aptos; font-size: 16px; color: black;"><span styl=
+e=3D"text-transform: none;" role=3D"presentation">A small PHP&nbsp;project =
+we can run locally.</span></li><li style=3D"font-family: Aptos; font-size: =
+16px; color: black;"><span style=3D"text-transform: none;" role=3D"presenta=
+tion">Short instructions on how to install and run the game.</span></li></u=
+l>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: rgb(255, 255, 255); margin: 0cm;">
+<span style=3D"font-family: Aptos, sans-serif; font-size: 11pt; color: blac=
+k;">&nbsp;</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: rgb(255, 255, 255); margin: 0cm;">
+<span style=3D"font-family: Aptos, sans-serif; font-size: 12pt; color: blac=
+k; background-color: white;">You will have 1 week to complete this assignme=
+nt (until Friday the 19th of June, 13:00). If you need more time, please le=
+t us know before the deadline.</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: white; margin: 0cm;">
+<span style=3D"font-family: Aptos, sans-serif; font-size: 12pt; color: blac=
+k;">When you=92re done, please send us the code along with your README</spa=
+n><span style=3D"font-family: Aptos, sans-serif; font-size: 12pt; color: bl=
+ack; background-color: white;">, or a
+ link to a repository</span><span style=3D"font-family: Aptos, sans-serif; =
+font-size: 12pt; color: black;">.</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: rgb(255, 255, 255); margin: 0cm;">
+<span style=3D"font-family: Aptos, sans-serif; font-size: 12pt; color: blac=
+k; background-color: white;">We=92re looking forward to seeing your solutio=
+n!</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: white; margin: 0cm;">
+<span style=3D"font-family: Aptos, sans-serif; font-size: 11pt; color: blac=
+k;">&nbsp;</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: white; margin: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 11pt; color: rg=
+b(0, 71, 171);"><b>Milan Mols</b></span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: white; margin: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 11pt; color: bl=
+ack;">Lead developer Web Team</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; backg=
+round-color: white; margin: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 11pt; color: bl=
+ack;">&nbsp;</span></p>
+<div style=3D"background-color: rgb(255, 255, 255);">
+<table style=3D"text-align: left; text-indent: 0px; text-transform: none; c=
+olor: rgb(33, 33, 33); box-sizing: border-box; border-collapse: collapse; b=
+order-spacing: 0px;">
+<tbody>
+<tr>
+<td style=3D"text-align: left; text-indent: 0px; text-transform: none; padd=
+ing: 0cm; width: 127.6pt; height: 37.2pt;">
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; margi=
+n: 0cm;">
+<span style=3D"font-family: Calibri, sans-serif; font-size: 11pt; color: bl=
+ack;"><img src=3D"cid:6FC6635A-D082-4510-98A9-D952991C45F5" alt=3D"signatur=
+e_3558066537" id=3D"Picture_x0020_1" width=3D"134" height=3D"30" style=3D"w=
+idth: 1.4062in; height: 0.3125in; max-width: 100%; margin-top: 0px; margin-=
+bottom: 0px;"></span></p>
+</td>
+<td style=3D"text-align: left; text-indent: 0px; text-transform: none; padd=
+ing: 0cm; vertical-align: top; width: 205.55pt; height: 37.2pt;">
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; margi=
+n: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 10pt; color: rg=
+b(0, 71, 171);"><b>Bundeling</b></span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; margi=
+n: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 10pt; color: rg=
+b(0, 71, 171);"><a href=3D"http://www.bundeling.com/" title=3D"http://www.b=
+undeling.com/" data-outlook-id=3D"83bcc7de-71aa-4ad1-9faf-deb59bdd017c" sty=
+le=3D"color: rgb(0, 71, 171); margin-top: 0px; margin-bottom: 0px;"><u>www.=
+bundeling.com</u></a></span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; margi=
+n: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 10pt; color: bl=
+ack;">Protonenlaan 2a</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; margi=
+n: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 10pt; color: bl=
+ack;">5405NE Uden</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; margi=
+n: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 10pt; color: rg=
+b(0, 71, 171);"><a href=3D"tel:+31%2520(85)%2520%E2%80%93%2520020%25200554"=
+ title=3D"tel:+31%2520(85)%2520%E2%80%93%2520020%25200554" data-outlook-id=
+=3D"8e073aef-4c20-41b1-95a3-3e2543fd82b9" style=3D"color: rgb(0, 71, 171); =
+margin-top: 0px; margin-bottom: 0px;"><u>+31
+ (85) =96 020 0554</u></a></span></p>
+</td>
+</tr>
+<tr>
+<td colspan=3D"2" style=3D"text-align: left; text-indent: 0px; text-transfo=
+rm: none; padding: 0cm; vertical-align: top; width: 333.15pt; height: 5.85p=
+t;">
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; margi=
+n: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 11pt; color: rg=
+b(112, 112, 112); background-color: white;">&nbsp;</span></p>
+<p style=3D"text-align: left; text-indent: 0px; text-transform: none; margi=
+n: 0cm;">
+<span style=3D"font-family: Verdana, sans-serif; font-size: 8pt; color: rgb=
+(112, 112, 112); background-color: white;">The content of this email is con=
+fidential and intended for the recipient specified in message only. It is s=
+trictly forbidden to share any part
+ of this message with any third party, without a written consent of the sen=
+der. If you received this message by mistake, please reply to this message =
+and follow with its deletion, so that we can ensure such a mistake does not=
+ occur in the future.</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div style=3D"direction: ltr; font-family: Aptos, Arial, Helvetica, sans-se=
+rif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div style=3D"direction: ltr; font-family: Aptos, Arial, Helvetica, sans-se=
+rif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+</body>
+</html>
+
+--_000_GVUPR01MB13016D3EB7196DDF03942D6829F102GVUPR01MB13016eu_--
+
+--_004_GVUPR01MB13016D3EB7196DDF03942D6829F102GVUPR01MB13016eu_
+Content-Type: application/octet-stream;
+	name="img-6c9866c8-29f1-4749-86a5-bf4beffc2dbe"
+Content-Description: img-6c9866c8-29f1-4749-86a5-bf4beffc2dbe
+Content-Disposition: inline;
+	filename="img-6c9866c8-29f1-4749-86a5-bf4beffc2dbe"; size=6501;
+	creation-date="Thu, 04 Jun 2026 14:40:09 GMT";
+	modification-date="Thu, 04 Jun 2026 14:40:09 GMT"
+Content-ID: <6FC6635A-D082-4510-98A9-D952991C45F5>
+Content-Transfer-Encoding: base64
+
+iVBORw0KGgoAAAANSUhEUgAAAMgAAAAsCAYAAAAgjfcKAAAAAXNSR0IArs4c6QAAAERlWElmTU0A
+KgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAyKADAAQAAAAB
+AAAALAAAAABGD1yKAAAYz0lEQVR4Ae1dCXyVxbU/M9+9SVgie3EHLLWtC6igqKigYDZkCZCI71Vf
+tXV56s+ltVqx1aDVvj6tP63auv6Up5ZyYxL2LEAFtCoutRW38nCjuLPJltzl++b9z3e3b5mbewOB
+Et6dHyEzZ87MnDlzzsyZMzNfBLUXSucPJRG7npSYSJLeJxH4HR1+aDM9OjLaXrF83h5w4LzQYWTK
+X5Cii4jkO+D9AxTuPYdWnB3bg1o7UFQJKmuoJKGuJYuGkaCFFDPvpmXVa1yVlISGEIlLSBrTSSkD
+eM+RkE9QY+UHLrwunhAZ6S+ZdwRJcyU6D0aoBJpQJMUF1DhtbsZy+Yw940B5/btkmd9PVSJkGPEL
+qGlaQwq2NyOltWdC0JtIWd1TzQi5Du1/J5Ue98eBVFD0N9B5cAoGjYJsrCfqNowaK7al4V07JjOS
+L+l4KMcRaeVgTMwuFo3JWCafseccEMG0cnBtyirEz+w9rzjHGgTd5VIOmwY1lCbNOTRVQ6DwMrIs
+h3LYSALz6CCyWmel8A6ASGYFUVbQVghvJ6U0vKB8urM4UIPxSK7Wrjp7ulJ7L8FCrm8ravZON2sN
+1NKpQLsQaUVKF+iyscwKkqlLgrmQDwcsBwRMJV2QAQdcrCKJ+dMbBMTJijZ7wV053XEF6cq9zdPe
+ORwI96snFbsHG3TUx9tY/mFREr+nlveeQuSACYGMPRGGImVmzM5n/D/mQNyj9jMqafgTlGSizQlh
+NVHjlNVElY6VpuvzKLOCdP2+5XuwtznQUvkGmuCfAzbkTawDdmjzHesMDuQVpDO4mK/jgOXA7ptY
+Exd2p0jkdGzMvkvCLIF78BgcMMFFKCwicxOOTP5CZCyDW+Mlap72ebscnFB3FJniWux5zoKbcBP2
+fPdT4/SF7ZZJZpYvKSQRPg+HVleAhv6gYSkVGL+lBZO/TKLYvyfNH0iR2CVwT1aBNtBID4Oux1M4
+NXCxvjIM/aFTcP4zGede3yZhBONeV/ML0DUXeSupcc3LRDVcPntg2mjnGLLkSNQ5CfvYw8EfA/FW
+9PEtkoH5qOR1WjLFfUqdvWY/xqT5xRSJnom+HQfay4EwBBvnAvAftPIBHi0hUfAqtfZchVP5Nn8F
+HYXwifuiMSTaRhJvVYPBNbRzy0pacbG77pIFQ0jGfgqZOAt0fEZK3kcHxZZSbXV8g1sV6kbbC5Bn
+ngpe837mEBw4BhA3cR6zDnucORjbVdQ8/Z2cKWTZNK3RZMXAd6sC7R4JuYCsWztQx99Aw2LcEFlN
+TdX/SNU5tqE3FZmXot0pJOU34N1sChgLO64gSkSpdO54ikYfQ4OHoXHuDLsxIHspuYEvXB1PFLsM
+hG2l8vpfU+PUe1LEeCOmXAivyDE22PYiy7FUEhpFLdXZ7VsVPgOMmIOycb+jMk+giPo3pCGMjhCJ
+3gPB/EEcgn2koEeorD5KTVNn27BXhoMGczzi8fMf3mqqWByd6FsoOwyFwlQ2PERNfA0kh6B2rQZv
+jgWfAjaH7O1rYg+rIMBmbBJq2UXlDQ/hisZNOdSoRymtO4miJjxLCn3GtY9EExC6BL7CONFppMIx
+6hb7gs5ruJAWVa7QV5Yj9NzaiRC0OrQV71ssFqWi4ltQ+m5XDSKyHHRBWTmwTFhn0JZuPNbracQj
+3WlbABv72PeQl5bFlBhBWSzzDExOO3D95XpqqnzCrqa9/8b96WiKRpZAFgcBLVEnGJJ2OB0NvlRh
+LMH3+v+GXN5uV1dEtejLOCDiMJz5ps6lCP1nXLB1DZbNn0QqUo8s98GgEK3Qrm6OBnWlPTD41oV8
+ALPMzbRw4i5XZtmcwUSFH/nqk8afQTwIzhJKQ0vRWRbsdDAwcatdQ6lxxgcpYHn9NnS8OJXmiKJt
+JAqxakQbkTiCAVkD+/qVaKSCr6fTwsvdfUkWLq2bAJpwNcTUHBYkkRy/sahAcJqpbfsM6t5vC5l8
+u8QVFDVXoWFNKK17ALy92qHMGiQPiK+vSHkTLam835tDZc+9AYE+0Q2HmAQwgS2e8V4cjtW27Hie
+4d1oMrANit4rBWTLwJIfYAJLgcAXxNUdWBmgOGIx6O7hyMwctXmkZlFb319lvJdWUX8FWepe0NUt
+c0WOHB5LEiEssrdRIPgemRFHJmfJl/RMd6O5U0p1UDm4OLRSmddQNPY0ja1JzxScZRn9MENwzB2U
+6ucGZEylBySJwgMnZPoukQ23OZzEiP+WAgIceQZE5KYcXMoWCquc2gac7K4skSoPDYCJg4klR+Ww
+68SMpaiECotnQDi11WqBZfVvo+BVWuXgwecua7qNPhRi9boPK9dvtPVmA5afEqSAh71chmXDGaIK
+Jp6uP6I/wAtyVg67bvCI1M+o+7YTnE2k4qUN15FpPpSzcth1Qk6UVUWGvFZPpxrkFtZUazlG7NlU
+4ZavfBOrSsxmPFmnQOAHI66pxDyPik6sQMYCTea+BylVhEYTDLeVdAcmuNWgfyvunB0ExTkT+Yzj
+CRh0A35/IpaStASU1x0Os+M9DDwEQxck28ArMSCb7VwrNgBzB1ZJFTfrhPgDWZ5ZTFcNw8rqcOPX
+hPnmCQKmgzRCsMHfJmmtJUvgiog4HXZ9BWbKI13YlvljKMmj+/YGrs2uy0F7fHLmyVGpL0HjX7FH
+24X4QMjSGVr5Uao7VqPr0IeEqZzoTcVzI9G3WzES+glfyF3IfxF8+Qp8wNxlYt8sT45bLfbkjbtl
+rIDeIJI2mjcjh7Q9O9FYKjZfptpp0VSJqtog7QxOgfn7LATMrYAKM4qI1cL27ElvXJ4ukyq8zyO2
+VtgrmBB3UaDgTipqDVNtlUU1UJUXGvpQgWjBoJzko0wYRdjDjMYe5sVUnjAm4KqF5i4TmpFyA+oZ
+Tqe9u5VqaiAl+FczC20MQxtyBRTjOIeqparMHBG3+fJY2CzYzk2VcCS4anuaqkIFtF2+DgHEPiAZ
+VF8IRgipEUnIPvodF2Q2ha3oVbRx8GM0cZFJNbcpqqqVtKNbX2zNXgGtR/npgZOF1IVQKFvT7HxT
+3ICK+vhwWUYVraI2MZkGmNuptjI+a3MbW4MDyRDPYzI7Gjh6xUKFbgF2tiDBbZ1SMY69fItSzDwr
+nUXseC22NkQhKqtFB8Qz6KR3Ni2gfv1+DJw/+Mo6AZnuBDlxOiMuRAT9uRr7ncdRXZrpNXZ8E40P
+nUMB+Tn64TYfeMYRhIGitIKY5swMJM1D/ZV2XuqmEoQ52UZNzXB40GBymNi7ZAvsPWqYB1z32An2
+zMkZ1DL1JW0NtdURKlkwmWQEjgM1IIUj5ElUFvquy6OTynRErBgI7tTwJVltlWiXlTlx3FhD2Cqz
+1H1N5XUXwf/zIhSIc9NBGAVUGhpHzbTMBjLttmcyjWLHeLIg625c078JE2B6XDkz3sZnGNtT4Kma
+C36UOofeLp/4L6PmgLBbgcO7R3ewzSr6DZSjxZ3hSTVV1cJMeYilyBXY9AoEpmIVyW0D6yq8FxLC
+eADC+xhqdjMx2dSy6m+Qc2Mymf4NdFkAcwACy2FiCK5EdWQ6PxETBjaz8nIf3AmogdvYtK4HaLsT
+rI2Pa+iLAR3vy1OqDqtZrQ/uBLRM/BjjkXZtch6PhzKudqLtk7goeDilHLoGG6f9Bavbal8We6OE
+PDUFF6BdKb8cC+Njapp+o085UgUR4bGNmedDRD91gp1xf8UT/9gf9u1ScM1vVsRLbqFBG3/prCRj
+PBh7DARu8eWbsUHUpw/b750QPLNDh2pEWVMtyVpEBFehHzyzuYMyMYHATOIQEY9goNz5dsqqw6z+
+lSbDDVo6fR1mzOxu7SAcBMLy74tkYJW7Ql0K/bXUb90bd9AsxMFYzvyyoKuiI7DCDMhCRrBOPJoh
+Nw02wFOekJ2BWSwkJiYEPkNRdKYdd/7HY2VZlzpBGeNnvLsdexPeT2qDp3XgRIruwKwyXj/YXAeu
+Oj+a4/7B6LYBBT7mUp5wJBV109jqHqy9nZQBi4xdr2dtRkLyIVpavJoE1Cga7stnG7jN+pEPrgdg
+6M0n3MKrQZQBrCAamzkWW6vB9oN2hVf62lA4J5k4wq90/tKdA5HGh7R08mdZKzPpc8ibH00G4qq3
+uRCOFO37lS8ojP1WLoFXbwuTpG2S+Quk7diqkEHbjV9g5eAT6XaCWt9OpjtrwSQc8MyDklgevzoV
+UriV7eCMS5u7or2VAvMDvWI51S7AQe8KIRLmlX0KH9XMlzjFHlDVmlP9jFRshWhnwdPwsmQuEsMz
+V43MwDtzH/Z9OzMXTOZAa712vVK9qbWVTd7caU1Wtzu/rRh783IIJnjqn8MxDnEOFFg9Idw6S+Qr
+Kg5EcmggjmJF1hJ8LqQ8+x3kphXkG2M0bOifA6v9epWV3U5O1cDmT4OfGbxsGujcvzzoJG03iGo+
+ppB6Wf79mlIRqp2VhaGO9ngjPWGRA6CJCnWIBgqQ+n62oYuX05DD7wi7YlB8fYTNXE8QcBQVtebe
+JyHbMq0gcfWsqBsERX0STM6+zCavlXhoypjkmdcXQDu/NzlQQuHODH3R9X2PO+31CjoqZFZ38Mcm
+Uayh2IAcVh9HU/siKmQGviYalybyvcs68hRm4LYtGrnLQLTQOKMSqAHbm2SxO9Y8ylVcURRaBQ1N
+LGfJTMEX4DoQMh77K/01jQ5Uvd+gjv1hhF5pgF3kNY3g4q46RsCt2IHQvkxgPPQmocL5gGW+04GG
+YL3wM1rrK2qujh9cag3+DtW4b5FjYVz6DPju5aBP/SjWI20dZaNKGYfGDw39iAHq3x/XG8yR6Swo
+nsBtR8JFNOILiR7tEuKwNG6W2OgniqHgh/uwlBWmmNrkgzsBSjMzOPOTcSHgycgmVElk729W/twn
+Gm9pzB3xhmtwBlE+P+xjsjAEhQ22kXMzS8vrx+AKiK8ZF0DJD+0L0y4gEjzbLqt+zws+oNNGr2+I
+wjvcd724x5BR2Z3ldFsO/WcZKMXkokWVJNWvkJM2raTxJm4Fnw8tTM4q7oLKGuUGtJPq1ecQDOYg
+H4YQn1LPYJx4EWvz5XcEIIzBHUHfa7hm2O9wYJ99NHZLzm0qqybTApGqo6BAP7EYBf4zmFShAzTS
+WLEd7tyPfL1TqhAT8L0+uA5wWqgIMlqiy2KYxPbs76lZVOAQSUUvoJaLMtujQgyh0ueqM1XoglvW
+VNTfzwXjhJAfUzAaN7EKe6zX3rsheQyNfT6tuL5KACitvxhli3VZnQtjB48mJL1YnCWtK9EvP5JF
+PyW+wJgt2DhicDY0irW9DZyoD8+KXOCDdSbA9VWTHCvWGD85lswVDTtixbeZdfhluM7+77oMF+wg
+eG5V8j6eK8dOSIoGL8WG+SV8xgV3X6zTs1454JNXo3AuldR/y1+dA8IX94h+jR+PDcNJtRwPZuJu
+uAWTt8NU8Xu6FFx8BRszHVZCOUJ9scr9RK9cDjr2VbRpxmtoSjOx8FuQ4DU5kHEOTMXBWfGapq/E
+WPn3b4pOppK5l2QtbyPAtORHRfyOpKT+uL1ySJgbIXuO1TS9GXzTmJaQU2U9gz5OwETr2Y+g//yY
+rbwBB5E0E4geGU2TFaDl9su70WlQItbeV01MWEVSzkMDF2pvgk6Ydzp8+U9o9wZCtMHee9jVnrDe
+hxY79kGcC/Neyrtp3OxJtPw/3GZFRcMJWFrvRv3HuurZW4lc7yEJyW8RfukjwzR/jtmsPxWKm2le
+5VZXPr8EjKmZ6C5c7P6FwYVrJ7DvMevwOlGudE8OzK/Ao1S+oAc1TnoQqABoQunCk0jUXQNHKF5N
+4qYv326tGD4T7w15MuuaQRozsQ+ZA+LdFgfvTYVYREWb3sQeEVuHMHiP5Ubiuo5ljkUcZqmeTUlG
+eDQrCc7ht7JOw12kdXhgUw8iIKwBzGoWrm9bd+Lu0SjdoYu9mAi8X2hKeU3iDSkBP4/yKAiyeEUr
+6rsRs8B9UPIl+FYwzDXjMsTPdgtHDvTuC5RoeA4ZgZtAuMfTh9dy/CS4LXAFFOUu3LtagBMoXIeg
+88kK3kAmLwjtD5SL/JZpq2DmPgXYD11wxWcx0d/hlvH9qPtC8OhVeO5NKozg/Yc1wh4nwidDrURb
+LEBsERCdimsbBlZ1O+GqsyskekYX4pB7BfpS5iM33r8T8fgPh9VsiqHPqQ15gg9C8HMN4Pg36lrj
+zdeIEyBoTeqrerySKMX7jJfh4sRexlqGn1GaF3GJGuQL1IrTYl9QeCMs/dQxnr2HV9fBmdACxZiD
+TpydOgnmqxz702dnluHFnYTQZ+oLe2gtayZm7VfwTuM18O0GirJVxgPFq7x4KMVbpNoNAXEHBhUr
+q8c6YIFQpgC/nsG7k7UUiHwAVXwXdT2NtqEcmgNmGdy6XyqHsjydy8ARft9u7ZyOrcJsHz9cRRIK
+kYKhemF8hlePN+A+VgrqjLSjIBncjQpPSZX1OMYlPdvEBwUDkwY5GwEV2EyJT2hbrJRWVPv3G/wg
+X4jbbTx3wUQKHbPrdnTQbt/6L8iW/8YnC40pvcQ4CmsbyQzkDarOlcwt1HiKNU6fBwW5Hn3RKzwr
+g80vLuwgifkTk7dlGCgHYqK9xdM+xEcn8JEK+oeHgngyNSYgg2dGHf3xcdlJYfPWFDFWhkFs8x3y
+aJr1k6lBAi0J97g20wGUfIVfE/hmnDewY6mp8mKs4L+HLLV6s31pW37k21QcOxKz8Ee+fBugu/SW
+xJTGRxhot1HM32NVOHVtmoqNvbgV+cBuT8k5zz4NfRKutJPp5erMhPPjeSlv5m9AtF8nZ2O1EfJO
+XAS8EwStAsDNMIXDhI145+4KeGHnCkyb+SKNeAPLYJag2ragv1+7sex+b4CGuNtmpFF/f4iMgimg
+a0OcR+6SrhTzUBiLYfaU0fKpm8iM/tOdj3akmOWCORPR4BjwDU4AdnTYNDlz9XG7zQD6ZGAMxffo
+z9M+SSBCInCnyx5XR1EhttPyGWtTkMYKnGPt/CKVTkYEuW8tFxauR788EyLTqJ5NFmn3txBvYTJx
+jw9bDabZoi8HOVgy5SrsxUahX5AlrKC2rKAMyxWXFQHm0yKShVNJFo22v66S8SRdbm6foyX11+OY
+cCbs1x5okB/612NT/qMUcWNxNb6o2zOwG/B80f57EqDADizAOOXkPwBjYs8x/a1UmWwR9o5Jmgsm
+DsMPHwKyxiDwbIKZQRrvQ+OvxGeBYDcijA/1omAghHbwmReMrCE2w76fRAun/dXOT/5XOg9/94Jf
+z6lecZD8XyquPIlqM830yYKJ32V1V2Leuh262B2/cQs4uI6WTD7Bg+VOsvekaPOD4F0Z6ON32Jhh
+WIrRFxwhoi+fgrf3uj4/VN7wbdjIS4GHt+1oR8mX8JmcqRjIzJMLt1oV6omXnA9gHM6GUGKvxvsg
+lnQsHfEHQzAJ8ByX30lYsdn4jM6DXEwbyuofQ7kqFA1izPFcVd5IzVOedOGOxwcZAgTPXYKfinaA
+1ipc7Wfa06F8Hr5+wg4b2x3PcrGCvsFXRdqbLFOl4V0qnX8Hxu1quz/x2x34qsy0S1MouURK6w6B
+VvXAY7GvqPEH8fM3Z7myupNB16u+A0chm9tXEK7ErlwegU331/gMj2dWTrRy7pxD8Vx1CLQTp8ZY
+zi3cCrXkJ9Qy5Z9OOjoUP3f+oWSEB+EPsnTHGQPOa8L8hmC9lgYWxMItx+KrFN0oiK9oNFZ7ZvtE
+yxMW9YEnA++RITS7rHe05l57RPJZhRUcgj1QhHpXrclZuUr+pwc2y9+BQvSBk8FAf6JQjC8p0m+d
+9gsd7IKNhoeCkWFqqsLM7Vkh26OR30jsLBiKWRbmF17f2XfeojHo5DaYcOBfDm9T+G1IxbChULRe
+FA2sT3g6/a3yaz6JfnGwIusxEa5BzL+i8h9joihkCNeLhhz1Tof/Qhn/NStJB0MBt9FB8Hgmv6ll
+N9wJ/1XUX4XxwIThJN1WjfuzK0gntJ+vIs+Bvc4BPtcwNwbo9AtbqSbD3kVHxIjXg9T/k8XQ8HPd
+2ZiU8NfUeBORD3kOdG0OnPPsIFJtdSR7PE+r6+fClT4m5w71X38ZVo6zNPgboSBv5VcQDWfyoC7G
+gbL6a7DHuT9lItlOCHiolHkP9qQv4FnnFtocbKPeX8D4L8a3fHoUUiG+x2aqn8AEvcq39+DuY/+B
+L/ZMSmyAuxhD8uTmOeDkgML1dmeIu9FxhUY8hVsKOD0v3EC9DGzOD8enV6E9FhwGMYX9LfXWXg4V
+cjv20tdirxPJK4iTsfl41+SAUq/ZXlZogrsD9qa7N2BxRXDuwd2I6RQrh6BL4Oixz5fye5A0a/Kx
+rsqBSP9lUJBZMIvgCt/dXQPKSfkljjUuoNa+85Ks2N3akuXzv/Mc2H84YJ/N4IBQKWzS+Yv22g86
+OOiF+PP7dZKfAbgSH+i+hRZVf+pA2G11c9aRj+c5sD9xQFBFaCC+HY4rJPi2m1T4ey90NOIj8dvA
+SrMZWrEWm/r1WDHexBHTqxTDrZGWyRsAz8UI25/6mqclz4F/LQf+D4c4evhoImiBAAAAAElFTkSu
+QmCC
+
+--_004_GVUPR01MB13016D3EB7196DDF03942D6829F102GVUPR01MB13016eu_--
