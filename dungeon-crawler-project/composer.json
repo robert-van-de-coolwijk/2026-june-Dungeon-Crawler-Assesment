@@ -1,0 +1,20 @@
+{
+  "name": "vendor_name/dungeon-crawler-project",
+  "description": "Dungeon Crawler game build as part of an assessment ",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Robert",
+      "email": "rc-develepor@coolwijk.nl"
+    }
+  ],
+  "require": {
+    "php": ">=8.4.0",
+    "ext-pdo": "*",
+    "lcobucci/jwt": "5.6.0",
+
+    "webfiori/http": "*",
+    "webfiori/cli": "*"
+  }
+}

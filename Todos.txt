@@ -4,17 +4,17 @@ V- DB editor / IDE
 - Installeer een LAMP stack
 V-- Docker installeren
 V-- Docker compose file maken
--- Docker containers uitrollen
--- PHP met web server
+V-- Docker containers uitrollen
+V-- PHP met web server
 --- Composer instaleren
--- MariaDB
+-- MariaDB (testen)
 - Standaard applicatie testen in elkaar draaien (hello world)
 
 Project voorbereiding
 V- Kijken of het geheel met docker of cubenets kan worden beheerd
 - Composer instaleren
 
-- Git project maken en code + alle toebehoren committen
+V- Git project maken en code + alle toebehoren committen
 
 - Eerste opzet met CLI
 - Opzet met een HTML output
@@ -23,8 +23,19 @@ V- Kijken of het geheel met docker of cubenets kan worden beheerd
 -- Todo's aanvullen
 -- Alle open toedoes verplaatsen naar een "beter plek":
 --- OF dedicated MD document structuur in het project
---- Open project
+--- OF Open project
 
 Implementatie
+
+> Kijken naar Entity Component System pattern
 - Data structuur met polyformisme
-- Tokonazer voor commando's
+-- Entity
+--- Container
+--- Room (decorator)
+-- Interactions
+
+- Tokenizer voor commando's
+
+World generation
+> Kijk naar Wavefunction collapse (Townscaper is voorbeeld game)
+> Kijk naar procedural generation
