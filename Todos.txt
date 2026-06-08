@@ -17,13 +17,20 @@ V- Kijken of het geheel met docker of cubenets kan worden beheerd
 V- Git project maken en code + alle toebehoren committen
 
 - Eerste opzet met CLI
-- Opzet met een HTML output
+-- Project met CLI en MVC gecopieerd van bestaand project
+-- Alles vermaken en testen zodat er een "lege applicatie" klaar staat om mee te gaan bouwen
+- Opzet met een HTML output (optioneel)
+
 
 - Project document doorkammen
 -- Todo's aanvullen
 -- Alle open toedoes verplaatsen naar een "beter plek":
 --- OF dedicated MD document structuur in het project
 --- OF Open project
+
+Project opzet wensen
+- Gebruik maken van Vue.js
+- Pure PHP
 
 Implementatie
 
