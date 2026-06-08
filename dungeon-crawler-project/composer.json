@@ -1,7 +1,6 @@
 {
   "name": "vendor_name/dungeon-crawler-project",
   "description": "Dungeon Crawler game build as part of an assessment ",
-  "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
     {
@@ -9,11 +8,17 @@
       "email": "robert@coolwijk.nl"
     }
   ],
+
+  "minimum-stability": "stable",
+
   "autoload": {
     "psr-4": {
-      "dungeon-crawler-project\\": "dungeon-crawler-project"
+      "DungeonCrawlerCLI\\": "lib/",
+      "DungeonCrawlerWeb\\": "public/",
+      "App\\": "app/"
     }
   },
+
   "require": {
     "php": ">=8.4.0",
     "ext-pdo": "*",
@@ -23,4 +28,5 @@
     "webfiori/http": "*",
     "webfiori/cli": "*"
   }
+
 }
