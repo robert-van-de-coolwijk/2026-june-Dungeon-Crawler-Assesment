@@ -5,13 +5,19 @@
   "license": "proprietary",
   "authors": [
     {
-      "name": "Robert",
-      "email": "rc-develepor@coolwijk.nl"
+      "name": "Robert van de Coolwijk",
+      "email": "robert@coolwijk.nl"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "dungeon-crawler-project\\": "dungeon-crawler-project"
+    }
+  },
   "require": {
     "php": ">=8.4.0",
     "ext-pdo": "*",
+
     "lcobucci/jwt": "5.6.0",
 
     "webfiori/http": "*",
