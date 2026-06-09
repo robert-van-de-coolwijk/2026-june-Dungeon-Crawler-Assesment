@@ -2,12 +2,14 @@
 
 namespace App\Models\GameDataTypes;
 
-use DungeonCrawlerCLI\CliReader;
-
 abstract class GameDataType
 {
+    public Lock $lock;
 
-    public abstract function __construct();
+
+    public function __construct(){
+        $this->lock = new Lock(); // @todo RC Find a way to initiate objects in a way that lets me finely define all of the default values for said properties without adding to much complexity general.
+    }
 
     public abstract function get() : string;
     public abstract function set(string $input) : Boolean;

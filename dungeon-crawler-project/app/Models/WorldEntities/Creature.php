@@ -5,7 +5,6 @@ namespace App\Models\WorldEntities;
 
 use App\Models\GameDataTypes\Collection;
 use Exception;
-use function Sodium\compare;
 
 class Creature extends Entity
 {
