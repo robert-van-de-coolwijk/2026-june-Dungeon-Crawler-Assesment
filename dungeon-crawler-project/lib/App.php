@@ -3,8 +3,6 @@
 namespace DungeonCrawlerCLI;
 
 
-use DungeonCrawlerCLI\CliPrinter;
-
 class App
 {
     protected bool $continueMode = false;
