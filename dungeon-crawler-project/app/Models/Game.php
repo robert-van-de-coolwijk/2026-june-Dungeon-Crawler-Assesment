@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Controllers\Commands\Command;
 use App\Models\GameState\AbstractGameState;
-use App\Models\GameState\GameState;
 use App\Models\GameState\Blank;
 use App\Models\WorldEntities\Player;
 use App\Models\WorldEntities\World;
@@ -59,7 +58,7 @@ class Game
 //            ];
 //        }
 
-        return Command::getInstance()->{$commandName}($params);
+        return Command::getInstance()->{$commandName}($this, $params);
 
     }
 
@@ -67,6 +66,28 @@ class Game
     {
 
         return Blank::getInstance();
+    }
+
+    /// SUPPORT FUNCTIONS \\\
+
+    public function getPlayerOne(): ?Player
+    {
+        return $this->playerOne;
+    }
+
+    public function setPlayerOne(?Player $playerOne): void
+    {
+        $this->playerOne = $playerOne;
+    }
+
+    public function getWorld(): ?World
+    {
+        return $this->world;
+    }
+
+    public function setWorld(?World $world): void
+    {
+        $this->world = $world;
     }
 
 }

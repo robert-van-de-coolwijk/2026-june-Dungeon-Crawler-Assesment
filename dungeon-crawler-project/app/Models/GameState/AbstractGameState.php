@@ -52,17 +52,20 @@ abstract class AbstractGameState extends SingletonPattern
 
     protected function __construct()
     {
+        $this->registerCommand('init');
         $this->registerCommand('player');
+        $this->registerCommand('move', ['north', 'east', 'south', 'west']); // @todo make aliases work
         $this->registerCommand('time');
     }
 
-    protected function registerCommand(string $commandName) : void
+    protected function registerCommand(string $commandName, array $aliases = []) : void
     {
         if(isset($this->commands[$commandName])) {
             throw new \Exception(sprintf('Command "%s" is already registered on %s', $commandName, get_called_class()));
         }
 
         $this->commands[$commandName] = $commandName;
+
     }
 
 

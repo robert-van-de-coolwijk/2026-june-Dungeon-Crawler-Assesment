@@ -3,6 +3,7 @@
 namespace App\Controllers\Commands;
 
 use App\Core\Tools;
+use App\Models\Game;
 use App\Models\GameState\Blank;
 use App\Models\SingletonPattern;
 
@@ -20,7 +21,34 @@ use App\Models\SingletonPattern;
  */
 class Command extends SingletonPattern
 {
-    public function time() : array {
+
+    public function init(Game $game, array $params) : array {
+
+        return [
+            "Not implemented, init needs content"
+        ];
+    }
+
+    public function player(Game $game, array $params) : array
+    {
+
+
+        return [
+            "Not implemented, player not named"
+        ];
+    }
+
+    public function move(Game $game, array $params) : array
+    {
+
+
+        return [
+            "Not implemented, player is not moved"
+        ];
+    }
+
+    public function time() : array
+    {
         return [
             Tools::getTimeStamp()
         ];
