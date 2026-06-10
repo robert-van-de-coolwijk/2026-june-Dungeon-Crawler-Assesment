@@ -14,5 +14,8 @@ vendor/
 dist/
 build/
 data/*
+
+/composer.lock
+
 *.log
 
