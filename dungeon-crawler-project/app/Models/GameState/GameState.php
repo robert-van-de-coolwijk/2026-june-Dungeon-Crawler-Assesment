@@ -2,6 +2,7 @@
 
 namespace App\Models\GameState;
 
+use App\Models\Singleton;
 use App\Models\WorldEntities\Player;
 use App\Models\WorldEntities\World;
 
@@ -37,16 +38,8 @@ use App\Models\WorldEntities\World;
  *
  *
  */
-class GameState
+abstract class GameState extends Singleton // @todo RC
 {
-
-    /**
-     * @var ?Player the name playerOne is chosen as the "messiah" there is only one (in the current implementation)
-     * The player will be filled in
-     */
-    protected ?Player $playerOne = null; // the name playerOne is chosen as the "messiah" there is only one (in the current implementation)
-
-    protected ?World $world = null;
 
 
     /**
@@ -59,7 +52,9 @@ class GameState
      */
 
 
-
+    public static function getInstance(): GameState {
+        return parent::getInstance();
+    }
 
 
 
