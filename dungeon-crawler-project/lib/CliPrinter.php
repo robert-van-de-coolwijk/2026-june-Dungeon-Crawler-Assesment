@@ -4,21 +4,26 @@ namespace DungeonCrawlerCLI;
 
 class CliPrinter
 {
-    public function out($message)
+    public function out($message) : void
     {
         echo $message;
     }
 
-    public function newline()
+    public function newline() : void
     {
         $this->out(PHP_EOL);
     }
 
-    public function display($message)
+    public function display(array|string $message) : void
     {
-        $this->newline();
+        if(is_array($message)) {
+            foreach ($message as $line) {
+                $this->display($line);
+            }
+            return;
+        }
+
         $this->out($message);
-        $this->newline();
         $this->newline();
     }
 }

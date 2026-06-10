@@ -2,9 +2,7 @@
 
 namespace App\Models\GameState;
 
-use App\Models\Singleton;
-use App\Models\WorldEntities\Player;
-use App\Models\WorldEntities\World;
+use App\Models\SingletonPattern;
 
 /**
  * GameState describes the current state of the game
@@ -14,7 +12,7 @@ use App\Models\WorldEntities\World;
  *
  * -- Game enter states --
  *
- * - Void -
+ * - Blank -
  * Condition: When there is no player, there is nothing.
  * Options: A player can be created.
  *
@@ -38,9 +36,8 @@ use App\Models\WorldEntities\World;
  *
  *
  */
-abstract class GameState extends Singleton // @todo RC
+abstract class AbstractGameState extends SingletonPattern
 {
-
 
     /**
      * @TODO's for implementation
@@ -51,10 +48,23 @@ abstract class GameState extends Singleton // @todo RC
      * -- implement commands / actions per game state
      */
 
+    protected array $commands = [];
 
-    public static function getInstance(): GameState {
-        return parent::getInstance();
+    protected function __construct()
+    {
+        $this->registerCommand('player');
+        $this->registerCommand('time');
     }
+
+    protected function registerCommand(string $commandName) : void
+    {
+        if(isset($this->commands[$commandName])) {
+            throw new \Exception(sprintf('Command "%s" is already registered on %s', $commandName, get_called_class()));
+        }
+
+        $this->commands[$commandName] = $commandName;
+    }
+
 
 
 

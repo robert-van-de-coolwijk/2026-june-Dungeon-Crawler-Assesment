@@ -2,9 +2,8 @@
 
 namespace App\Models\GameState;
 
-use App\Models\GameState\GameState;
 
-class Genesis extends GameState
+class Genesis extends AbstractGameState
 {
     /**
      * @TODO's for implementation

@@ -2,9 +2,8 @@
 
 namespace App\Models\GameState;
 
-use App\Models\GameState\GameState;
 
-class Void extends GameState
+class Blank extends AbstractGameState
 {
 
     /**

@@ -2,9 +2,9 @@
 
 namespace App\Models\WorldEntities;
 
-use App\Models\Singleton;
+use App\Models\SingletonPattern;
 
-class World extends Singleton
+class World extends SingletonPattern
 {
     /**
      * @var int Stores the highest id assigned to an entity

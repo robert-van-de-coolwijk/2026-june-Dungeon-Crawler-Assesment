@@ -2,9 +2,8 @@
 
 namespace App\Models\GameState;
 
-use App\Models\GameState\GameState;
 
-class Exploration extends GameState
+class Exploration extends AbstractGameState
 {
 
 }

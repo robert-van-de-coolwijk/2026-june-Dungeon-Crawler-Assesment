@@ -6,21 +6,28 @@ if (php_sapi_name() !== 'cli') {
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use App\Core\Tools;
 use DungeonCrawlerCLI\App;
 
 $app = new App();
 
 // run command send form terminal
 if(count($argv) > 1){
+
     $commandName = array_splice($argv, 1, 1)[0];
-    $app->runCommand($commandName, $argv);
+    $params = array_splice($argv, 1);
+
+    $app->runCommand($commandName, $params);
 }
 
-// if in continues mode, the line is held open to listen for more commands
-if(true) { //@todo RC Turn into a config setting / param for program start
+// if continues mode is set
+if(true) //@todo RC Turn into a config setting / param for program start
+{
+    //the program is held open to listen for more commands
     $app->setContinuesMode();
 
-    while($app->isContinueMode()){
+    while($app->isContinueMode())
+    {
         sleep(1);
 
         $app->runCommandFromInput();
@@ -30,5 +37,7 @@ if(true) { //@todo RC Turn into a config setting / param for program start
 
     sleep(3);
 }
+
+// for single command mode, this exit is silent and instantaneous
 
 exit();

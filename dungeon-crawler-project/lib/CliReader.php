@@ -2,6 +2,7 @@
 
 namespace DungeonCrawlerCLI;
 
+use App\Core\Tools;
 use Exception;
 use http\Encoding\Stream;
 

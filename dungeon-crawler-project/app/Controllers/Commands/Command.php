@@ -2,6 +2,10 @@
 
 namespace App\Controllers\Commands;
 
+use App\Core\Tools;
+use App\Models\GameState\Blank;
+use App\Models\SingletonPattern;
+
 /**
  * This is a command a player (or actor) can execute on the game world.
  * Commands are agnostic and do not differentiate who did what and why.
@@ -11,10 +15,15 @@ namespace App\Controllers\Commands;
  * CURRENT implementation always accept a command IF the command exists and the entity and when applicable said property exists.
  *
  * Entities are responsible to reflect through Exceptions if things are allowed because you are allow to and if they exist.
- * See GameException for specific
+ * See GameException for specifics
  *
  */
-abstract class Command
+class Command extends SingletonPattern
 {
+    public function time() : array {
+        return [
+            Tools::getTimeStamp()
+        ];
+    }
 
 }

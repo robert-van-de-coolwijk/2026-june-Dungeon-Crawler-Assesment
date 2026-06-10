@@ -3,11 +3,16 @@
 namespace DungeonCrawlerCLI;
 
 
+use App\Controllers\Main;
+use App\Core\Tools;
+
 class App
 {
     protected bool $continueMode = false;
     protected CliPrinter $printer;
     protected CliReader $reader;
+
+    protected Main $main; // @todo EVIL, there must be a better way to do this. Consider changing this into an API or ANYTHING else for that matter.
 
     protected $registry = [];
 
@@ -17,16 +22,30 @@ class App
         $this->reader = new CliReader();
 
 
-        $this->registerCommand('hello', function (array $argv) {
-            $name = isset ($argv[1]) ? $argv[1] : "World";
+        $this->main = new Main();
+        $this->main->start();
+
+        /// register valid commands (client side) \\\
+
+        // game (server) commands
+        $this->registerCommand("player", "genericCommandHandler");
+        $this->registerCommand("time", "genericCommandHandler");
+
+
+        // client commands
+        $this->registerCommand("hello", function (array $params) {
+            $name = isset ($params[0]) ? $params[0] : "World";
             $this->getPrinter()->display("Hello $name!!!");
         });
 
-        $this->registerCommand('help', function (array $argv) {
-            $this->getPrinter()->display("usage: minicli hello [ your-name ]");
+        $this->registerCommand("help", function (array $params) {
+            $this->getPrinter()->display([
+                "usage: command [ params ]",
+                ""
+            ]);
         });
 
-        $this->registerCommand('exit', function (array $argv) {
+        $this->registerCommand("exit", function (array $params) {
             $this->setContinuesMode(false);
             $this->getPrinter()->display("Exiting application");
         });
@@ -37,9 +56,20 @@ class App
         return $this->printer;
     }
 
-    public function registerCommand($name, $callable): void
+
+    /// command logic \\\
+
+
+    public function genericCommandHandler(string $commandName, array $params) : void
     {
-        $this->registry[$name] = $callable;
+        $message = $this->main->command($commandName, $params);
+
+        $this->getPrinter()->display($message);
+    }
+
+    public function registerCommand($commandName, $callable): void
+    {
+        $this->registry[$commandName] = $callable;
     }
 
     protected function getCommand($command)
@@ -52,12 +82,17 @@ class App
         $command = $this->getCommand(strtolower($commandName));
 
         if ($command === null) {
-            $this->getPrinter()->display("ERROR: Command \"$commandName\" not found.");
+            $this->getPrinter()->display(sprintf('ERROR: Command "%s" not found.', $commandName));
 
             return false;
+        }else if(is_callable($command)){
+            call_user_func($command, $params);
+        }else if(is_string($command) && method_exists($this, $command)){
+            $this->{$command}($commandName, $params);
+        }else{
+            $this->getPrinter()->display(sprintf('ERROR: Command "%s" is registered, but could not be executed.', $commandName));
         }
 
-        call_user_func($command, $params);
 
         return true;
     }
@@ -71,6 +106,9 @@ class App
         if(is_string($line) && strlen($line) > 0){
             $line = explode(" ", $line);
             $commandName = array_splice($line, 0, 1)[0];
+
+//            Tools::debug($commandName);
+//            Tools::debug($line);
 
             $this->runCommand($commandName, $line);
         }

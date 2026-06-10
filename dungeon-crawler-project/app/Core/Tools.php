@@ -4,7 +4,6 @@ namespace App\Core;
 
 use Exception;
 
-require_once '../core/class.encrypt.php';
 
 class Tools {
 

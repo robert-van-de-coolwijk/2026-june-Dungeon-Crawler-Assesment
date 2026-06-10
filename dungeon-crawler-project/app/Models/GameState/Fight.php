@@ -2,9 +2,8 @@
 
 namespace App\Models\GameState;
 
-use App\Models\GameState\GameState;
 
-class Fight extends GameState
+class Fight extends AbstractGameState
 {
     /**
      * @TODO's for implementation
