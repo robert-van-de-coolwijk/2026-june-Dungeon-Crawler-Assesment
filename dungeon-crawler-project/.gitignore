@@ -1,0 +1,18 @@
+# Ignore system-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE files
+/.vscode/
+/.idea/
+
+# Ignore node_modules and dependency directories
+node_modules/
+vendor/
+
+# Ignore build / run artifacts
+dist/
+build/
+data/*
+*.log
+
