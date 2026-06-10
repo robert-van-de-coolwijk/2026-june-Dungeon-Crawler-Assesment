@@ -3,16 +3,21 @@
 namespace App\Models\WorldEntities;
 
 use App\Models\GameDataTypes\GameDataType;
+use App\Models\GameDataTypes\Identifier;
 use App\Models\GameDataTypes\ShortText;
 use App\Models\GameDataTypes\Text;
 use Exception;
-//use MongoDB\BSON\Int64;
 
 class Entity {
-    protected int $id; // This number can become LARGE. A lot of entities like rooms will have a minimum of 4 entities associated with them.
+    protected Identifier $id; // This number can become LARGE. A lot of entities like rooms will have a minimum of 4 entities associated with them.
 
     protected ShortText $name;
     protected Text $description;
+
+    protected function __construct()
+    {
+        $this->id = Identifier::getNewIdentifier();
+    }
 
     protected function getSetSanityCheck($name, $method)
     {
