@@ -12,6 +12,8 @@ class Creature extends Entity
 
     public CreatureType $creatureType = CreatureType::Unset;
 
+    public Resource $health;
+
     public function __construct()
     {
         $this->inventory = new Collection();
