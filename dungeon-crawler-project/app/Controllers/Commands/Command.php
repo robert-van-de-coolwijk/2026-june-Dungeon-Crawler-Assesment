@@ -22,14 +22,15 @@ use App\Models\SingletonPattern;
 class Command extends SingletonPattern
 {
 
-    public function init(Game $game, array $params) : array {
-
-        return [
-            "Not implemented, init needs content"
-        ];
+    /**
+     * @throws \Exception
+     */
+    public function init(array $params) : array
+    {
+        return Init::world($params);
     }
 
-    public function player(Game $game, array $params) : array
+    public function player(array $params) : array
     {
 
 
@@ -38,7 +39,14 @@ class Command extends SingletonPattern
         ];
     }
 
-    public function move(Game $game, array $params) : array
+    public function state(array $params) : array
+    {
+        $game = Game::getInstance();
+
+        return $game->getStateOfTheGame();
+    }
+
+    public function move(array $params) : array
     {
 
 

@@ -17,7 +17,7 @@ class Main
     protected Game $game;
 
     public function start() : void {
-        $this->game = new Game();
+        $this->game = Game::getInstance();
     }
 
     /**
