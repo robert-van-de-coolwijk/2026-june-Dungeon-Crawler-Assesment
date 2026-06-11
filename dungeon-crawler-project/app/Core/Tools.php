@@ -10,11 +10,13 @@ class Tools {
 
     public static $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
 
-    function __construct(){
+    function __construct()
+    {
         throw new Exception('This class should not be initiated through NEW. It is filled with static functions');
     }
 
-    public static function getTimeStamp(){
+    public static function getTimeStamp() : string
+    {
         return date('Y-m-d H:i:s');
     }
 
@@ -32,14 +34,16 @@ class Tools {
         return new MsgWrap($msg, $contentType, $sentiment);
     }
 
-    public static function getMsgWrapFn(){
+    public static function getMsgWrapFn() : callable
+    {
         return function(string $msg, string $contentType = '', string $sentiment = '') : MsgWrap
         {
             return new MsgWrap($msg, $contentType, $sentiment);
         };
     }
 
-    public static function debug(){
+    public static function debug() : void
+    {
         $bt = debug_backtrace();
         $caller = array_shift($bt);
 
@@ -62,7 +66,8 @@ class Tools {
 
     }
 
-    public static function debugError(){
+    public static function debugError() : void
+    {
         $bt = debug_backtrace();
         $caller = array_shift($bt);
 
@@ -84,7 +89,8 @@ class Tools {
         );
     }
 
-    public static function debugFilePath($fPath){
+    public static function debugFilePath($fPath) : void
+    {
         $out = sprintf(
             '
                 <div>
@@ -103,24 +109,41 @@ class Tools {
         echo $out;
     }
 
-    public static function echoNow($fInput){
+    public static function echoNow($fInput) : void
+    {
         echo $fInput;
 
         flush();
         ob_flush();
     }
 
-    public static function startsWith($haystack, $needle) {
+
+    public static function getClassName(string|object $class) : string
+    {
+        $className = is_object($class) ? get_class($class) : $class;
+
+        if ($pos = strrpos($className, '\\'))
+        {
+            return substr($className, $pos + 1);
+        }
+
+        return $pos;
+    }
+
+    public static function startsWith($haystack, $needle) : bool
+    {
         // search backwards starting from haystack length characters from the end
         return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
     }
 
-    public static function endsWith($haystack, $needle) {
+    public static function endsWith($haystack, $needle) : bool
+    {
         // search forward starting from end minus needle length characters
         return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
     }
 
-    public static function formatBytes($bytes, $precision = 2) {
+    public static function formatBytes($bytes, $precision = 2) : string
+    {
         if(!is_numeric($bytes) || $bytes == 0){
             return $bytes;
         }
@@ -128,6 +151,20 @@ class Tools {
         $base = log($bytes, 1024);
 
         return round(pow(1024, $base - floor($base)), $precision) . self::$units[floor($base)];
+    }
+
+    public static function stringToArray(string $input) : array {
+        return str_split($input);
+    }
+
+    public static function arrayFirst(array $arr)
+    {
+        return reset($arr);
+    }
+
+    public static function arrayLast(array $arr)
+    {
+        return $arr[array_key_last($arr)];
     }
 
     public static function cleanString($fInput){
@@ -175,4 +212,6 @@ class Tools {
         $html .= '</table>';
         return $html;
     }
+
+
 }
