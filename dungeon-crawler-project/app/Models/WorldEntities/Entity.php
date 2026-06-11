@@ -9,30 +9,34 @@ use App\Models\GameDataTypes\Text;
 use Exception;
 
 class Entity {
-    protected Identifier $id; // This number can become LARGE. A lot of entities like rooms will have a minimum of 4 entities associated with them.
+    protected Identifier $_id; // This number can become LARGE. A lot of entities like rooms will have a minimum of 4 entities associated with them.
 
-    protected ShortText $name;
-    protected Text $description;
+    protected ShortText $_name;
+
+    protected Text $_description;
 
     protected function __construct()
     {
-        $this->id = Identifier::getNewIdentifier();
+        $this->_id = Identifier::getNewIdentifier();
+
+        $this->_name = new ShortText();
+        $this->_description = new ShortText();
     }
 
-    protected function getSetSanityCheck($name, $method)
+    /**
+     * @throws Exception
+     */
+    protected function getSetSanityCheck(string $name, string $method) : bool
     {
 
         // The order of these checks is VERY important.
         // The next check will blindly expect things to exist so it RELIES on checks above it.
         switch ($name) {
-            case !isset($this->{$name}):
+            case !property_exists($this, $name):
                 throw new Exception("Property '{$name}' does not exist");
 
             case is_null($this->{$name}):
                 throw new Exception("Property '{$name}' is unset, please report this error for entity ID #{$this->id}");
-
-            case 'id':
-                return (string)$this->id;
 
             case $method == 'get':
                 return method_exists($this, '__toString');
@@ -45,20 +49,36 @@ class Entity {
         }
     }
 
-    public function __get(string $name)
-    {
-        if($this->getSetSanityCheck($name, 'get')){
-            return $this->{$name}->__toString();
-        }
-
+    protected static function getPropKey($name) : string {
+        return "_$name";
     }
 
-    public function __set(string $name, $value)
+    /**
+     * @throws Exception
+     */
+    public function __get(string $name)
     {
+        $propName = self::getPropKey($name);
 
-        if($this->getSetSanityCheck($name, 'set')){
-            return $this->{$name}->set($value);
+        if($this->getSetSanityCheck($propName, 'get')){
+            return $this->{$propName}->__toString();
         }
+    }
 
+    /**
+     * @throws Exception
+     */
+    public function __set(string $name, string $value)
+    {
+        $propName = self::getPropKey($name);
+
+        if($this->getSetSanityCheck($propName, 'set')){
+            return $this->{$propName}->set($value);
+        }
+    }
+
+    public function getIdAsNumber() : int
+    {
+        return $this->_id->getAsNumber();
     }
 }

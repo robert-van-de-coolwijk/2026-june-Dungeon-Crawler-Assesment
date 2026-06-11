@@ -7,11 +7,12 @@ class Text extends GameDataType
 
     protected const int maxLength = 4096;
 
-    protected string $data;
+    protected string $data = '';
 
 
     public function __construct()
     {
+        parent::__construct();
     }
 
     public function __toString() : string
@@ -26,7 +27,7 @@ class Text extends GameDataType
 
     // @todo RC make it so when a string is being assigned to this data type, it instead just ingests it the normal way way through the setter if possible.
 
-    public function set(string $input) : Boolean
+    public function set(string $input) : bool
     {
         if($this->validate($input)){
             $this->data = $input;
@@ -37,7 +38,7 @@ class Text extends GameDataType
         return false;
     }
 
-    public function validate(string $input) : Boolean {
+    public function validate(string $input) : bool {
         if(strlen($input) > self::maxLength){
             // handle error
             return false;

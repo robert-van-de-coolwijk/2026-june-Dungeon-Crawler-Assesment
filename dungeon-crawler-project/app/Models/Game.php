@@ -20,7 +20,7 @@ use App\Models\WorldEntities\World;
  *
  * The game state dictates the state of the game
  */
-class Game
+class Game extends SingletonPattern
 {
     // @todo RC make a token based player identification to separate player interactions
 
@@ -31,8 +31,10 @@ class Game
 
     protected ?World $world = null;
 
-    public function __construct()
+    protected function __construct()
     {
+        parent::__construct();
+
         $this->init();
     }
 
@@ -61,7 +63,7 @@ class Game
 //            ];
 //        }
 
-        return Command::getInstance()->{$commandName}($this, $params);
+        return Command::getInstance()->{$commandName}($params);
 
     }
 
@@ -115,7 +117,12 @@ class Game
         ];
     }
 
-    public function __toString()
+    public static function getInstance() : Game
+    {
+        return parent::getInstance();
+    }
+
+    public function __toString() : string
     {
         $stateOfTheGameArray = $this->getStateOfTheGame();
 

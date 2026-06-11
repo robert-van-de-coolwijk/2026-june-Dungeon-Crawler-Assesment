@@ -2,15 +2,19 @@
 
 namespace App\Models\WorldEntities;
 
-use App\Models\GameDataTypes\Collection;
+use App\Models\GameDataTypes\ShortText;
 
 class Room extends Container
 {
-    public Collection $data;
+    public ShortText $_biome;
+
 
     public function __construct()
     {
-        $this->data = new Collection();
+        parent::__construct();
+
+        $this->_biome = new ShortText();
+
     }
 
 }

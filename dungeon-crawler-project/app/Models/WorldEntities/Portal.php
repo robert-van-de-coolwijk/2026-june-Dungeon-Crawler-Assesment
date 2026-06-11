@@ -4,6 +4,7 @@ namespace App\Models\WorldEntities;
 
 use App\Models\GameDataTypes\Boolean;
 use App\Models\GameDataTypes\Identifier;
+use App\Models\GameDataTypes\Resource;
 use App\Models\WorldEntities;
 
 /**
@@ -17,9 +18,13 @@ use App\Models\WorldEntities;
 class Portal extends WorldEntities\Entity
 {
 
-    public Identifier $source;
+    public ?Identifier $_source = null;
 
-    public Identifier $target;
+    public ?Identifier $_target = null;
 
+    public function __construct()
+    {
+        parent::__construct();
 
+    }
 }

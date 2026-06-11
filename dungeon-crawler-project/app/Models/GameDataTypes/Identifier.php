@@ -2,6 +2,8 @@
 
 namespace App\Models\GameDataTypes;
 
+use App\Core\Tools;
+use App\Models\Game;
 use App\Models\WorldEntities\World;
 
 /**
@@ -16,13 +18,21 @@ class Identifier extends Text
     private function __construct() {
         parent::__construct();
 
-        $id = World::getInstance()->getHighestIdentifier();
+        $world = Game::getInstance()->getWorld();
+
+        $id = $world->getHighestIdentifier();
 
         $id = $id < self::ID_START_NUMBER ?
             self::ID_START_NUMBER :
-            $id++;
+            ++$id;
 
-        $this->set(sprintf('%s%i', self::ID_PREFIX, $id));
+        Tools::debug($id);
+
+        $this->data = self::ID_PREFIX . $id;
+
+        Tools::debug($this->data);
+
+        $world->setHighestIdentifier($id);
 
     }
 
@@ -30,7 +40,7 @@ class Identifier extends Text
         return new Identifier();
     }
 
-    public function validate(string $input) : Boolean {
+    public function validate(string $input) : bool {
         if(strlen($input) <= 1){
             return false;
         }

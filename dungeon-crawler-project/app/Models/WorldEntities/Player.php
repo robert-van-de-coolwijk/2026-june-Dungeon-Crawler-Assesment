@@ -8,13 +8,13 @@ use App\Core\Tools;
 
 class Player extends Creature
 {
-    public CreatureType $creatureType = CreatureType::Player;
+    public CreatureType $_creatureType = CreatureType::Player;
 
     public function getStateOfThePlayer() : MsgWrap
     {
         $msg = implode(PHP_EOL, [
-            $this->name,
-            $this->health
+            $this->_name,
+            $this->_health
         ]);
 
         return Tools::MsgWrap($msg, ContType::P);

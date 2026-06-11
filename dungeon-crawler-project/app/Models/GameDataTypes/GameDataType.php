@@ -12,6 +12,6 @@ abstract class GameDataType
     }
 
     public abstract function get() : string;
-    public abstract function set(string $input) : Boolean;
+    public abstract function set(string $input) : bool;
 
 }

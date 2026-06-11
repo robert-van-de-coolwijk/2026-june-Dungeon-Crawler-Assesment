@@ -21,6 +21,7 @@ class Lock extends GameDataType
      */
     public function __construct(string $value = 'true')
     {
+
         $this->set($value);
     }
 
@@ -32,13 +33,13 @@ class Lock extends GameDataType
     /**
      * @throws \Exception
      */
-    public function set(string $value): boolean
+    public function set(string $input): bool
     {
-        if(!$this->valid($value)){
-            throw new \Exception("Invalid value '$value' for lock");
+        if(!$this->valid($input)){
+            throw new \Exception("Invalid value '$input' for lock");
         }
 
-        $this->data = $value;
+        $this->data = $input;
 
         return true;
     }

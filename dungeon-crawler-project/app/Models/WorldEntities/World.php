@@ -7,7 +7,7 @@ use App\Core\MsgWrap\MsgWrap;
 use App\Core\Tools;
 use App\Models\SingletonPattern;
 
-class World extends SingletonPattern
+class World
 {
     /**
      * @var int Stores the highest id assigned to an entity
@@ -18,13 +18,16 @@ class World extends SingletonPattern
     protected array $entities = array();
 
     public function addEntity(Entity $entity){
-        $this->entities[$entity->id->get()] = $entity;
+        $this->entities[] = $entity;
 
-        $id = $entity->id->getAsNumber();
+        // @todo RC see if this is a sensible option if not: remove
+//        $this->entities[$entity->id] = $entity;
 
-        if($id > $this->highestIdentifier){
-            $this->highestIdentifier = $id;
-        }
+//        $id = $entity->getIdAsNumber();
+
+//        if($id > $this->highestIdentifier){
+//            $this->highestIdentifier = $id;
+//        }
     }
 
     public function numberOfEntities(){
@@ -36,12 +39,9 @@ class World extends SingletonPattern
         return $this->highestIdentifier;
     }
 
-    /**
-     * Just to fix singleton pattern return type
-     * @return World
-     */
-    public static function getInstance(): World {
-        return parent::getInstance();
+    public function setHighestIdentifier(int $id)
+    {
+        $this->highestIdentifier = $id;
     }
 
     /**
@@ -54,8 +54,8 @@ class World extends SingletonPattern
     {
         $countArr = [];
 
-        foreach($this as $entity){
-            $className = get_class($entity);
+        foreach($this->entities as $entity){
+            $className = Tools::getClassName($entity);
 
             isset($countArr[$className]) ? $countArr[$className]++ : $countArr[$className] = 1;
         }
@@ -63,21 +63,29 @@ class World extends SingletonPattern
         return $countArr;
     }
 
+
+
     public function getStateOfTheWorld() : MsgWrap
     {
-        $msgs = [];
+        $messages = [];
+        $messages[] =  sprintf('%s: %d', 'Highest ID', $this->highestIdentifier);
+
         $entitiesCounts = $this->getNumberOfEntities();
 
-        foreach($this->entities as $entityName => $entity){
-            $entitiesCounts[] =  sprintf('%s: %i', $entityName, $entity);
+        foreach($entitiesCounts as $entityName => $entity){
+            $messages[] =  sprintf('%s: %d', $entityName, $entity);
         }
 
-        $entitiesCounts[] = '---';
-        $entitiesCounts[] =  sprintf('%s: %i', 'total', $entity);
+        $messages[] = '---';
+        $messages[] =  sprintf('%s: %d', 'total', $entity);
 
-        $msg = implode(PHP_EOL, $msgs);
+        Tools::debug($messages);
+
+        $msg = implode(PHP_EOL, $messages);
 
         return Tools::MsgWrap($msg, ContType::P);
     }
+
+
 
 }

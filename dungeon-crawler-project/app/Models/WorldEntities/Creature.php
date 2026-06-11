@@ -4,19 +4,31 @@ namespace App\Models\WorldEntities;
 
 
 use App\Models\GameDataTypes\Collection;
+use App\Models\GameDataTypes\Resource;
 use Exception;
 
 class Creature extends Entity
 {
-    public Collection $inventory;
 
-    public CreatureType $creatureType = CreatureType::Unset;
+    public CreatureType $_creatureType;
 
-    public Resource $health;
+    public Collection $_inventory;
+
+    /// RESOURCES \\\
+    public Resource $_health;
+
+    /// ATTRIBUTES \\\
+
 
     public function __construct()
     {
-        $this->inventory = new Collection();
+        parent::__construct();
+
+        $this->_creatureType = CreatureType::Unset;
+
+        $this->_inventory = new Collection();
+
+        $this->_health = new Resource();
     }
 
     public function __set(string $name, $value)

@@ -14,7 +14,7 @@ class Collection extends GameDataType
         // TODO: Implement get() method.
     }
 
-    public function set(string $input): Boolean
+    public function set(string $input): bool
     {
         // TODO: Implement set() method.
     }
