@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Core;
+namespace App\Core\MsgWrap;
 
-
-class MsgWrapContentType
+/**
+ * Message Wrap Content Type
+ */
+class ContType
 {
     /**
      * Heading level 1

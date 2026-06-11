@@ -26,4 +26,9 @@ class Main
     public function command(string $commandName, array $params) : array {
         return $this->game->handleCommand($commandName, $params);
     }
+
+    public function getGameState() : array
+    {
+        return $this->game->getStateOfTheGame();
+    }
 }

@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Core;
+namespace App\Core\MsgWrap;
 
-
-class MsgWrapSentiment
+/**
+ * Message Wrap Sentiment
+ */
+class Sentiment
 {
     public const Normal = 'normal';
 

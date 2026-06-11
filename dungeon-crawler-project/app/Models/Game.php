@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Controllers\Commands\Command;
+use App\Core\MsgWrap\ContType;
+use App\Core\MsgWrap\Sentiment;
+use App\Core\Tools;
 use App\Models\GameState\AbstractGameState;
 use App\Models\GameState\Blank;
 use App\Models\WorldEntities\Player;
@@ -88,6 +91,35 @@ class Game
     public function setWorld(?World $world): void
     {
         $this->world = $world;
+    }
+
+    /**
+     * @return array Message Wrapper objects
+     */
+    public function getStateOfTheGame() : array
+    {
+
+        $playerString = $this->playerOne !== null   ? $this->playerOne->getStateOfThePlayer()   : '[ there is no player ]';
+        $worldString = $this->world !== null        ? $this->world->getStateOfTheWorld()        : '[ there is no world ]';
+
+        $MW = Tools::getMsgWrapFn();
+        $emptyLine = '';
+
+        return [
+            $MW('Current state of the game',    ContType::H1),
+            $MW('Player',                       ContType::H2),
+            $MW($playerString,                  ContType::P),
+            $MW($emptyLine,                     ContType::P),
+            $MW('World:',                       ContType::H2),
+            $MW($worldString,                   ContType::P),
+        ];
+    }
+
+    public function __toString()
+    {
+        $stateOfTheGameArray = $this->getStateOfTheGame();
+
+        return implode(PHP_EOL, $stateOfTheGameArray);
     }
 
 }

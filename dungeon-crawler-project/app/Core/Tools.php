@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\Core\MsgWrap\MsgWrap;
 use Exception;
 
 
@@ -15,6 +16,27 @@ class Tools {
 
     public static function getTimeStamp(){
         return date('Y-m-d H:i:s');
+    }
+
+    /**
+     * Creates an instance of Message Wrapper,
+     * see class for details
+     *
+     * @param string $msg
+     * @param string|null $contentType
+     * @param string|null $sentiment
+     * @return MsgWrap
+     */
+    public static function MsgWrap(string $msg, string $contentType = '', ?string $sentiment = '') : MsgWrap
+    {
+        return new MsgWrap($msg, $contentType, $sentiment);
+    }
+
+    public static function getMsgWrapFn(){
+        return function(string $msg, string $contentType = '', string $sentiment = '') : MsgWrap
+        {
+            return new MsgWrap($msg, $contentType, $sentiment);
+        };
     }
 
     public static function debug(){
