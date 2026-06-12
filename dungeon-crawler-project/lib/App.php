@@ -28,8 +28,13 @@ class App
         /// register valid commands (client side) \\\
 
         // game (server) commands
-        $this->registerCommand("player", "genericCommandHandler");
         $this->registerCommand("time", "genericCommandHandler");
+        $this->registerCommand("state", "genericCommandHandler");
+
+        $this->registerCommand("player", "genericCommandHandler");
+        $this->registerCommand("init", "genericCommandHandler");
+
+
 
 
         // client commands
