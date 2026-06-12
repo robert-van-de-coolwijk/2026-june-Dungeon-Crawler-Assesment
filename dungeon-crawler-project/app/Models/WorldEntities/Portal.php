@@ -18,13 +18,15 @@ use App\Models\WorldEntities;
 class Portal extends WorldEntities\Entity
 {
 
-    public ?Identifier $_source = null;
+    public Identifier $_source;
 
-    public ?Identifier $_target = null;
+    public Identifier $_target;
 
-    public function __construct()
+    public function __construct(Room $source, Room $target)
     {
         parent::__construct();
 
+        $this->_source = $source->_id;
+        $this->_target = $target->_id;
     }
 }

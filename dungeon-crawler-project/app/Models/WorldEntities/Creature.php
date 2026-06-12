@@ -3,6 +3,7 @@
 namespace App\Models\WorldEntities;
 
 
+use App\Core\Tools;
 use App\Models\GameDataTypes\Collection;
 use App\Models\GameDataTypes\Resource;
 use Exception;
@@ -28,35 +29,24 @@ class Creature extends Entity
 
         $this->_inventory = new Collection();
 
-        $this->_health = new Resource();
+        $this->_health = new Resource(10); // @todo RC calculate this from default attributes
     }
 
     public function __set(string $name, $value)
     {
+        switch ($name) {
+            case strcmp($name, 'creatureType'):
 
-        if(!strcmp($name, 'creatureType')){
-            $result = parent::__set($name, $value);
+                if(enum_exists(CreatureType::{$value})) {
+                    $this->creatureType = CreatureType::{$value};
+                } else {
+                    throw new Exception("Creature type '$value' is invalid");
+                }
+                break;
 
-            if($result === false){
-                // @todo RC test and handle error
-            } else if ( $result === true) {
-                // this if good flow
-                true;
-            } else {
-                // this should never happen and the exception is just there to report if it does
-                throw new Exception("Programming error, entity #{$this->id} property {$name}, on setting the value '$value' returned a non boolean value.");
-            }
+            default:
+                parent::__set($name, $value);
 
-            return; //@todo RC decide if we keep void returns to prevent continuation of code execution OR use something else for that purpose OR put something useful like the result of the set as the return value
-        }
-
-        // cast to lowercase
-        $value = strtolower($value);
-
-        if(enum_exists(CreatureType::{$value})) {
-            $this->creatureType = CreatureType::{$value};
-        } else {
-            throw new Exception("Creature type '$value' ");
         }
 
     }

@@ -6,6 +6,8 @@ use App\Core\Tools;
 use App\Models\Game;
 use App\Models\WorldEntities\World;
 
+
+
 /**
  * This value stores the ID of one Entity
  */
@@ -26,11 +28,11 @@ class Identifier extends Text
             self::ID_START_NUMBER :
             ++$id;
 
-        Tools::debug($id);
+        //Tools::debug($id);
 
         $this->data = self::ID_PREFIX . $id;
 
-        Tools::debug($this->data);
+        //Tools::debug($this->data);
 
         $world->setHighestIdentifier($id);
 

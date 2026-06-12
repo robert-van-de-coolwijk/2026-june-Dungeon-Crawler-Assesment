@@ -29,11 +29,16 @@ class Game extends SingletonPattern
      */
     protected ?Player $playerOne = null;
 
-    protected ?World $world = null;
+    protected World $world;
+
 
     protected function __construct()
     {
         parent::__construct();
+
+        $this->world = new World();
+
+        $this->populateFromSave();
 
         $this->init();
     }
@@ -80,9 +85,18 @@ class Game extends SingletonPattern
         return $this->playerOne;
     }
 
-    public function setPlayerOne(?Player $playerOne): void
+    public function setPlayerOne(Player $playerOne) : array
     {
+        $msgs = array();
+
         $this->playerOne = $playerOne;
+
+        if($this->world !== null)
+        {
+            $msgs = array_merge($msgs, $this->placePlayerInRandomRoom());
+        }
+
+        return $msgs;
     }
 
     public function getWorld(): ?World
@@ -90,9 +104,37 @@ class Game extends SingletonPattern
         return $this->world;
     }
 
-    public function setWorld(?World $world): void
+    public function setWorld(World $world) : array
     {
+        $msgs = array();
+
         $this->world = $world;
+
+        if($this->playerOne !== null)
+        {
+            $msgs = array_merge($msgs, $this->placePlayerInRandomRoom());
+        }
+
+        return $msgs;
+    }
+
+    private function placePlayerInRandomRoom() : array
+    {
+        $msg = array();
+
+        if($this->world !== null && $this->playerOne !== null)
+        {
+
+            $randomRoom = $this->world->getRandomRoom();
+
+            if($randomRoom !== null){
+                $this->playerOne->currentRoom = $randomRoom;
+
+                $msg[] = Tools::MsgWrap(sprintf('Player placed into room %s "%s"  ', $randomRoom->id, $randomRoom->name));
+            }
+        }
+
+        return $msg;
     }
 
     /**
@@ -127,6 +169,13 @@ class Game extends SingletonPattern
         $stateOfTheGameArray = $this->getStateOfTheGame();
 
         return implode(PHP_EOL, $stateOfTheGameArray);
+    }
+
+    private function populateFromSave()
+    {
+        // see if there is a world on shared memory (Redis)
+
+        // see if there is a world saved on disk
     }
 
 }

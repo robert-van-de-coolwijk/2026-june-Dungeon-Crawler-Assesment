@@ -2,6 +2,7 @@
 
 namespace App\Models\WorldEntities;
 
+use App\Core\Tools;
 use App\Models\GameDataTypes\GameDataType;
 use App\Models\GameDataTypes\Identifier;
 use App\Models\GameDataTypes\ShortText;
@@ -38,15 +39,19 @@ class Entity {
             case is_null($this->{$name}):
                 throw new Exception("Property '{$name}' is unset, please report this error for entity ID #{$this->id}");
 
-            case $method == 'get':
-                return method_exists($this, '__toString');
+//@todo RC rework this logic, it is flawed
+//
+//            case $method == 'get':
+//                return method_exists($this, '__toString');
+//
+//            case $method == 'set':
+//                return method_exists($this, 'set');
 
-            case $method == 'set':
-                return method_exists($this, 'set');
-
-            default:
-                throw new Exception("Something went horribly wrong. If you can read this message, report that property '{$name}' on entity ID #{$this->id} caused an ERROR the game was not designed for.");
         }
+
+        return true;
+
+        throw new Exception("Something went horribly wrong. If you can read this message, report that property '{$name}' on entity ID #{$this->id} caused an ERROR the game was not designed for.");
     }
 
     protected static function getPropKey($name) : string {
@@ -73,8 +78,11 @@ class Entity {
         $propName = self::getPropKey($name);
 
         if($this->getSetSanityCheck($propName, 'set')){
+
             return $this->{$propName}->set($value);
         }
+
+        return false;
     }
 
     public function getIdAsNumber() : int

@@ -79,13 +79,35 @@ class World
         $messages[] = '---';
         $messages[] =  sprintf('%s: %d', 'total', $entity);
 
-        Tools::debug($messages);
-
         $msg = implode(PHP_EOL, $messages);
 
         return Tools::MsgWrap($msg, ContType::P);
     }
 
+    public function createPortal(Room $sourceRoom, Room $targetRoom, string $name, string $description = '')
+    {
+        $portal = new Portal($sourceRoom, $targetRoom);
+
+        $this->addEntity($portal);
+    }
+
+    public function getRandomRoom() : ?Room
+    {
+        $rooms = [];
+
+        foreach($this->entities as $entity){
+            if($entity instanceof Room){
+                $rooms[] = $entity;
+            }
+        }
+
+        if(count($rooms) == 0)
+        {
+            return null;
+        }
+
+        return $rooms[array_rand($rooms)];
+    }
 
 
 }

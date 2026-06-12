@@ -2,6 +2,8 @@
 
 namespace App\Models\GameDataTypes;
 
+use App\Core\Tools;
+
 class Text extends GameDataType
 {
 
@@ -40,8 +42,7 @@ class Text extends GameDataType
 
     public function validate(string $input) : bool {
         if(strlen($input) > self::maxLength){
-            // handle error
-            return false;
+            throw new \Exception(sprintf('Value for property is to long, %s chars of %s maximum allowed: "%s"', strlen($input), self::maxLength, $input));
         }
 
         return true;

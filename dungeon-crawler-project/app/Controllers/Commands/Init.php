@@ -65,27 +65,28 @@ class Init
         // put all letters into a 2-dimensional array
         $grid = explode("\n", $fileContents);
 
+        // replace the string on this array position with an array
         foreach ($grid as $key => $line) {
             $grid[$key] = Tools::stringToArray($line);
         }
 
-        Tools::debug($grid);
+        //Tools::debug($grid);
 
         $roomGrid = [];
         $builder = TemplateBuilder::getInstance();
 
         // walk through all letters and make rooms
-        foreach ($grid as $x => $row) {
-            foreach($row as $y => $cell) {
-                $key = "$x#$y";
+        foreach ($grid as $y => $row) {
+            foreach($row as $x => $cell) {
+                $key = self::gridKey($x, $y);
 
                 $biomeString = self::getBiomeFromLetter($cell);
 
                 $room = self::createRoom($builder, $biomeString);
 
                 $roomGrid[$key] = $room;
-                Tools::debug($key);
-                Tools::debug($room->id);
+                //Tools::debug($key);
+                //Tools::debug($room->id);
 
                 $world->addEntity($room);
             }
@@ -93,13 +94,44 @@ class Init
 
         // walk through all the rooms again and make portals to rooms adjacent to rooms
 
-        foreach ($grid as $x => $row) {
-            foreach($row as $y => $cell) {
+        $northLimit = 0;
+        $westLimit = 0;
+        $southLimit = count($grid) - 1;
+
+
+        //Tools::debug($grid);
+        //Tools::debug($southLimit);
+
+        foreach ($grid as $y => $row) {
+            $eastLimit = count($row) - 1;
+
+            foreach($row as $x => $cell) {
+
                 // WARNING this loop uses a hybrid system,
-                // where the outer loop can be used to easily determine that grid dimensions + traversal
-                // as the $roomGrid has a quick key lookup and is a FLAT single dimensional array
-                $key = "$x#$y";
+                // where the outer loop can be used to easily determine the grid dimensions + traversal,
+                // the $roomGrid has a quick key lookup and is a FLAT single dimensional array
+                $key = self::gridKey($x, $y);
                 $room = $roomGrid[$key];
+
+                if($y > $northLimit) {
+                    $adjacentPortal = $roomGrid[self::gridKey($x, $y - 1)];
+                    $world->createPortal($room, $adjacentPortal, 'north');
+                }
+
+                if($x > $westLimit) {
+                    $adjacentPortal = $roomGrid[self::gridKey($x - 1, $y)];
+                    $world->createPortal($room, $adjacentPortal, 'west');
+                }
+
+                if($y < $southLimit) {
+                    $adjacentPortal = $roomGrid[self::gridKey($x, $y + 1)];
+                    $world->createPortal($room, $adjacentPortal, 'south');
+                }
+
+                if($x < $eastLimit) {
+                    $adjacentPortal = $roomGrid[self::gridKey($x + 1, $y)];
+                    $world->createPortal($room, $adjacentPortal, 'east');
+                }
 
             }
         }
@@ -110,6 +142,13 @@ class Init
 
 
         return $msgs;
+    }
+
+
+    private static function gridKey(int|string $x, int|string $y) : string {
+        //Tools::debug(sprintf('%s#%s', $x, $y));
+
+        return sprintf('%s#%s', $x, $y);
     }
 
     private static function getBiomeFromLetter(string $cell) : string

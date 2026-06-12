@@ -6,6 +6,7 @@ use App\Core\Tools;
 use App\Models\Game;
 use App\Models\GameState\Blank;
 use App\Models\SingletonPattern;
+use App\Models\WorldEntities\Player;
 
 /**
  * This is a command a player (or actor) can execute on the game world.
@@ -32,11 +33,28 @@ class Command extends SingletonPattern
 
     public function player(array $params) : array
     {
+        $msg = [];
+        $game = Game::getInstance();
 
+        $playerOne = $game->getPlayerOne();
 
-        return [
-            "Not implemented, player not named"
-        ];
+        if($playerOne === null && isset($params[0]))
+        {
+            $playerOne = new Player();
+            $playerOne->name = $params[0];
+
+            $world = $game->getWorld();
+
+            $msg[] = Tools::MsgWrap('Created player');
+
+            $game->setPlayerOne($playerOne);
+        }
+
+        $msg[] = Tools::MsgWrap(
+            $playerOne?->__toString() ?? 'No player set'
+        );
+
+        return $msg;
     }
 
     public function state(array $params) : array
