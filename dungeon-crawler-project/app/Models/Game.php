@@ -36,23 +36,11 @@ class Game extends SingletonPattern
     {
         parent::__construct();
 
-        $this->world = new World();
+        $this->setWorld(new World());
 
         $this->populateFromSave();
-
-        $this->init();
     }
 
-    public function init()
-    {
-        // see what is saved on disk
-
-        // load game if exists
-        // load player if exists
-        // load world if exists
-
-        // return game
-    }
 
     public function handleCommand(string $commandName, array $params) : array
     {
@@ -104,7 +92,7 @@ class Game extends SingletonPattern
         return $this->world;
     }
 
-    public function setWorld(World $world) : array
+    private function setWorld(World $world) : array
     {
         $msgs = array();
 
@@ -128,7 +116,7 @@ class Game extends SingletonPattern
             $randomRoom = $this->world->getRandomRoom();
 
             if($randomRoom !== null){
-                $this->playerOne->currentRoom = $randomRoom;
+                $this->playerOne->currentRoom = $randomRoom->id;
 
                 $msg[] = Tools::MsgWrap(sprintf('Player placed into room %s "%s"  ', $randomRoom->id, $randomRoom->name));
             }
@@ -176,6 +164,9 @@ class Game extends SingletonPattern
         // see if there is a world on shared memory (Redis)
 
         // see if there is a world saved on disk
+
+            // load player if exists
+            // load world if exists
     }
 
 }

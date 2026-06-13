@@ -2,6 +2,8 @@
 
 namespace App\Controllers\Commands;
 
+use App\Core\MsgWrap\ContType;
+use App\Core\MsgWrap\Sentiment;
 use App\Core\Tools;
 use App\Models\Game;
 use App\Models\GameState\Blank;
@@ -31,6 +33,15 @@ class Command extends SingletonPattern
         return Init::world($params);
     }
 
+    public function restore(array $params) : array
+    {
+        $game = Game::getInstance();
+
+        $game->getWorld()->restore();
+
+        return [Tools::MsgWrap("world restored")];
+    }
+
     public function player(array $params) : array
     {
         $msg = [];
@@ -45,13 +56,14 @@ class Command extends SingletonPattern
 
             $world = $game->getWorld();
 
-            $msg[] = Tools::MsgWrap('Created player');
+            $msg[] = Tools::MsgWrap('Created player', ContType::P, Sentiment::Important);
 
             $game->setPlayerOne($playerOne);
         }
 
         $msg[] = Tools::MsgWrap(
-            $playerOne?->__toString() ?? 'No player set'
+            $playerOne?->__toString() ?? 'No player set',
+            ContType::P
         );
 
         return $msg;

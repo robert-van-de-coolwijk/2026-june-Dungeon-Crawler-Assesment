@@ -41,8 +41,7 @@ class Init
     {
         $game = Game::getInstance();
 
-        $world = new World();
-        $game->setWorld($world);
+        $world = $game->getWorld();
 
         $msgs = [];
 

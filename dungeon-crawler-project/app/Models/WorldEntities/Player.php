@@ -5,12 +5,13 @@ namespace App\Models\WorldEntities;
 use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\MsgWrap;
 use App\Core\Tools;
+use App\Models\GameDataTypes\Identifier;
 
 class Player extends Creature
 {
     public CreatureType $_creatureType = CreatureType::Player;
 
-    public ?Room $_currentRoom = null;
+    public ?Identifier $_currentRoom = null;
 
     public function getStateOfThePlayer() : MsgWrap
     {
