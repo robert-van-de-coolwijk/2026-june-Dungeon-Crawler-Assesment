@@ -3,19 +3,24 @@
 namespace App\Core\Data;
 
 use App\Config\Config;
+use App\Config\FileCacherConfig;
 use App\Core\Tools;
+use App\Models\SingletonPattern;
 
-class FileCacher {
+class FileCacher  extends SingletonPattern{
 
-    public function __construct() {
-        $path = Config::FileCacherDataPath;
+    protected function __construct() {
+        parent::__construct();
+
+        $path = FileCacherConfig::DataPath;
 
 //        echo '<br />Init FileCacher';
 //        Tools::debugFilePath($path);
 //        echo '<br />Done (Init FileCacher)';
     }
 
-    public function put($fContextString, $fData, $fDebug = true){
+    public function put(string $fContextString, $fData, $fDebug = true) : void
+    {
         $path = $this->getContextPath($fContextString);
 
         if($fDebug){
@@ -31,13 +36,15 @@ class FileCacher {
         }
     }
 
-    public function exists($fContextString){
+    public function exists(string $fContextString) : bool
+    {
         $path = $this->getContextPath($fContextString);
 
         return file_exists($path);
     }
 
-    public function get($fContextString){
+    public function get(string $fContextString) : ?string
+    {
         $path = $this->getContextPath($fContextString);
         //Tools::debugFilePath($path);
 
@@ -48,11 +55,16 @@ class FileCacher {
         return $fData;
     }
 
-    private function getContextPath($fContextString){
+    private function getContextPath(string $fContextString) : string
+    {
         $crc = crc32($fContextString);
-        $path = Config::FileCacherDataPath . '/' . $fContextString . '_' . $crc . '.json';
+        $path = FileCacherConfig::DataPath . '/' . $fContextString . '_' . $crc . '.json';
 
         return $path;
+    }
+
+    public static function getInstance() : FileCacher {
+        return parent::getInstance();
     }
 
 }
