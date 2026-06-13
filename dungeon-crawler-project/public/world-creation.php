@@ -14,8 +14,10 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $main = new Main();
 $main->start();
 
-$main->command('restore', []);
+$main->command('player', ['Mr Patchouli']);
 
+
+$main->command('init', ['world', 'world_1.txt']);
 
 // RESULT, we do this after we do the testing stuff
 $stateOfTheGameLines = $main->getGameState();
