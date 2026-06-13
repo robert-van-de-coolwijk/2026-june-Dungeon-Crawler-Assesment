@@ -2,10 +2,15 @@
 
 namespace App\Models\WorldEntities;
 
+use App\Config\FileCacherConfig;
+use App\Core\Data\FileCacher;
 use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\MsgWrap;
 use App\Core\Tools;
-use App\Models\SingletonPattern;
+use App\Models\Game;
+use App\Models\GameDataTypes\Identifier;
+use Exception;
+use stdClass;
 
 class World
 {
@@ -17,11 +22,17 @@ class World
 
     protected array $entities = array();
 
-    public function addEntity(Entity $entity){
-        $this->entities[] = $entity;
+    public function addEntity(Entity $entity)
+    {
+        $entityKey = (string)$entity->id;
+
+        if(isset($this->entities[$entityKey]))
+        {
+            throw new \Exception("Already have a entity with key $entityKey");
+        }
 
         // @todo RC see if this is a sensible option if not: remove
-//        $this->entities[$entity->id] = $entity;
+        $this->entities[$entityKey] = $entity;
 
 //        $id = $entity->getIdAsNumber();
 
@@ -109,5 +120,57 @@ class World
         return $rooms[array_rand($rooms)];
     }
 
+
+    /// SAVE AND RESTORE LOGIC \\\
+
+    private static function getFileCacherContext(string $id) : string {
+        return FileCacherConfig::WorldContext . '_' . $id;
+    }
+
+    private function save()
+    {
+        $fileCacher = FileCacher::getInstance();
+
+        $contextString = self::getFileCacherContext($this->id);
+
+        $worldObject = new stdClass();
+        $worldObject->highestIdentifier = $this->highestIdentifier;
+
+        $fileCacher->put($contextString, $worldObject);
+    }
+
+    /**
+     * World restore relies on the highestIdentifier being stored in an object saved to disk
+     * The
+     * @throws Exception
+     */
+    public function restore() : bool
+    {
+        $fileCacher = FileCacher::getInstance();
+
+        // @todo Make more robust
+
+        $contextString = self::getFileCacherContext(1); // in anticipation of being able to support multiple worlds
+
+        $worldObject = $fileCacher->get($contextString);
+
+        $world = Game::getInstance()->getWorld();
+
+        // continue restoring where left
+        for($i = $world->highestIdentifier; $i <= $worldObject->highestIdentifier; $i++){
+
+            $entity = Entity::restore($world, $i);
+
+            // defense against infinite loops and
+            // out of memory problems due though a world being restored bigger than what the current server can support
+            if($i >  FileCacherConfig::EntityRestoreLimit){
+                throw new Exception(sprintf("Entity restore limit of %s reached", FileCacherConfig::EntityRestoreLimit));
+                break;
+            }
+        }
+
+
+        return true;
+    }
 
 }

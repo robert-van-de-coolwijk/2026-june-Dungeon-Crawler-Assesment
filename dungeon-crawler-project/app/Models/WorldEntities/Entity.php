@@ -2,7 +2,11 @@
 
 namespace App\Models\WorldEntities;
 
+use App\Config\Config;
+use App\Config\FileCacherConfig;
+use App\Core\Data\FileCacher;
 use App\Core\Tools;
+use App\Models\Game;
 use App\Models\GameDataTypes\GameDataType;
 use App\Models\GameDataTypes\Identifier;
 use App\Models\GameDataTypes\ShortText;
@@ -10,6 +14,7 @@ use App\Models\GameDataTypes\Text;
 use Exception;
 
 class Entity {
+
     protected Identifier $_id; // This number can become LARGE. A lot of entities like rooms will have a minimum of 4 entities associated with them.
 
     protected ShortText $_name;
@@ -22,6 +27,8 @@ class Entity {
 
         $this->_name = new ShortText();
         $this->_description = new ShortText();
+
+        $this->save();
     }
 
     /**
@@ -68,6 +75,8 @@ class Entity {
         if($this->getSetSanityCheck($propName, 'get')){
             return $this->{$propName}->__toString();
         }
+
+        return null;
     }
 
     /**
@@ -89,4 +98,43 @@ class Entity {
     {
         return $this->_id->getAsNumber();
     }
+
+    /// SAVE AND RESTORE LOGIC \\\
+
+    private static function getFileCacherContext(string $id) : string {
+        return FileCacherConfig::EntityContext . '/' . $id;
+    }
+
+    private function save()
+    {
+        $fileCacher = FileCacher::getInstance();
+
+        $contextString = self::getFileCacherContext($this->id);
+        $serializedEntity = serialize($this);
+
+        $fileCacher->put($contextString, $serializedEntity);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function restore(World $world, int $id) : Entity
+    {
+        $fileCacher = FileCacher::getInstance();
+
+        $entityId = '#' . $id;
+
+        // @todo Make more robust
+        $contextString = self::getFileCacherContext($entityId);
+
+        $serializedEntity = $fileCacher->get($contextString);
+
+        $entity = unserialize($serializedEntity);
+
+        $world->addEntity($entity);
+
+
+        return $entity;
+    }
+
 }
