@@ -19,7 +19,7 @@ class FileCacher  extends SingletonPattern{
 //        echo '<br />Done (Init FileCacher)';
     }
 
-    public function put(string $fContextString, $fData, $fDebug = true) : void
+    public function put(string $fContextString, $fData, $fDebug = false) : void
     {
         $path = $this->getContextPath($fContextString);
 
@@ -43,7 +43,7 @@ class FileCacher  extends SingletonPattern{
         return file_exists($path);
     }
 
-    public function get(string $fContextString) : ?string
+    public function get(string $fContextString) : mixed
     {
         $path = $this->getContextPath($fContextString);
         //Tools::debugFilePath($path);

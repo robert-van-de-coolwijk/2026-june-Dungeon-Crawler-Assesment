@@ -33,13 +33,26 @@ class Command extends SingletonPattern
         return Init::world($params);
     }
 
+    public function save(array $params) : array
+    {
+        $game = Game::getInstance();
+
+        $restoreSuccess = $game->getWorld()->save();
+
+        return [
+            Tools::MsgWrap($restoreSuccess ? "world saved to disk" : "Failed saving world to disk", ContType::P),
+        ];
+    }
+
     public function restore(array $params) : array
     {
         $game = Game::getInstance();
 
-        $game->getWorld()->restore();
+        $restoreSuccess = $game->getWorld()->restore();
 
-        return [Tools::MsgWrap("world restored")];
+        return [
+            Tools::MsgWrap($restoreSuccess ? "world restored" : "Restore failed", ContType::P),
+        ];
     }
 
     public function player(array $params) : array

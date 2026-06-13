@@ -27,8 +27,6 @@ class Entity {
 
         $this->_name = new ShortText();
         $this->_description = new ShortText();
-
-        $this->save();
     }
 
     /**
@@ -105,7 +103,7 @@ class Entity {
         return FileCacherConfig::EntityContext . '/' . $id;
     }
 
-    private function save()
+    public function save()
     {
         $fileCacher = FileCacher::getInstance();
 
@@ -118,7 +116,7 @@ class Entity {
     /**
      * @throws Exception
      */
-    public static function restore(World $world, int $id) : Entity
+    public static function restore(World $world, int $id) : ?Entity
     {
         $fileCacher = FileCacher::getInstance();
 
@@ -126,6 +124,10 @@ class Entity {
 
         // @todo Make more robust
         $contextString = self::getFileCacherContext($entityId);
+        if(!$fileCacher->exists($contextString)){
+            return null;
+        }
+
 
         $serializedEntity = $fileCacher->get($contextString);
 

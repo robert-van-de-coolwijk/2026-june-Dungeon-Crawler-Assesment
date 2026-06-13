@@ -11,6 +11,6 @@ class FileCacherConfig
 
     const EntityContext = 'Entity';
 
-    const WorldContext = 'World';
-    const EntityRestoreLimit = 10;
+    const WorldContext = 'World_';
+    const EntityRestoreLimit = 1000000;
 }

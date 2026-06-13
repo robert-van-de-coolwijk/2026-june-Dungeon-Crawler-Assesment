@@ -6,6 +6,7 @@ use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\MsgWrap;
 use App\Core\Tools;
 use App\Models\WorldEntities\Room;
+use App\Views\HtmlRenderer\HtmlRender;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -14,7 +15,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 $main = new Main();
 $main->start();
 
-$main->command('restore', []);
+HtmlRender::printMsgWrap($main->command('restore', []));
 
 
 // RESULT, we do this after we do the testing stuff

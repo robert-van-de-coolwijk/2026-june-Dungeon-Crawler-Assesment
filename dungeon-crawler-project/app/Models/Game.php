@@ -92,18 +92,11 @@ class Game extends SingletonPattern
         return $this->world;
     }
 
-    private function setWorld(World $world) : array
+    private function setWorld(World $world) : void
     {
         $msgs = array();
 
         $this->world = $world;
-
-        if($this->playerOne !== null)
-        {
-            $msgs = array_merge($msgs, $this->placePlayerInRandomRoom());
-        }
-
-        return $msgs;
     }
 
     private function placePlayerInRandomRoom() : array

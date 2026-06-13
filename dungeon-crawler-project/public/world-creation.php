@@ -20,6 +20,9 @@ HtmlRender::printMsgWrap($main->command('player', ['Mr Patchouli']));
 
 HtmlRender::printMsgWrap($main->command('init', ['world', 'world_1.txt']));
 
+
+HtmlRender::printMsgWrap($main->command('save', []));
+
 // RESULT, we do this after we do the testing stuff
 $stateOfTheGameLines = $main->getGameState();
 

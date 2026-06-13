@@ -31,7 +31,7 @@ class World
             throw new \Exception("Already have a entity with key $entityKey");
         }
 
-        // @todo RC see if this is a sensible option if not: remove
+        // @todo RC key storage see if this is a sensible option if not: remove
         $this->entities[$entityKey] = $entity;
 
 //        $id = $entity->getIdAsNumber();
@@ -75,7 +75,6 @@ class World
     }
 
 
-
     public function getStateOfTheWorld() : MsgWrap
     {
         $messages = [];
@@ -88,7 +87,7 @@ class World
         }
 
         $messages[] = '---';
-        $messages[] =  sprintf('%s: %d', 'total', $entity);
+        $messages[] =  sprintf('%s: %d', 'total', array_sum($entitiesCounts));
 
         $msg = implode(PHP_EOL, $messages);
 
@@ -123,20 +122,24 @@ class World
 
     /// SAVE AND RESTORE LOGIC \\\
 
-    private static function getFileCacherContext(string $id) : string {
-        return FileCacherConfig::WorldContext . '_' . $id;
+    private static function getFileCacherContext(string $worldId) : string {
+        return FileCacherConfig::WorldContext . $worldId;
     }
 
-    private function save()
+    public function save() : void
     {
         $fileCacher = FileCacher::getInstance();
 
-        $contextString = self::getFileCacherContext($this->id);
+        $contextString = $this->getFileCacherContext(1); // in anticipation of being able to support multiple worlds
 
         $worldObject = new stdClass();
         $worldObject->highestIdentifier = $this->highestIdentifier;
 
         $fileCacher->put($contextString, $worldObject);
+
+        foreach($this->entities as $entity){
+            $entity->save();
+        }
     }
 
     /**
@@ -152,14 +155,20 @@ class World
 
         $contextString = self::getFileCacherContext(1); // in anticipation of being able to support multiple worlds
 
+        if(!$fileCacher->exists($contextString)){
+            throw new \Exception("Can't restore World");
+        }
+
         $worldObject = $fileCacher->get($contextString);
+
+        Tools::debug($worldObject);
 
         $world = Game::getInstance()->getWorld();
 
         // continue restoring where left
         for($i = $world->highestIdentifier; $i <= $worldObject->highestIdentifier; $i++){
 
-            $entity = Entity::restore($world, $i);
+            Entity::restore($world, $i);
 
             // defense against infinite loops and
             // out of memory problems due though a world being restored bigger than what the current server can support
