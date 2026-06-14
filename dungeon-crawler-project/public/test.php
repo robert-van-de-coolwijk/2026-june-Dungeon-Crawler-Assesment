@@ -34,6 +34,18 @@ foreach ($stateOfTheGameLines as $line) {
     echo sprintf('<%s class=" %s" style="%s">%s</%s>', $line->contentType, $line->sentiment, $style, $line->msg, $line->contentType);
 }
 
+HtmlRender::printMsgWrap($main->command('look', []));
+
+
+HtmlRender::printMsgWrap($main->command('south', []));
+
+HtmlRender::printMsgWrap($main->command('south', []));
+
+HtmlRender::printMsgWrap($main->command('east', []));
+
+HtmlRender::printMsgWrap($main->command('east', []));
+
+HtmlRender::printMsgWrap($main->command('north', []));
 
 
 //$room = new Room();

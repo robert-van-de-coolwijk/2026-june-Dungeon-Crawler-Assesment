@@ -93,10 +93,24 @@ class Entity {
 
         if($this->getSetSanityCheck($propName, 'set')){
 
-            return $this->{$propName}->set($value);
+            $success = $this->{$propName}->set($value);
+
+            if($success && $this->{$propName} instanceof CollectionIdentifier) {
+                $this->{$propName}->setCollectionRelation($this->_id, $value);
+            }
+
+            return $success;
         }
 
         return false;
+    }
+
+    public function __toString() : string
+    {
+        return implode(PHP_EOL, [
+            $this->_name,
+            $this->_description
+        ]);
     }
 
 
@@ -146,5 +160,6 @@ class Entity {
 
         return $entity;
     }
+
 
 }

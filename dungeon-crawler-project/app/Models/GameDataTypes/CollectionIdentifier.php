@@ -4,6 +4,7 @@ namespace App\Models\GameDataTypes;
 
 use App\Core\Tools;
 use App\Models\Game;
+use App\Models\WorldEntities\Entity;
 use App\Models\WorldEntities\World;
 
 /**
@@ -27,37 +28,8 @@ class CollectionIdentifier extends Identifier
         $this->collectionName = $collectionName;
     }
 
-    public function set(string $collectionEntityId): bool
+    public function setCollectionRelation(Entity|string $singularEntity, Entity|string $collectionEntity) : void
     {
-        $succes = parent::set($collectionEntityId);
-
-        if($succes){
-            EntityRelationManager::getInstance()->setRelation($this->collectionName, $this->data, $collectionEntityId);
-        }
-
-        return $succes;
+        EntityRelationManager::getInstance()->setRelation($this->collectionName, $singularEntity, $collectionEntity);
     }
-
-    public function validate(string $input) : bool {
-        // only valid for idRef
-        if(strcmp($input, self::Unset)){
-            return true;
-        }
-
-        if(strlen($input) <= 1){
-            return false;
-        }
-
-        if(!str_starts_with($input, self::ID_PREFIX)){
-            return false;
-        }
-
-        if(is_numeric(substr($input, 1))){
-            return false;
-        }
-
-        // all checks passed
-        return true;
-    }
-
 }

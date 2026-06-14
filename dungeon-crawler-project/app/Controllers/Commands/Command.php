@@ -101,10 +101,129 @@ class Command extends SingletonPattern
 
     /// game actions \\\
 
+    public function look(array $params) : array
+    {
+        $msg = [];
+        $game = Game::getInstance();
+
+        $currentRoomId = $game->getPlayerOne()->insideContainer;
+
+        $currentRoom = $game->getWorld()->getEntityById($currentRoomId);
+
+        if(!is_null($currentRoom)){
+            $msg[] = Tools::MsgWrap(
+                $currentRoom->name,
+                ContType::P,
+                Sentiment::Important
+            );
+            $msg[] = Tools::MsgWrap(
+                $currentRoom->description,
+                ContType::P,
+                Sentiment::Normal
+            );
+
+            $msg[] = Tools::MsgWrap(
+                '',
+                ContType::P,
+                Sentiment::Normal
+            );
+
+            $msg[] = Tools::MsgWrap(
+                sprintf("[%s]", implode(', ', $currentRoom->getPortalNames())),
+                ContType::P,
+                Sentiment::Normal
+            );
+        }else {
+            $msg[] = Tools::MsgWrap(
+                '[ Player is not in a room ]',
+                ContType::P
+            );
+        }
+
+
+        return $msg;
+    }
+
+    //@todo RC move to be aliasses of an existing command (east is alias of "move east")
+    public function north() : array {
+        return $this->move(['north']);
+    }
+
+    public function east() : array {
+        return $this->move(['east']);
+    }
+
+    public function south() : array {
+        return $this->move(['south']);
+    }
+
+    public function west() : array {
+        return $this->move(['west']);
+    }
+
     public function move(array $params) : array
     {
+        $msg = [];
+        $game = Game::getInstance();
+        $world = $game->getWorld();
+        $playerOne = $game->getPlayerOne();
 
-        throw new \Exception("Move not implemented");
+        $requestedPortalName = trim($params[0]);
+
+        if(strlen($requestedPortalName) < 1){
+            $msg[] = Tools::MsgWrap(
+                sprintf('Invalid value for move action "%s"', $requestedPortalName),
+                ContType::P
+            );
+
+            return $msg;
+        }
+
+        $currentRoomId = $game->getPlayerOne()->insideContainer;
+
+        $currentRoom = $game->getWorld()->getEntityById($currentRoomId);
+
+        if(is_null($currentRoom)){
+            $msg[] = Tools::MsgWrap(
+                'Player is not in a room!',
+                ContType::P
+            );
+
+            return $msg;
+        }
+
+
+        $portalsAssoc = $currentRoom->getPortalNames();
+
+        $portalId = array_search($requestedPortalName, $portalsAssoc);
+
+
+        if(!is_string($portalId)){
+            $msg[] = Tools::MsgWrap(
+                'Can not move in that direction. No exit or portal with given name.',
+                ContType::P
+            );
+
+            return $msg;
+        }
+
+        $portalEntity = $world->getEntityById($portalId);
+
+        $playerOne->insideContainer = $portalEntity->target;
+
+        $msg[] = Tools::MsgWrap(
+            'You moved "%s":',
+            ContType::P
+        );
+
+        //@todo RC make this a player settable options or scriptable
+
+        // immediately look into room
+        $msg = array_merge($this->look([]));
+
+
+        return $msg;
+
     }
 
     /// read only helper functions \\\

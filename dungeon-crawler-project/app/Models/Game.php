@@ -82,7 +82,7 @@ class Game extends SingletonPattern
 
         $this->world->addEntity($playerOne);
 
-        if($this->playerOne->isInsideContainer())
+        if(!$this->playerOne->isInsideContainer())
         {
             $msgs = array_merge($msgs, $this->placePlayerInRandomRoom($this->playerOne));
         }
@@ -90,16 +90,9 @@ class Game extends SingletonPattern
         return $msgs;
     }
 
-    public function getWorld(): ?World
+    public function getWorld(): World
     {
         return $this->world;
-    }
-
-    private function setWorld(World $world) : void
-    {
-        $msgs = array();
-
-        $this->world = $world;
     }
 
     public function placePlayerInRandomRoom(Player $player) : array

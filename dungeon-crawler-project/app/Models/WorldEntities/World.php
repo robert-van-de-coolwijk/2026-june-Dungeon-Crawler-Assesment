@@ -9,6 +9,7 @@ use App\Core\MsgWrap\MsgWrap;
 use App\Core\Tools;
 use App\Models\CollectionPosition;
 use App\Models\Game;
+use App\Models\GameDataTypes\EntityRelationManager;
 use Exception;
 use stdClass;
 
@@ -105,6 +106,15 @@ class World
         $portal->target = $targetRoom->id;
 
         $this->addEntity($portal);
+
+        // validation checks
+
+        Tools::debug(
+            'Portal ', $portal->name,
+            'Target ', $targetRoom->name,
+            'Source ', $sourceRoom->name,
+            'Source, portals: ', var_export($sourceRoom->getPortalNames(), true),
+        );
     }
 
 
@@ -167,6 +177,20 @@ class World
             }
         }
 
+        // rebuild EntityRelationManager
+        foreach($this->entities as $entity){
+
+
+            switch(Tools::getClassName($entity)){
+                case Tools::getClassName(Portal::class):
+
+                    $entity->source = (string)$entity->source;
+
+                    break;
+            }
+
+        }
+
 
 
         return true;
@@ -175,6 +199,11 @@ class World
     public function deleteSave()
     {
         throw new Exception("Not implemented yet");
+    }
+
+    public function getEntityById(string $id) : ?Entity
+    {
+        return isset($this->entities[$id]) ? $this->entities[$id] : null;
     }
 
     public function get(?string $class = null, string $pos = CollectionPosition::First) : ?Entity

@@ -2,6 +2,7 @@
 
 namespace App\Models\GameDataTypes;
 
+use App\Core\Tools;
 use App\Models\SingletonPattern;
 use App\Models\WorldEntities\Entity;
 
@@ -49,12 +50,8 @@ class EntityRelationManager extends SingletonPattern
         $singularEntityId = is_string($singularEntity) ? $singularEntity : $singularEntity->id;
         $collectionEntityId = is_string($collectionEntity) ? $collectionEntity : $collectionEntity->id;
 
-        if(strcmp($collectionEntityId, CollectionIdentifier::Unset)){
-            unset($this->collections[$collectionName][$singularEntityId]);
-        }else{
-            $this->collections[$collectionName][$singularEntityId] = $collectionEntityId;
-        }
 
+        $this->collections[$collectionName][$singularEntityId] = $collectionEntityId;
     }
 
     /**
@@ -77,7 +74,7 @@ class EntityRelationManager extends SingletonPattern
 
         foreach($this->collections[$collectionName] as $singularEntityId => $collectionEntityId){
             if(strcmp($collectionEntityId, $requestedCollectionEntityId) === 0){
-                $returnArr = $singularEntityId;
+                $returnArr[] = $singularEntityId;
             }
         }
 

@@ -23,10 +23,9 @@ class Identifier extends Text
         $this->data = self::Unset;
     }
 
-    public function set(string $collectionEntityId): bool
+    public function set(string $entityId): bool
     {
-        $succes = parent::set($collectionEntityId);
-
+        $succes = parent::set($entityId);
 
         return $succes;
     }
