@@ -210,8 +210,8 @@ class World
     {
         $className = is_string($class) ? Tools::getClassName($class) : null;
 
-        Tools::debug($className);
-        Tools::debug($pos);
+//        Tools::debug($className);
+//        Tools::debug($pos);
 
         switch($pos){
             case CollectionPosition::First:

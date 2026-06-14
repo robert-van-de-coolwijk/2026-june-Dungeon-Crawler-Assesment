@@ -48,6 +48,8 @@ HtmlRender::printMsgWrap($main->command('east', []));
 HtmlRender::printMsgWrap($main->command('north', []));
 
 
+HtmlRender::printMsgWrap($main->command('trouble', ['room']));
+
 //$room = new Room();
 //
 //$room->biome = "forest";

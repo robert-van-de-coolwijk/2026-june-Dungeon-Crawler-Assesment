@@ -5,9 +5,11 @@ namespace App\Controllers\Commands;
 use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\Sentiment;
 use App\Core\Tools;
+use App\Models\CollectionPosition;
 use App\Models\Game;
 use App\Models\GameState\Blank;
 use App\Models\SingletonPattern;
+use App\Models\WorldEntities\Creature;
 use App\Models\WorldEntities\Player;
 
 /**
@@ -24,6 +26,79 @@ use App\Models\WorldEntities\Player;
  */
 class Command extends SingletonPattern
 {
+
+    /// development \\\
+    // @todo RC these functions are there to help with development, split them off and secure them or better, just remove them when you become feature complete and script them
+
+    public function trouble(array $params) : array
+    {
+        $msgs = [];
+        $game = Game::getInstance();
+        $player = $game->getPlayerOne();
+        $world = $game->getWorld();
+
+        $currentRoomId = $player->insideContainer;
+
+
+        switch($params[0]){
+            // bring trouble to the room you are in, see if there is a creature and bring it to this room
+            case 'room':
+
+                $currentRoom = $world->getEntityById($currentRoomId);
+
+                $randomCreature = $world->get(Creature::class, CollectionPosition::Random);
+
+                $randomCreature->insideContainer = $currentRoomId;
+
+                $msgs[] = Tools::MsgWrap(
+                    sprintf('Moved %s %s to room %s %s with you', $randomCreature->name, $randomCreature->id, $currentRoom->name, $currentRoom->id),
+                    ContType::P,
+                    Sentiment::Normal
+                );
+
+                break;
+
+            // go look for trouble: check if there is monster in the world, place player in room with the creature
+
+            default:
+            case 'me':
+                $randomCreature = $world->get(Creature::class, CollectionPosition::Random);
+
+                // the room the creature is in
+                $room_creature = $randomCreature->insideContainer;
+
+                // the player in the room the creature is in
+                $player->insideContainer = $room_creature;
+
+                $msg = sprintf(
+                    'Moved you into room %s %s together with %s %s',
+                    $room_creature->name,
+                    $room_creature->id,
+                    $randomCreature->name,
+                    $randomCreature->id
+                );
+
+                $msgs[] = Tools::MsgWrap(
+                    $msg,
+                    ContType::P,
+                    Sentiment::Normal
+                );
+
+                break;
+
+
+
+        }
+        $msgs[] = Tools::MsgWrap(
+            "",
+            ContType::P
+        );
+
+
+
+
+        return $msgs;
+    }
 
    /// world administration \\\
 
@@ -73,7 +148,6 @@ class Command extends SingletonPattern
             Tools::MsgWrap($restoreSuccess ? "world deleted" : "Failed deleting world", ContType::P),
         ];
     }
-
 
     public function player(array $params) : array
     {
@@ -143,6 +217,24 @@ class Command extends SingletonPattern
                 ContType::P,
                 Sentiment::Normal
             );
+
+            $creatureNames = $currentRoom->getCreatureNames();
+
+            if(count($creatureNames) > 0){
+                $msg[] = Tools::MsgWrap(
+                    "Monster encounter:",
+                    ContType::P,
+                    Sentiment::Important
+                );
+
+                foreach($creatureNames as $creatureId => $creatureName){
+                    $msg[] = Tools::MsgWrap(
+                        $creatureName,
+                        ContType::P,
+                        Sentiment::Normal
+                    );
+                }
+            }
         }else {
             $msg[] = Tools::MsgWrap(
                 '[ Player is not in a room ]',

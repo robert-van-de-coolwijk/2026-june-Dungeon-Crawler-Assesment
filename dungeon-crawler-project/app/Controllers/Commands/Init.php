@@ -205,6 +205,8 @@ class Init
         for($i = 0; $i < $numberOfCreatures; $i++) {
             $creature = self::createCreature($builder, $creaturesTemplateArray[array_rand($creaturesTemplateArray)]);
 
+            $world->addEntity($creature);
+
             $randomRoom = $world->get(Room::class, CollectionPosition::Random);
             $randRoomId = $randomRoom->id;
 

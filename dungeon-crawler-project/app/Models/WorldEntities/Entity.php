@@ -119,6 +119,28 @@ class Entity {
         return $this->_insideContainer->isUnset();
     }
 
+    /**
+     * Returns the names of portals, if a portal (entity) could not be found, it returns the id
+     *
+     * @return array Array of strings
+     * @throws \Exception
+     */
+    protected function getCollectionEntitiesAssoc(string $collectionName) : array
+    {
+        $portalNames = [];
+        $world = Game::getInstance()->getWorld();
+
+        $portalIds = EntityRelationManager::getInstance()->getIdsInsideCollection($collectionName, $this);
+
+        foreach ($portalIds as $portalId) {
+            $entity = $world->getEntityById($portalId);
+
+            $portalNames[$portalId] = !is_null($entity) ? $entity->name : $portalId;
+        }
+
+        return $portalNames;
+    }
+
     /// SAVE AND RESTORE LOGIC \\\
 
     private static function getFileCacherContext(string $id) : string {

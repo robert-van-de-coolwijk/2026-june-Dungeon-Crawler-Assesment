@@ -31,18 +31,14 @@ class Room extends Container
      */
     public function getPortalNames() : array
     {
-        $portalNames = [];
-        $world = Game::getInstance()->getWorld();
-
-        $portalIds = EntityRelationManager::getInstance()->getIdsInsideCollection(EntityRelationManager::Collection_Room_Portal, $this);
-
-        foreach ($portalIds as $portalId) {
-            $entity = $world->getEntityById($portalId);
-
-            $portalNames[$portalId] = !is_null($entity) ? $entity->name : $portalId;
-        }
-
-        return $portalNames;
+        return $this->getCollectionEntitiesAssoc(EntityRelationManager::Collection_Room_Portal);
     }
+
+    public function getCreatureNames() : array
+    {
+        return $this->getCollectionEntitiesAssoc(EntityRelationManager::Collection_Room_Creature);
+    }
+
+
 
 }
