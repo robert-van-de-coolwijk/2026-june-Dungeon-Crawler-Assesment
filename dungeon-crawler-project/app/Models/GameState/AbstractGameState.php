@@ -8,6 +8,9 @@ use App\Models\SingletonPattern;
  * GameState describes the current state of the game
  * as actions are taken the game goes from one state to another
  *
+ * The idea is that "the whole game supports and allows everything",
+ * the game state locks the player into certain limits so that there is a game state
+ *
  * Possible game states:
  *
  * -- Game enter states --
@@ -17,7 +20,7 @@ use App\Models\SingletonPattern;
  * Options: A player can be created.
  *
  * - Genesis -
- * Condition: One player exists
+ * Condition: One player exists, and is not inside a room
  * Options: A world can be created, the player will be placed in a room upon creation. The world decides default start location, if note is given a empty room is chosen at default, if none available, any room will be chosen.
  *
  * -- Game playing state --

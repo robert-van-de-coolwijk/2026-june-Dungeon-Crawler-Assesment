@@ -99,7 +99,7 @@ class Game extends SingletonPattern
     {
         $msg = array();
 
-        Tools::debug($player);
+        //Tools::debug($player);
 
         if(!is_null($player))
         {
@@ -107,16 +107,16 @@ class Game extends SingletonPattern
             $randomRoom = $this->world->get(Room::class, CollectionPosition::First);
 
 
-            Tools::debug($randomRoom);
+            //Tools::debug($randomRoom);
 
             if(!is_null($randomRoom))
             {
-                Tools::debug($randomRoom->id);
+                //Tools::debug($randomRoom->id);
 
                 $player->insideContainer = $randomRoom->id;
 
 
-                Tools::debug($player->insideContainer);
+                //Tools::debug($player->insideContainer);
 
                 $msg[] = Tools::MsgWrap(sprintf('Player placed into room %s "%s"  ', $randomRoom->id, $randomRoom->name));
             }

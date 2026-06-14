@@ -161,7 +161,7 @@ class World
 
         $worldObject = $fileCacher->get($contextString);
 
-        Tools::debug($worldObject);
+        //Tools::debug($worldObject);
 
 
         // continue restoring where left
@@ -236,10 +236,10 @@ class World
             return Tools::arrayFirst($this->entities);
         }
 
-        Tools::debug($class);
+        //Tools::debug($class);
 
         foreach($this->entities as $entity){
-            Tools::debug($entity);
+            //Tools::debug($entity);
 
             if(strcmp(Tools::getClassName($entity), $class) == 0){
                 return $entity;
@@ -247,7 +247,7 @@ class World
         }
 
 
-        Tools::debug('Sheise');
+        //Tools::debug('Failed to return something');
 
         return null;
     }

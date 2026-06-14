@@ -86,6 +86,8 @@ class TemplateBuilder extends SingletonPattern
 
         $creature->name = $creatureStruct->name ?? "unset";
         $creature->description = $creatureStruct->description ?? "unset";
+
+        $creature->healthMax = $creatureStruct->health ?? 69;
         $creature->health = $creatureStruct->health ?? 69;
 
         return $creature;

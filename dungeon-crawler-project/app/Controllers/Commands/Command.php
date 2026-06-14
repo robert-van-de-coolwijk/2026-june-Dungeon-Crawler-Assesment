@@ -149,6 +149,8 @@ class Command extends SingletonPattern
         ];
     }
 
+    /// player administrative \\\
+
     public function player(array $params) : array
     {
         $msg = [];
@@ -189,10 +191,11 @@ class Command extends SingletonPattern
     {
         $msg = [];
         $game = Game::getInstance();
+        $world = $game->getWorld();
 
         $currentRoomId = $game->getPlayerOne()->insideContainer;
 
-        $currentRoom = $game->getWorld()->getEntityById($currentRoomId);
+        $currentRoom = $world->getEntityById($currentRoomId);
 
         if(!is_null($currentRoom)){
             $msg[] = Tools::MsgWrap(
@@ -218,18 +221,37 @@ class Command extends SingletonPattern
                 Sentiment::Normal
             );
 
-            $creatureNames = $currentRoom->getCreatureNames();
+            $contentNames = $currentRoom->getContentNames();
 
-            if(count($creatureNames) > 0){
+            if(count($contentNames) > 0){
                 $msg[] = Tools::MsgWrap(
-                    "Monster encounter:",
+                    "Contents:",
                     ContType::P,
                     Sentiment::Important
                 );
 
-                foreach($creatureNames as $creatureId => $creatureName){
+                $creatureCount = 0;
+
+                foreach($contentNames as $entityId => $entityName){
+                    $entity = $world->getEntityById($entityId);
+
+                    $suffix = '';
+                    $postFix = '';
+
+                    $currentEntityClass = Tools::getClassName($entity);
+
+                    if(strcmp(Tools::getClassName(Creature::class), $currentEntityClass) === 0){
+                        $creatureCount++;
+                        $postFix = ' [creature]'; //@todo RC if and when flashed out, write the creature type here, like: wolf, skeleton, etc.
+                    }
+                    else if(strcmp(Tools::getClassName(Player::class), $currentEntityClass) === 0)
+                    {
+                        // skip the player
+                        continue;
+                    }
+
                     $msg[] = Tools::MsgWrap(
-                        $creatureName,
+                        $suffix . $entityName . $postFix,
                         ContType::P,
                         Sentiment::Normal
                     );
@@ -311,10 +333,12 @@ class Command extends SingletonPattern
 
         $portalEntity = $world->getEntityById($portalId);
 
+        $targetRoom = $world->getEntityById($portalEntity->target);
+
         $playerOne->insideContainer = $portalEntity->target;
 
         $msg[] = Tools::MsgWrap(
-            sprintf('You moved "%s":', $requestedPortalName),
+            sprintf('You moved "%s" into %s', $requestedPortalName, $targetRoom->name),
             ContType::P
         );
 
@@ -330,6 +354,168 @@ class Command extends SingletonPattern
         return $msg;
 
     }
+
+    public function fight(array $params) : array
+    {
+        $msgArr = [];
+        $game = Game::getInstance();
+        $player = $game->getPlayerOne();
+        $world = $game->getWorld();
+
+        $creatureAttackSelect = (string)$params[0] ?? '';
+
+
+        $currentRoomId = $player->insideContainer;
+
+        $currentRoom = $world->getEntityById($currentRoomId);
+
+
+        $contentNames = $currentRoom->getContentNames();
+
+        // build number selection index
+        $indexNumber = 1;
+        $selectionIndex = [];
+        $creatureNames = [];
+
+        foreach($contentNames as $entityId => $entityName){
+            $entity = $world->getEntityById($entityId);
+
+            if(is_null($entity) || strcmp(Tools::getClassName($entity), Tools::getClassName(Creature::class)) !== 0){
+                continue;
+            }
+
+            $creatureNames[$entityId] = $entityName;
+            $selectionIndex[$indexNumber] = $entity;
+
+            $indexNumber++;
+        }
+
+
+        switch(count($creatureNames)){
+            case 0:
+                // no creature in the room
+                $msgArr[] = Tools::MsgWrap(
+                    sprintf('The room contains no monsters. You swat at the air.'),
+                    ContType::P
+                );
+
+                return $msgArr;
+
+                case 1:
+                    // if only 1 creature, force selection here
+                    $creatureAttackSelect = '1';
+                    break;
+        }
+
+
+
+
+        // find selected creature
+
+        $creatureIdSelected = null;
+
+        // attempt one - select by index
+        if(is_null($creatureIdSelected) && isset($selectionIndex[$creatureAttackSelect])){
+            $creatureIdSelected = $selectionIndex[$creatureAttackSelect]->id;
+        }
+
+        // attempt two - select by creature id
+        if(is_null($creatureIdSelected) && isset($creatureNames[$creatureAttackSelect])){
+            $creatureIdSelected = $creatureAttackSelect;
+        }
+
+        // attempt three - select by exact name and take first match
+
+        // attempt four - select by partial match that returns 1 creature
+
+
+        // no creature selected for attack
+        if(is_null($creatureIdSelected)){
+            $msgArr[] = Tools::MsgWrap(
+                sprintf('Please select who you want to attack:'),
+                ContType::P,
+                Sentiment::Important
+            );
+
+            foreach($selectionIndex as $index => [$cratureId, $creatureName]){
+
+                $msgArr[] = Tools::MsgWrap(
+                    sprintf('%s: %s', $index, $creatureName),
+                    ContType::P
+                );
+            }
+
+            return $msgArr;
+        }
+
+        // we'll do some fighting
+
+        //@todo RC improve the fighting, when the fight condition is reached; determine fight order with init, implement logic to do proper turns
+
+
+        $success = true; //@todo RC build in sanity checks for faulty states to stop current command.
+
+        $creature = $world->getEntityById($creatureIdSelected);
+
+
+        if(!$creature->isAlive()){
+            $msgArr[] = Tools::MsgWrap(
+                sprintf('%s is already death', $creature->name),
+                ContType::P
+            );
+
+            return $msgArr;
+        }
+
+
+        $damage = rand(1, 10);
+
+        $creature->damageCreature($damage);
+
+
+
+        if(!$creature->isAlive()){
+            $msgArr[] = Tools::MsgWrap(
+                sprintf('You killed %s by inclifcting %s damage', $creature->name, $damage),
+                ContType::P
+            );
+        } else {
+            $msgArr[] = Tools::MsgWrap(
+                $success ? sprintf('You did %s damaged to %s, %s health remaining', $damage, $creature->name, $creature->health) : "You failed to damage the creature",
+                ContType::P
+            );
+        }
+
+        // each creatures attempts to attack back
+        foreach($selectionIndex as $index => $creature)
+        {
+            if(!$creature->isAlive()){
+                continue;
+            }
+
+            $damage = rand(0, 3);
+
+            $player->damageCreature($damage);
+
+            $msgArr[] = Tools::MsgWrap(
+                sprintf('%s does %s damage to you (%s health left)', $creature->name, $damage, $player->health),
+                ContType::P
+            );
+
+            if(!$player->isAlive()){
+
+                $msgArr[] = Tools::MsgWrap(
+                    sprintf('%s has killed you.', $creature->name),
+                    ContType::P
+                );
+
+                break;
+            }
+        }
+
+        return $msgArr;
+    }
+
 
     /// read only helper functions \\\
 

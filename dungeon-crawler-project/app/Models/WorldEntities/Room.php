@@ -13,6 +13,8 @@ class Room extends Container
 
     public Collection $_portals;
 
+    public Collection $_creatures;
+
 
     public function __construct()
     {
@@ -34,9 +36,9 @@ class Room extends Container
         return $this->getCollectionEntitiesAssoc(EntityRelationManager::Collection_Room_Portal);
     }
 
-    public function getCreatureNames() : array
+    public function getContentNames() : array
     {
-        return $this->getCollectionEntitiesAssoc(EntityRelationManager::Collection_Room_Creature);
+        return $this->getCollectionEntitiesAssoc(EntityRelationManager::Collection_Container_Entity);
     }
 
 

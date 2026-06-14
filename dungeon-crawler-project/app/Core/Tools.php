@@ -213,5 +213,16 @@ class Tools {
         return $html;
     }
 
+    public static function ClampNumber(int $number, int $minValue, int $maxValue) : int
+    {
+        if($number < $minValue){
+            return $minValue;
+        } else if($number > $maxValue){
+            return $maxValue;
+        }
+
+        return $number;
+    }
+
 
 }

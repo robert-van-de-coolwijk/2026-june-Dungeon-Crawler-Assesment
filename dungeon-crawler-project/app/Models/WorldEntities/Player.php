@@ -24,7 +24,7 @@ class Player extends Creature
     {
         $msg = implode(PHP_EOL, [
             $this->_name,
-            sprintf('Health %s of %s', $this->_health, $this->_health->getMaxValue()),
+            sprintf('Health %s of %s', $this->health, $this->healthMax),
             sprintf('Room %s', $this?->_insideContainer ?? '[ No room ]'),
         ]);
 
@@ -37,9 +37,11 @@ class Player extends Creature
             'Player: ',
             $this->_name,
             '',
-            sprintf('Health %s of %s', $this->_health, $this->_health->getMaxValue())
+            sprintf('Health %s of %s', $this->health, $this->healthMax)
         ]);
     }
+
+
 
 
 }

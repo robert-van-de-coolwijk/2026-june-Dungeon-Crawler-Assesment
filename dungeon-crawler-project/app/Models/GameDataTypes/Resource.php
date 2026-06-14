@@ -8,12 +8,14 @@ class Resource extends Text
 {
     protected int $maxValue;
 
-    public function __construct(int $maxValue)
+    public function __construct(int $value)
     {
-        $this->maxValue = $maxValue;
+        parent::__construct();
+
+        $this->data = $value;
     }
 
-    public function getMaxValue(): int {
-        return $this->maxValue;
+    public function getAsNumber() : int {
+        return $this->data;
     }
 }

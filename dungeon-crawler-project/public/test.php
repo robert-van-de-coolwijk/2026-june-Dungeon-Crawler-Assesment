@@ -50,6 +50,24 @@ HtmlRender::printMsgWrap($main->command('north', []));
 
 HtmlRender::printMsgWrap($main->command('trouble', ['room']));
 
+
+HtmlRender::printMsgWrap($main->command('fight', ['1']));
+
+HtmlRender::printMsgWrap($main->command('fight', ['1']));
+
+HtmlRender::printMsgWrap($main->command('fight', ['1']));
+
+HtmlRender::printMsgWrap($main->command('fight', ['1']));
+
+HtmlRender::printMsgWrap($main->command('fight', ['1']));
+
+HtmlRender::printMsgWrap($main->command('fight', ['1']));
+
+HtmlRender::printMsgWrap($main->command('fight', ['1']));
+
+HtmlRender::printMsgWrap($main->command('fight', ['1']));
+
+
 //$room = new Room();
 //
 //$room->biome = "forest";
