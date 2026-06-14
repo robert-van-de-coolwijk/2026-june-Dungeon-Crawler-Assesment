@@ -3,7 +3,7 @@
 namespace App\Models\WorldEntities;
 
 use App\Models\GameDataTypes\Collection;
-use App\Models\GameDataTypes\ShortText;
+use App\Models\GameDataTypes\EntityRelationManager;
 
 class Container extends Entity
 {
@@ -13,7 +13,7 @@ class Container extends Entity
     {
         parent::__construct();
 
-        $this->_contents = new Collection();
+        $this->_contents = new Collection(EntityRelationManager::Collection_Container_Entity);
 
     }
 }

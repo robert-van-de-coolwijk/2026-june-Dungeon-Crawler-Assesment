@@ -82,7 +82,7 @@ class Game extends SingletonPattern
 
         $this->world->addEntity($playerOne);
 
-        if($this->playerOne->_currentRoom === null)
+        if($this->playerOne->isInsideContainer())
         {
             $msgs = array_merge($msgs, $this->placePlayerInRandomRoom($this->playerOne));
         }
@@ -120,10 +120,10 @@ class Game extends SingletonPattern
             {
                 Tools::debug($randomRoom->id);
 
-                $player->currentRoom = $randomRoom->id;
+                $player->insideContainer = $randomRoom->id;
 
 
-                Tools::debug($player->currentRoom);
+                Tools::debug($player->insideContainer);
 
                 $msg[] = Tools::MsgWrap(sprintf('Player placed into room %s "%s"  ', $randomRoom->id, $randomRoom->name));
             }

@@ -25,9 +25,7 @@ use App\Models\WorldEntities\Player;
 class Command extends SingletonPattern
 {
 
-    /**
-     * @throws \Exception
-     */
+   /// world administrative \\\
     public function init(array $params) : array
     {
         return Init::world($params);
@@ -66,6 +64,7 @@ class Command extends SingletonPattern
         ];
     }
 
+
     public function player(array $params) : array
     {
         $msg = [];
@@ -100,14 +99,15 @@ class Command extends SingletonPattern
         return $game->getStateOfTheGame();
     }
 
+    /// game actions \\\
+
     public function move(array $params) : array
     {
 
-
-        return [
-            "Not implemented, player is not moved"
-        ];
+        throw new \Exception("Move not implemented");
     }
+
+    /// read only helper functions \\\
 
     public function time() : array
     {

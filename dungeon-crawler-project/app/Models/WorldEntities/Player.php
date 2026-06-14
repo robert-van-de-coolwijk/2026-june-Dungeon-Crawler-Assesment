@@ -5,19 +5,19 @@ namespace App\Models\WorldEntities;
 use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\MsgWrap;
 use App\Core\Tools;
+use App\Models\GameDataTypes\EntityRelationManager;
 use App\Models\GameDataTypes\Identifier;
-use App\Models\GameDataTypes\IdRef;
+use App\Models\GameDataTypes\UniqueIdentifier;
+use App\Models\GameDataTypes\CollectionIdentifier;
 
 class Player extends Creature
 {
     public CreatureType $_creatureType = CreatureType::Player;
 
-    public IdRef $_currentRoom;
 
     public function __construct()
     {
         parent::__construct();
-        $this->_currentRoom = new IdRef();
     }
 
     public function getStateOfThePlayer() : MsgWrap
@@ -25,7 +25,7 @@ class Player extends Creature
         $msg = implode(PHP_EOL, [
             $this->_name,
             sprintf('Health %s of %s', $this->_health, $this->_health->getMaxValue()),
-            sprintf('Room %s', $this?->_currentRoom ?? '[ No room ]'),
+            sprintf('Room %s', $this?->_insideContainer ?? '[ No room ]'),
         ]);
 
         return Tools::MsgWrap($msg, ContType::P);
@@ -40,5 +40,6 @@ class Player extends Creature
             sprintf('Health %s of %s', $this->_health, $this->_health->getMaxValue())
         ]);
     }
+
 
 }

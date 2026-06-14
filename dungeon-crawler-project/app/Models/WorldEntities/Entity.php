@@ -7,26 +7,33 @@ use App\Config\FileCacherConfig;
 use App\Core\Data\FileCacher;
 use App\Core\Tools;
 use App\Models\Game;
+use App\Models\GameDataTypes\CollectionIdentifier;
+use App\Models\GameDataTypes\EntityRelationManager;
 use App\Models\GameDataTypes\GameDataType;
 use App\Models\GameDataTypes\Identifier;
+use App\Models\GameDataTypes\UniqueIdentifier;
 use App\Models\GameDataTypes\ShortText;
 use App\Models\GameDataTypes\Text;
 use Exception;
 
 class Entity {
 
-    protected Identifier $_id; // This number can become LARGE. A lot of entities like rooms will have a minimum of 4 entities associated with them.
+    protected UniqueIdentifier $_id; // This number can become LARGE. A lot of entities like rooms will have a minimum of 4 entities associated with them.
 
     protected ShortText $_name;
 
     protected Text $_description;
 
+    public CollectionIdentifier $_insideContainer;
+
     protected function __construct()
     {
-        $this->_id = Identifier::getNewIdentifier();
+        $this->_id = UniqueIdentifier::getNewIdentifier();
 
         $this->_name = new ShortText();
         $this->_description = new ShortText();
+
+        $this->_insideContainer = new CollectionIdentifier(EntityRelationManager::Collection_Container_Entity);
     }
 
     /**
@@ -92,9 +99,10 @@ class Entity {
         return false;
     }
 
-    public function getIdAsNumber() : int
+
+    public function isInsideContainer()
     {
-        return $this->_id->getAsNumber();
+        return $this->_insideContainer->isUnset();
     }
 
     /// SAVE AND RESTORE LOGIC \\\

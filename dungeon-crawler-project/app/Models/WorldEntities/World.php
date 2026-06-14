@@ -96,16 +96,16 @@ class World
 
     public function createPortal(Room $sourceRoom, Room $targetRoom, string $name, string $description = '')
     {
-        $portal = new Portal($sourceRoom, $targetRoom);
+
+        $portal = new Portal();
 
         $portal->name = $name;
         $portal->description = $description;
-
+        $portal->source = $sourceRoom->id;
+        $portal->target = $targetRoom->id;
 
         $this->addEntity($portal);
     }
-
-
 
 
     /// SAVE AND RESTORE LOGIC \\\

@@ -8,6 +8,7 @@ class Text extends GameDataType
 {
 
     protected const int maxLength = 4096;
+    protected const string Unset = '';
 
     protected string $data = '';
 
@@ -46,5 +47,9 @@ class Text extends GameDataType
         }
 
         return true;
+    }
+
+    public function isUnset() : bool {
+        return strcmp(self::Unset, $this->data);
     }
 }

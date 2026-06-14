@@ -5,15 +5,16 @@ namespace App\Models\WorldEntities;
 
 use App\Core\Tools;
 use App\Models\GameDataTypes\Collection;
+use App\Models\GameDataTypes\Identifier;
 use App\Models\GameDataTypes\Resource;
 use Exception;
 
-class Creature extends Entity
+class Creature extends Container
 {
-
     public CreatureType $_creatureType;
 
-    public Collection $_inventory;
+    // Inventory == $this->contents
+
 
     /// RESOURCES \\\
     public Resource $_health;
@@ -26,8 +27,6 @@ class Creature extends Entity
         parent::__construct();
 
         $this->_creatureType = CreatureType::Unset;
-
-        $this->_inventory = new Collection();
 
         $this->_health = new Resource(10); // @todo RC calculate this from default attributes
     }

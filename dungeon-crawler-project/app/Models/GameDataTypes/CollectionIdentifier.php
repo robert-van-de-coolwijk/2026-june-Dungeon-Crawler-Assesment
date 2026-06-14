@@ -6,23 +6,36 @@ use App\Core\Tools;
 use App\Models\Game;
 use App\Models\WorldEntities\World;
 
-
-
 /**
  * This value stores the ID of one Entity as a reference
  * it is not implicit connection and is optional
+ * when set; the identifier reference must point to a valid entity which exists only once.
  */
-class IdRef extends Text
+class CollectionIdentifier extends Identifier
 {
-    public const string ID_PREFIX = '#';
-    protected const int maxLength = 255;
 
-    public const string Unset = '[unset]';
+    /**
+     * @var string Registers this identity reference relation to collection name
+     */
+    protected string $collectionName;
 
-    public function __construct() {
+    public function __construct(string $collectionName) {
         parent::__construct();
 
         $this->data = self::Unset;
+
+        $this->collectionName = $collectionName;
+    }
+
+    public function set(string $collectionEntityId): bool
+    {
+        $succes = parent::set($collectionEntityId);
+
+        if($succes){
+            EntityRelationManager::getInstance()->setRelation($this->collectionName, $this->data, $collectionEntityId);
+        }
+
+        return $succes;
     }
 
     public function validate(string $input) : bool {
@@ -45,13 +58,6 @@ class IdRef extends Text
 
         // all checks passed
         return true;
-    }
-
-
-
-    public function getAsNumber() : int
-    {
-        return (int)substr($this->data, 1);
     }
 
 }

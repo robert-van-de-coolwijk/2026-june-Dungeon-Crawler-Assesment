@@ -3,7 +3,10 @@
 namespace App\Models\WorldEntities;
 
 use App\Models\GameDataTypes\Boolean;
+use App\Models\GameDataTypes\EntityRelationManager;
 use App\Models\GameDataTypes\Identifier;
+use App\Models\GameDataTypes\UniqueIdentifier;
+use App\Models\GameDataTypes\CollectionIdentifier;
 use App\Models\GameDataTypes\Resource;
 use App\Models\WorldEntities;
 
@@ -13,20 +16,19 @@ use App\Models\WorldEntities;
  *
  * portals are ONE way, as:
  * the name of the portal is what you enter, and doesn't make sense when you appear at the other end.
- * If you go north, this portal named north.
+ * If you go north, this portal named north does not go north in the room you end up at.
  */
-class Portal extends WorldEntities\Entity
+class Portal extends Entity
 {
-
-    public Identifier $_source;
+    public CollectionIdentifier $_source;
 
     public Identifier $_target;
 
-    public function __construct(Room $source, Room $target)
+    public function __construct()
     {
         parent::__construct();
 
-        $this->_source = $source->_id;
-        $this->_target = $target->_id;
+        $this->_source = new CollectionIdentifier(EntityRelationManager::Collection_Room_Portal);
+        $this->_target = new Identifier();
     }
 }

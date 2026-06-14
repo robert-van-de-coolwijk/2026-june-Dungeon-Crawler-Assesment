@@ -6,42 +6,37 @@ use App\Core\Tools;
 use App\Models\Game;
 use App\Models\WorldEntities\World;
 
-
-
 /**
- * This value stores the ID of one Entity and is mandatory for an entity to exist
+ * Basic identifier, that holds an ID to an entity
  */
-class Identifier extends IdRef
+class Identifier extends Text
 {
-    public const int ID_START_NUMBER = 1;
+    public const string ID_PREFIX = '#';
+    protected const int maxLength = 255;
+
+    public const string Unset = '[unset]';
 
 
-    private function __construct() {
+    public function __construct() {
         parent::__construct();
 
-        $world = Game::getInstance()->getWorld();
-
-        $id = $world->getHighestIdentifier();
-
-        $id = $id < self::ID_START_NUMBER ?
-            self::ID_START_NUMBER :
-            ++$id;
-
-        //Tools::debug($id);
-
-        $this->data = self::ID_PREFIX . $id;
-
-        //Tools::debug($this->data);
-
-        $world->setHighestIdentifier($id);
-
+        $this->data = self::Unset;
     }
 
-    public static function getNewIdentifier(): Identifier {
-        return new Identifier();
+    public function set(string $collectionEntityId): bool
+    {
+        $succes = parent::set($collectionEntityId);
+
+
+        return $succes;
     }
 
     public function validate(string $input) : bool {
+        // only valid for idRef
+        if(strcmp($input, self::Unset)){
+            return true;
+        }
+
         if(strlen($input) <= 1){
             return false;
         }
@@ -56,13 +51,6 @@ class Identifier extends IdRef
 
         // all checks passed
         return true;
-    }
-
-
-
-    public function getAsNumber() : int
-    {
-        return (int)substr($this->data, 1);
     }
 
 }
