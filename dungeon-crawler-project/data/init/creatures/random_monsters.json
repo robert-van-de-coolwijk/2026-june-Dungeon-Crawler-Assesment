@@ -1,0 +1,212 @@
+[
+    {
+        "name": "Forest Wolf",
+        "description": "A relatively tame gray wolf with thick fur and piercing amber eyes, often seen patrolling the edges of woodlands. It is known for its keen senses and loyalty to its small pack.",
+        "health": "18"
+    },
+    {
+        "name": "Glimmer Goblin",
+        "description": "A small, mischievous goblin with greenish skin and large pointed ears, commonly found scavenging near forest paths. It carries a tiny satchel of shiny trinkets and avoids direct confrontation.",
+        "health": "12"
+    },
+    {
+        "name": "Wandering Skeleton",
+        "description": "A basic animated skeleton held together by faint magic, shuffling slowly through old ruins. Its hollow eye sockets glow softly as it searches for lost trinkets.",
+        "health": "15"
+    },
+    {
+        "name": "Moonhowl Wolf",
+        "description": "A common silver-furred wolf that howls at night but remains relatively tame around travelers. Its distinctive white streak along the spine helps it blend into moonlight.",
+        "health": "20"
+    },
+    {
+        "name": "Mossback Goblin",
+        "description": "A sturdy goblin covered in patches of green moss, living in damp caves and trading small herbs. It has a friendly demeanor despite its scruffy appearance.",
+        "health": "14"
+    },
+    {
+        "name": "Rattlebone Skeleton",
+        "description": "A lightly armored skeleton whose bones clatter softly as it walks the forgotten battlefields. It carries a rusty short sword but poses little threat to the prepared.",
+        "health": "16"
+    },
+    {
+        "name": "Timber Wolf",
+        "description": "A common brown wolf with strong legs and a bushy tail, frequently spotted near logging camps. It is curious but keeps its distance from humans.",
+        "health": "19"
+    },
+    {
+        "name": "Tinker Goblin",
+        "description": "A clever goblin with tools dangling from its belt, often repairing broken items near villages. Its large nose and bright eyes give it a harmless, inventive look.",
+        "health": "13"
+    },
+    {
+        "name": "Dustwalker Skeleton",
+        "description": "A weathered skeleton covered in desert dust, wandering old caravan routes. Its movements are slow and deliberate, rarely aggressive.",
+        "health": "17"
+    },
+    {
+        "name": "Shadowpelt Wolf",
+        "description": "A dark-furred wolf with subtle black markings that help it hide in twilight forests. It is tame enough to occasionally follow lone travelers from afar.",
+        "health": "21"
+    },
+    {
+        "name": "Cave Goblin",
+        "description": "A pale-skinned goblin adapted to underground life, carrying a dim lantern. It collects mushrooms and avoids bright sunlight.",
+        "health": "11"
+    },
+    {
+        "name": "Bone Scout",
+        "description": "A nimble skeleton missing one arm, used as a lookout in ancient ruins. Its jaw hangs loosely but its posture remains upright.",
+        "health": "14"
+    },
+    {
+        "name": "Pack Runner Wolf",
+        "description": "A lean, energetic wolf with reddish fur that leads small hunting groups. It is common in hilly regions and rarely attacks unless provoked.",
+        "health": "18"
+    },
+    {
+        "name": "River Goblin",
+        "description": "A slippery goblin with webbed fingers living by streams, fishing with crude nets. Its wide grin reveals small sharp teeth.",
+        "health": "13"
+    },
+    {
+        "name": "Ironjaw Skeleton",
+        "description": "A skeleton with a reinforced jawbone, often found guarding old crypt entrances. It moves with surprising steadiness for an undead creature.",
+        "health": "16"
+    },
+    {
+        "name": "Frostfang Wolf",
+        "description": "A hardy wolf with icy-blue eyes and thick winter coat, common in northern woods. It is relatively tame and scavenges rather than hunts aggressively.",
+        "health": "22"
+    },
+    {
+        "name": "Hill Goblin",
+        "description": "A stocky goblin with earthy brown skin that dwells in grassy hills. It tends small gardens and trades vegetables with passersby.",
+        "health": "15"
+    },
+    {
+        "name": "Lost Wanderer Skeleton",
+        "description": "A skeleton still wearing tattered traveler's clothes, roaming country roads. Its empty ribcage occasionally houses small forest creatures.",
+        "health": "12"
+    },
+    {
+        "name": "Bramble Wolf",
+        "description": "A shaggy wolf with twigs and leaves caught in its fur, living deep in thorny thickets. Its calm nature makes it less threatening than its wild cousins.",
+        "health": "19"
+    },
+    {
+        "name": "Spark Goblin",
+        "description": "A small goblin with singed eyebrows from tinkering with fire, often seen near campsites. It carries a pouch of flint stones.",
+        "health": "12"
+    },
+    {
+        "name": "Shieldbearer Skeleton",
+        "description": "A skeleton equipped with a cracked wooden shield, standing guard at old fortifications. Its movements are mechanical and predictable.",
+        "health": "17"
+    },
+    {
+        "name": "Dusk Wolf",
+        "description": "A common wolf with sleek dark gray fur that emerges at twilight. It has soft golden eyes and a gentle howl.",
+        "health": "20"
+    },
+    {
+        "name": "Root Goblin",
+        "description": "A goblin with vines wrapped around its arms, living among ancient tree roots. It is skilled at herbalism and quite sociable.",
+        "health": "14"
+    },
+    {
+        "name": "Skullbearer Skeleton",
+        "description": "A tall skeleton carrying an extra skull on its belt, wandering graveyards. It seems more curious than hostile.",
+        "health": "15"
+    },
+    {
+        "name": "Highland Wolf",
+        "description": "A sturdy wolf with mottled brown and white fur adapted to rocky highlands. It is known for its endurance and calm temperament.",
+        "health": "21"
+    },
+    {
+        "name": "Swamp Goblin",
+        "description": "A greenish goblin with muddy feet that navigates foggy wetlands. It collects reeds and sings quiet tunes to itself.",
+        "health": "13"
+    },
+    {
+        "name": "Arrowhead Skeleton",
+        "description": "A skeleton with several broken arrows lodged in its ribs, shambling through old battle sites. Its grip on a rusted bow is surprisingly firm.",
+        "health": "16"
+    },
+    {
+        "name": "Silent Prowler Wolf",
+        "description": "A stealthy wolf with muted brown coat and large paws, common in dense forests. It observes more than it attacks.",
+        "health": "18"
+    },
+    {
+        "name": "Burrow Goblin",
+        "description": "A short goblin with powerful digging claws, living in extensive tunnel networks. Its large eyes are adapted to low light.",
+        "health": "11"
+    },
+    {
+        "name": "Chainlink Skeleton",
+        "description": "A skeleton dragging rusty chains behind it, once a prisoner in life. It moves slowly through dungeons.",
+        "health": "17"
+    },
+    {
+        "name": "Meadow Wolf",
+        "description": "A friendly-looking wolf with golden fur often seen in open grasslands. It hunts small game and avoids larger threats.",
+        "health": "19"
+    },
+    {
+        "name": "Forge Goblin",
+        "description": "A soot-covered goblin that works small forges near mining towns. It has a knack for simple metal repairs.",
+        "health": "14"
+    },
+    {
+        "name": "Echo Skeleton",
+        "description": "A skeleton whose bones resonate with faint echoes in caves, repeating distant sounds. It is a common sight in mountain passages.",
+        "health": "15"
+    },
+    {
+        "name": "Mist Wolf",
+        "description": "A pale gray wolf that blends into morning fog, common near lakes and rivers. Its howls are soft and haunting.",
+        "health": "20"
+    },
+    {
+        "name": "Trader Goblin",
+        "description": "A goblin wearing a patched vest full of pockets, traveling between villages with goods. Its friendly haggling is well known.",
+        "health": "13"
+    },
+    {
+        "name": "Ancient Bonewalker",
+        "description": "An old skeleton with yellowed bones covered in faint runes, slowly patrolling temple grounds. It seems almost peaceful.",
+        "health": "18"
+    },
+    {
+        "name": "Snowpaw Wolf",
+        "description": "A white wolf with padded feet suited for snowy terrain, common in colder climates. It is relatively tame and curious about camps.",
+        "health": "22"
+    },
+    {
+        "name": "Leafcloak Goblin",
+        "description": "A goblin adorned with leaves and twigs for camouflage in forests. It gathers berries and nuts to trade.",
+        "health": "12"
+    },
+    {
+        "name": "Helmet Skeleton",
+        "description": "A skeleton wearing a dented iron helmet, marching along old military roads. Its posture is surprisingly disciplined.",
+        "health": "16"
+    },
+    {
+        "name": "Thorn Wolf",
+        "description": "A resilient wolf with scarred hide from brambles, living on forest borders. It has a watchful but non-aggressive nature.",
+        "health": "19"
+    },
+    {
+        "name": "Gemeye Goblin",
+        "description": "A goblin with unusually bright eyes that sparkle like gems, hunting for shiny stones in riverbeds. It is playful and harmless.",
+        "health": "14"
+    },
+    {
+        "name": "Wispbone Skeleton",
+        "description": "A frail-looking skeleton surrounded by faint glowing motes, drifting through misty graveyards. Its presence is more eerie than dangerous.",
+        "health": "13"
+    }
+]
