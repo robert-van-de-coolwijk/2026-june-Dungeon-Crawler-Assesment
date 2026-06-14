@@ -14,4 +14,5 @@ class Sentiment
     public const Vital = 'vital';
 
     public const Error = 'error';
+    public const Command = 'command';
 }

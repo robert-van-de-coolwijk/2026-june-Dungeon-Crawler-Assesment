@@ -212,14 +212,17 @@ class Command extends SingletonPattern
         $playerOne->insideContainer = $portalEntity->target;
 
         $msg[] = Tools::MsgWrap(
-            'You moved "%s":',
+            sprintf('You moved "%s":', $requestedPortalName),
             ContType::P
         );
 
         //@todo RC make this a player settable options or scriptable
 
         // immediately look into room
-        $msg = array_merge($this->look([]));
+        $msg = array_merge(
+            $msg,
+            $this->look([])
+        );
 
 
         return $msg;

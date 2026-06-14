@@ -3,6 +3,9 @@
 namespace App\Controllers;
 
 
+use App\Core\MsgWrap\ContType;
+use App\Core\MsgWrap\Sentiment;
+use App\Core\Tools;
 use App\Models\Game;
 
 class Main
@@ -24,7 +27,18 @@ class Main
      * @todo RC replace this with an interface
      */
     public function command(string $commandName, array $params) : array {
-        return $this->game->handleCommand($commandName, $params);
+
+        return array_merge(
+            [
+                Tools::MsgWrap(
+                    sprintf('%s %s', $commandName, implode(' ', $params)),
+                    ContType::P,
+                    Sentiment::Command
+                )
+            ],
+            $this->game->handleCommand($commandName, $params)
+        );
+
     }
 
     public function getGameState() : array
