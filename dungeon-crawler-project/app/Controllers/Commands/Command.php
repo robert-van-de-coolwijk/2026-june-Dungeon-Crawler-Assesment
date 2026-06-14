@@ -48,10 +48,21 @@ class Command extends SingletonPattern
     {
         $game = Game::getInstance();
 
-        $restoreSuccess = $game->getWorld()->restore();
+        $restoreSuccess = $game->restore();
 
         return [
             Tools::MsgWrap($restoreSuccess ? "world restored" : "Restore failed", ContType::P),
+        ];
+    }
+
+    public function deleted(array $params) : array
+    {
+        $game = Game::getInstance();
+
+        $restoreSuccess = $game->getWorld()->deleteSave();
+
+        return [
+            Tools::MsgWrap($restoreSuccess ? "world deleted" : "Failed deleting world", ContType::P),
         ];
     }
 

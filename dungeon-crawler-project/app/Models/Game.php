@@ -9,6 +9,7 @@ use App\Core\Tools;
 use App\Models\GameState\AbstractGameState;
 use App\Models\GameState\Blank;
 use App\Models\WorldEntities\Player;
+use App\Models\WorldEntities\Room;
 use App\Models\WorldEntities\World;
 
 /**
@@ -36,9 +37,9 @@ class Game extends SingletonPattern
     {
         parent::__construct();
 
-        $this->setWorld(new World());
+        $this->world = new World();
 
-        $this->populateFromSave();
+        $this->populateFromCache();
     }
 
 
@@ -79,9 +80,11 @@ class Game extends SingletonPattern
 
         $this->playerOne = $playerOne;
 
-        if($this->world !== null)
+        $this->world->addEntity($playerOne);
+
+        if($this->playerOne->_currentRoom === null)
         {
-            $msgs = array_merge($msgs, $this->placePlayerInRandomRoom());
+            $msgs = array_merge($msgs, $this->placePlayerInRandomRoom($this->playerOne));
         }
 
         return $msgs;
@@ -99,17 +102,28 @@ class Game extends SingletonPattern
         $this->world = $world;
     }
 
-    private function placePlayerInRandomRoom() : array
+    public function placePlayerInRandomRoom(Player $player) : array
     {
         $msg = array();
 
-        if($this->world !== null && $this->playerOne !== null)
+        Tools::debug($player);
+
+        if(!is_null($player))
         {
 
-            $randomRoom = $this->world->getRandomRoom();
+            $randomRoom = $this->world->get(Room::class, CollectionPosition::First);
 
-            if($randomRoom !== null){
-                $this->playerOne->currentRoom = $randomRoom->id;
+
+            Tools::debug($randomRoom);
+
+            if(!is_null($randomRoom))
+            {
+                Tools::debug($randomRoom->id);
+
+                $player->currentRoom = $randomRoom->id;
+
+
+                Tools::debug($player->currentRoom);
 
                 $msg[] = Tools::MsgWrap(sprintf('Player placed into room %s "%s"  ', $randomRoom->id, $randomRoom->name));
             }
@@ -152,7 +166,7 @@ class Game extends SingletonPattern
         return implode(PHP_EOL, $stateOfTheGameArray);
     }
 
-    private function populateFromSave()
+    private function populateFromCache()
     {
         // see if there is a world on shared memory (Redis)
 
@@ -160,6 +174,33 @@ class Game extends SingletonPattern
 
             // load player if exists
             // load world if exists
+    }
+
+    public function save() {
+        $success = $this->world->save();
+
+        if($success && !is_null($this->playerOne)){
+            $success = $success && $this->playerOne->save();
+        }
+
+        return $success;
+    }
+
+    public function restore()
+    {
+        $success = $this->world->restore();
+
+        if($success){
+            $player = $this->world->get(Player::class, CollectionPosition::First);
+
+            if($player !== null)
+            {
+                $this->playerOne = $player;
+
+            }
+        }
+
+        return $success;
     }
 
 }

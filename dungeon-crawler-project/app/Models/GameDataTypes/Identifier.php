@@ -9,13 +9,12 @@ use App\Models\WorldEntities\World;
 
 
 /**
- * This value stores the ID of one Entity
+ * This value stores the ID of one Entity and is mandatory for an entity to exist
  */
-class Identifier extends Text
+class Identifier extends IdRef
 {
     public const int ID_START_NUMBER = 1;
-    public const string ID_PREFIX = '#';
-    protected const int maxLength = 255;
+
 
     private function __construct() {
         parent::__construct();

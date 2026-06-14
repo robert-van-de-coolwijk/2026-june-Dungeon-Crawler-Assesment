@@ -137,6 +137,12 @@ class Init
 
         $msgs[] = Tools::MsgWrap('World created', ContType::H1, Sentiment::Important);
 
+        $player = $game->getPlayerOne();
+
+        if(!is_null($player)){
+            $game->placePlayerInRandomRoom($player);
+        }
+
         $msgs[] = $world->getStateOfTheWorld();
 
 

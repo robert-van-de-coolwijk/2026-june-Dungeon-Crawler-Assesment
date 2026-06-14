@@ -103,14 +103,14 @@ class Entity {
         return FileCacherConfig::EntityContext . '/' . $id;
     }
 
-    public function save()
+    public function save() : bool
     {
         $fileCacher = FileCacher::getInstance();
 
         $contextString = self::getFileCacherContext($this->id);
         $serializedEntity = serialize($this);
 
-        $fileCacher->put($contextString, $serializedEntity);
+        return $fileCacher->put($contextString, $serializedEntity);
     }
 
     /**

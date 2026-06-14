@@ -19,7 +19,7 @@ class FileCacher  extends SingletonPattern{
 //        echo '<br />Done (Init FileCacher)';
     }
 
-    public function put(string $fContextString, $fData, $fDebug = false) : void
+    public function put(string $fContextString, $fData, $fDebug = false) : bool
     {
         $path = $this->getContextPath($fContextString);
 
@@ -29,11 +29,13 @@ class FileCacher  extends SingletonPattern{
 
         $serializedData = json_encode($fData);
 
-        file_put_contents($path, $serializedData);
+        $success = (bool)file_put_contents($path, $serializedData);
 
         if($fDebug){
             Tools::debug('FileCacher.put() - Write file ok<br />' . $path);
         }
+
+        return $success;
     }
 
     public function exists(string $fContextString) : bool

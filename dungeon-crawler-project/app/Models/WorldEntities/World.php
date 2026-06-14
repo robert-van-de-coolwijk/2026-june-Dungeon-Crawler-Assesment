@@ -7,8 +7,8 @@ use App\Core\Data\FileCacher;
 use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\MsgWrap;
 use App\Core\Tools;
+use App\Models\CollectionPosition;
 use App\Models\Game;
-use App\Models\GameDataTypes\Identifier;
 use Exception;
 use stdClass;
 
@@ -98,26 +98,14 @@ class World
     {
         $portal = new Portal($sourceRoom, $targetRoom);
 
+        $portal->name = $name;
+        $portal->description = $description;
+
+
         $this->addEntity($portal);
     }
 
-    public function getRandomRoom() : ?Room
-    {
-        $rooms = [];
 
-        foreach($this->entities as $entity){
-            if($entity instanceof Room){
-                $rooms[] = $entity;
-            }
-        }
-
-        if(count($rooms) == 0)
-        {
-            return null;
-        }
-
-        return $rooms[array_rand($rooms)];
-    }
 
 
     /// SAVE AND RESTORE LOGIC \\\
@@ -126,7 +114,7 @@ class World
         return FileCacherConfig::WorldContext . $worldId;
     }
 
-    public function save() : void
+    public function save() : bool
     {
         $fileCacher = FileCacher::getInstance();
 
@@ -135,11 +123,13 @@ class World
         $worldObject = new stdClass();
         $worldObject->highestIdentifier = $this->highestIdentifier;
 
-        $fileCacher->put($contextString, $worldObject);
+        $success = $fileCacher->put($contextString, $worldObject);
 
         foreach($this->entities as $entity){
-            $entity->save();
+            $success = $success && $entity->save();
         }
+
+        return $success;
     }
 
     /**
@@ -163,12 +153,11 @@ class World
 
         Tools::debug($worldObject);
 
-        $world = Game::getInstance()->getWorld();
 
         // continue restoring where left
-        for($i = $world->highestIdentifier; $i <= $worldObject->highestIdentifier; $i++){
+        for($i = $this->highestIdentifier; $i <= $worldObject->highestIdentifier; $i++){
 
-            Entity::restore($world, $i);
+            Entity::restore($this, $i);
 
             // defense against infinite loops and
             // out of memory problems due though a world being restored bigger than what the current server can support
@@ -179,7 +168,103 @@ class World
         }
 
 
+
         return true;
     }
+
+    public function deleteSave()
+    {
+        throw new Exception("Not implemented yet");
+    }
+
+    public function get(?string $class = null, string $pos = CollectionPosition::First) : ?Entity
+    {
+        $className = is_string($class) ? Tools::getClassName($class) : null;
+
+        Tools::debug($className);
+        Tools::debug($pos);
+
+        switch($pos){
+            case CollectionPosition::First:
+                return $this->first($className);
+
+            case CollectionPosition::Last:
+                return $this->last($className);
+
+            case CollectionPosition::Random:
+                return $this->getRandom($className);
+
+            default:
+                throw new Exception("Get failed, given position \"$pos\" does not exist");
+        }
+
+        return null;
+    }
+
+    protected function first(?string $class = null) : ?Entity
+    {
+        if(is_null($class)){
+            return Tools::arrayFirst($this->entities);
+        }
+
+        Tools::debug($class);
+
+        foreach($this->entities as $entity){
+            Tools::debug($entity);
+
+            if(strcmp(Tools::getClassName($entity), $class) == 0){
+                return $entity;
+            }
+        }
+
+
+        Tools::debug('Sheise');
+
+        return null;
+    }
+
+    protected function last(?string $class = null) : ?Entity
+    {
+        if(is_null($class)){
+            return Tools::arrayFirst($this->entities);
+        }
+
+        for ($currentElement = end($this->entities); ($currentKey = key($this->entities)) !== null; $currentElement = prev($this->entities)) {
+
+            $entity = $this->entities[key($this->entities)];
+
+            if(strcmp(Tools::getClassName($entity), $class) == 0){
+                return $entity;
+            }
+        }
+
+        return null;
+    }
+
+    protected function getRandom(?string $class = null) : ?Entity
+    {
+        $entityArr = [];
+
+        if(is_string($class)){
+
+            foreach($this->entities as $entity){
+                if(strcmp(Tools::getClassName($entity), $class) == 0){
+                    $entityArr[] = $entity;
+                }
+            }
+
+        } else {
+            $entityArr = $this->entities;
+        }
+
+
+        if(count($entityArr) == 0)
+        {
+            return null;
+        }
+
+        return $entityArr[array_rand($entityArr, 1)];
+    }
+
 
 }
