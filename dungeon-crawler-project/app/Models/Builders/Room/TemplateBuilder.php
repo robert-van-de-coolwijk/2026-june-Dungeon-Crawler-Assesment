@@ -4,8 +4,12 @@ namespace App\Models\Builders\Room;
 
 use App\Core\Tools;
 use App\Models\SingletonPattern;
+use App\Models\WorldEntities\Creature;
 use App\Models\WorldEntities\Room;
 use stdClass;
+
+//@TODO RC consider splitting up in template builder and a generator of sorts
+//@TODO RC cleanup or split up per generator type (for now it is good enough)
 
 class TemplateBuilder extends SingletonPattern
 {
@@ -74,5 +78,16 @@ class TemplateBuilder extends SingletonPattern
 
     public static function getInstance() : TemplateBuilder {
         return new static();
+    }
+
+    public function createCreatureFromTemplateObject(object $creatureStruct) : Creature
+    {
+        $creature = new Creature();
+
+        $creature->name = $creatureStruct->name ?? "unset";
+        $creature->description = $creatureStruct->description ?? "unset";
+        $creature->health = $creatureStruct->health ?? 69;
+
+        return $creature;
     }
 }

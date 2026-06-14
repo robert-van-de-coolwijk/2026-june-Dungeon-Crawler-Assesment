@@ -109,12 +109,12 @@ class World
 
         // validation checks
 
-        Tools::debug(
-            'Portal ', $portal->name,
-            'Target ', $targetRoom->name,
-            'Source ', $sourceRoom->name,
-            'Source, portals: ', var_export($sourceRoom->getPortalNames(), true),
-        );
+//        Tools::debug(
+//            'Portal ', $portal->name,
+//            'Target ', $targetRoom->name,
+//            'Source ', $sourceRoom->name,
+//            'Source, portals: ', var_export($sourceRoom->getPortalNames(), true),
+//        );
     }
 
 

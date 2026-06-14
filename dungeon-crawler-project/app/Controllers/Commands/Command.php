@@ -25,10 +25,20 @@ use App\Models\WorldEntities\Player;
 class Command extends SingletonPattern
 {
 
-   /// world administrative \\\
+   /// world administration \\\
+
     public function init(array $params) : array
     {
-        return Init::world($params);
+        switch($params[0]){
+            case 'world':
+                return Init::world($params);
+
+            case 'creatures':
+                return Init::creatures($params);
+
+            default:
+                throw new \Exception(sprintf('Command init does not support param "%s"', $params[0]));
+        }
     }
 
     public function save(array $params) : array

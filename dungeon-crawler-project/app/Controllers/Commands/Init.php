@@ -6,9 +6,10 @@ use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\Sentiment;
 use App\Core\Tools;
 use App\Models\Builders\Room\TemplateBuilder;
+use App\Models\CollectionPosition;
 use App\Models\Game;
 use App\Models\WorldEntities\Room;
-use App\Models\WorldEntities\World;
+use App\Models\WorldEntities\Creature;
 
 class Init
 {
@@ -32,9 +33,8 @@ class Init
     /**
      * Init world
      *
-     * @param Game $game
      * @param array $params
-     * @return void
+     * @return array
      * @throws \Exception
      */
     public static function world(array $params) : array
@@ -47,7 +47,7 @@ class Init
 
 
         // $params[0] == world
-        $fileName = $params[1];
+        $fileName = $params[1]; //@todo RC requires some serious sanitation. Consider giving options instead and let user choose from a number
 
         $inputFilePath = realpath(__DIR__ . "/../../../data/init/world/$fileName");
 
@@ -167,5 +167,71 @@ class Init
         return $builder->createRoomFromBiome($biomeString);
     }
 
+    public static function creatures(array $params) : array
+    {
+        $game = Game::getInstance();
+
+        $world = $game->getWorld();
+
+        $msgs = [];
+
+
+
+        // $params[0]       == world
+        $fileName           = $params[1]; //@todo RC requires some serious sanitation. Consider giving options instead and let user choose from a number
+        $numberOfCreatures  = is_numeric($params[2] ?? null) ? (int) $params[2] : 10;
+
+        Tools::debugFilePath(__DIR__ . "/../../../data/init/creatures/$fileName");
+
+        $inputFilePath = realpath(__DIR__ . "/../../../data/init/creatures/$fileName");
+
+        if (!file_exists($inputFilePath)) {
+            throw new \Exception(sprintf('File "%s" not found for creature creation', $fileName));
+        }
+
+        // ingest file
+        $fileContents = file_get_contents($inputFilePath);
+
+        $creaturesTemplateArray = json_decode($fileContents);
+
+        if(!is_array($creaturesTemplateArray)) {
+            throw new \Exception(sprintf('File "%s" is damaged, could not read properly', $fileName));
+        }
+
+        $builder = TemplateBuilder::getInstance();
+
+        $uniqueRoomCount = [];
+
+        for($i = 0; $i < $numberOfCreatures; $i++) {
+            $creature = self::createCreature($builder, $creaturesTemplateArray[array_rand($creaturesTemplateArray)]);
+
+            $randomRoom = $world->get(Room::class, CollectionPosition::Random);
+            $randRoomId = $randomRoom->id;
+
+            $creature->insideContainer = $randRoomId;
+
+            //Tools::debug($creature->id, $creature->name, $randomRoom->id, $randomRoom->name);
+
+            isset($uniqueRoomCount[$randRoomId]) ? $uniqueRoomCount[$randRoomId]++ :  $uniqueRoomCount[$randRoomId] = 1;
+        }
+
+
+        $msgs[] = Tools::MsgWrap(
+            sprintf('Created %s creatures in %s unique rooms', $numberOfCreatures, count($uniqueRoomCount)),
+            ContType::P,
+            Sentiment::Important
+        );
+
+
+        $msgs[] = $world->getStateOfTheWorld();
+
+
+        return $msgs;
+    }
+
+    private static function createCreature(TemplateBuilder $builder, object $createTemplate) : Creature
+    {
+        return $builder->createCreatureFromTemplateObject($createTemplate);
+    }
 
 }
