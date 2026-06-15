@@ -11,13 +11,21 @@ V- Create "monsters" and populate them at random in the rooms
 V- Make a fight mechanic
 
 - Create treasure items
--- Populate them in rooms at random
--- Make it so the player can pick them up
+  - Populate them in rooms at random
+  - Make it so the player can pick them up
 
 - Implement proper game states
--- Explorer
--- Fight
--- Game over
+  - Explorer
+  - Fight
+  - Game over
+
+- Implement journal;
+The player has traversed the game and fought monsters, 
+but it might all go by quickly if you just cheese the game.
+This will solidify the idea "you did something and it matters".
+  - Journal command to show current entries
+  - Make it so actions register an appropriate message in the journal
+  - On game over, either prompt the player or just open the journal
 
 
 
