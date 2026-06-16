@@ -7,7 +7,6 @@ use App\Core\MsgWrap\Sentiment;
 use App\Core\Tools;
 use App\Models\CollectionPosition;
 use App\Models\Game;
-use App\Models\GameState\Blank;
 use App\Models\SingletonPattern;
 use App\Models\WorldEntities\Creature;
 use App\Models\WorldEntities\Player;
@@ -86,7 +85,7 @@ class Command extends SingletonPattern
 
                 break;
 
-
+            //@todo RC case look: to "look for trouble" see if there is a creature in the world and just "keep walking" until you run into one
 
         }
         $msgs[] = Tools::MsgWrap(
@@ -98,6 +97,46 @@ class Command extends SingletonPattern
 
 
         return $msgs;
+    }
+
+    /// read only helper functions \\\
+
+    public function commands() : array
+    {
+        $msgArr = [];
+
+        $game = Game::getInstance();
+        $gameState = $game->getCurrentGameState();
+
+        $commandArr = $gameState->commandList();
+
+        Tools::debug($commandArr);
+
+        $msgArr[] = Tools::MsgWrap(
+            'Available commands:',
+            ContType::P,
+            Sentiment::Important
+        );
+
+        foreach($commandArr as $command){
+            $msgArr[] = Tools::MsgWrap(
+                $command,
+                ContType::P
+            );
+        }
+
+        return $msgArr;
+    }
+
+    public function time() : array
+    {
+
+        return [
+            Tools::MsgWrap(
+                Tools::getTimeStamp(),
+                ContType::P
+            ),
+        ];
     }
 
    /// world administration \\\
@@ -182,7 +221,27 @@ class Command extends SingletonPattern
     {
         $game = Game::getInstance();
 
-        return $game->getStateOfTheGame();
+        $selection = $params[0] ?? '';
+
+        if(strcmp($selection, 'all') === 0)
+        {
+            return $game->getStateOfTheGame();
+        }
+
+        $gameState = $game->getCurrentGameState();
+
+        return [
+            Tools::MsgWrap(
+                sprintf('Current game state: %s', $gameState->name()),
+                ContType::P,
+                Sentiment::Important
+            ),
+            Tools::MsgWrap(
+                $gameState->description(),
+                ContType::P,
+                Sentiment::Normal
+            )
+        ];
     }
 
     /// game actions \\\
@@ -192,6 +251,7 @@ class Command extends SingletonPattern
         $msg = [];
         $game = Game::getInstance();
         $world = $game->getWorld();
+        $playerOne = $game->getPlayerOne();
 
         $currentRoomId = $game->getPlayerOne()->insideContainer;
 
@@ -223,7 +283,14 @@ class Command extends SingletonPattern
 
             $contentNames = $currentRoom->getContentNames();
 
-            if(count($contentNames) > 0){
+            //remove player
+            if(isset($contentNames[$playerOne->id]))
+            {
+                unset($contentNames[$playerOne->id]);
+            }
+
+            if(count($contentNames) > 0)
+            {
                 $msg[] = Tools::MsgWrap(
                     "Contents:",
                     ContType::P,
@@ -232,7 +299,8 @@ class Command extends SingletonPattern
 
                 $creatureCount = 0;
 
-                foreach($contentNames as $entityId => $entityName){
+                foreach($contentNames as $entityId => $entityName)
+                {
                     $entity = $world->getEntityById($entityId);
 
                     $suffix = '';
@@ -263,6 +331,8 @@ class Command extends SingletonPattern
                 ContType::P
             );
         }
+
+        Tools::debug($game->getCurrentGameState()->name());
 
 
         return $msg;
@@ -517,13 +587,27 @@ class Command extends SingletonPattern
     }
 
 
-    /// read only helper functions \\\
 
-    public function time() : array
+    public function flee(array $params) : array
     {
-        return [
-            Tools::getTimeStamp()
-        ];
+        $msgArr = [];
+        $game = Game::getInstance();
+        $player = $game->getPlayerOne();
+        $world = $game->getWorld();
+
+        $msgArr[] = Tools::MsgWrap(
+            sprintf('You can not flee right now. Fight!'),
+            ContType::P
+        );
+
+        // do some arbitrary roll to see "if you can flee" if that fails, let the monster fight
+        //todo RC split off fight logic so parts can be used here
+
+        // op successful flee
+            // get all portals in current room
+            // move to that portal with a custom message
+
+        return $msgArr;
     }
 
 }

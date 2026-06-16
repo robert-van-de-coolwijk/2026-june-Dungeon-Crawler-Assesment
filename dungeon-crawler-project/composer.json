@@ -21,12 +21,7 @@
 
   "require": {
     "php": ">=8.4.0",
-    "ext-pdo": "*",
-
-    "lcobucci/jwt": "5.6.0",
-
-    "webfiori/http": "*",
-    "webfiori/cli": "*"
+    "ext-pdo": "*"
   }
 
 }

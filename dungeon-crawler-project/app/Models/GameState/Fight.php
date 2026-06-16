@@ -14,4 +14,17 @@ class Fight extends AbstractGameState
      *
      * - implement commands / actions
      */
+
+    protected function __construct()
+    {
+        parent::__construct();
+
+        $this->name = "Fight";
+        $this->description = "You are in altercation with unsavory individuals. Resist, fight or flee for your life";
+
+        $this->registerCommand('look');
+
+        $this->registerCommand('fight');
+        $this->registerCommand('flee');
+    }
 }

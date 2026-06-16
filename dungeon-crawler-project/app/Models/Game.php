@@ -3,11 +3,18 @@
 namespace App\Models;
 
 use App\Controllers\Commands\Command;
+use App\Core\Data\FileCacher;
 use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\Sentiment;
 use App\Core\Tools;
+use App\Models\GameDataTypes\EntityRelationManager;
 use App\Models\GameState\AbstractGameState;
 use App\Models\GameState\Blank;
+use App\Models\GameState\Exploration;
+use App\Models\GameState\Fight;
+use App\Models\GameState\GameOver;
+use App\Models\GameState\Genesis;
+use App\Models\WorldEntities\Creature;
 use App\Models\WorldEntities\Player;
 use App\Models\WorldEntities\Room;
 use App\Models\WorldEntities\World;
@@ -49,23 +56,18 @@ class Game extends SingletonPattern
         $currentGameState = $this->getCurrentGameState();
 
 
-//        if(!$currentGameState->validCommand($commandName, $params)){
-//
-//            return [
-//                sprintf('Command "%s" is not available', $commandName),
-//                sprintf('Use command', $commandName)
-//            ];
-//        }
+        if(!$currentGameState->validCommand($commandName, $params)){
+
+            return [
+                Tools::MsgWrap(sprintf('Can not "%s" right now', $commandName), ContType::P),
+                Tools::MsgWrap(sprintf('Use commands to see available commands'), ContType::P)
+            ];
+        }
 
         return Command::getInstance()->{$commandName}($params);
 
     }
 
-    protected function getCurrentGameState(): AbstractGameState
-    {
-
-        return Blank::getInstance();
-    }
 
     /// SUPPORT FUNCTIONS \\\
 
@@ -118,7 +120,9 @@ class Game extends SingletonPattern
 
                 //Tools::debug($player->insideContainer);
 
-                $msg[] = Tools::MsgWrap(sprintf('Player placed into room %s "%s"  ', $randomRoom->id, $randomRoom->name));
+                $msg[] = Tools::MsgWrap(sprintf('Player placed into room %s "%s"', $randomRoom->id, $randomRoom->name));
+            }else{
+                $msg[] = Tools::MsgWrap(sprintf('Could not place player in a room'));
             }
         }
 
@@ -134,11 +138,15 @@ class Game extends SingletonPattern
         $playerString = $this->playerOne !== null   ? $this->playerOne->getStateOfThePlayer()   : '[ there is no player ]';
         $worldString = $this->world !== null        ? $this->world->getStateOfTheWorld()        : '[ there is no world ]';
 
+        $gameState = $this->getCurrentGameState();
+        $gameStateString = sprintf('State: %s', $gameState->name());
+
         $MW = Tools::getMsgWrapFn();
         $emptyLine = '';
 
         return [
             $MW('Current state of the game',    ContType::H1),
+            $MW($gameStateString,                  ContType::P),
             $MW('Player',                       ContType::H2),
             $MW($playerString,                  ContType::P),
             $MW($emptyLine,                     ContType::P),
@@ -189,11 +197,56 @@ class Game extends SingletonPattern
             if($player !== null)
             {
                 $this->playerOne = $player;
-
             }
         }
 
         return $success;
+    }
+
+    public function getCurrentGameState() : AbstractGameState
+    {
+        if(is_null($this->playerOne)){
+            return Blank::getInstance();
+        }
+
+        if(!$this->playerOne->isInsideContainer()){
+            return Genesis::getInstance();
+        }
+
+        $world = $this->world;
+        $player = $this->playerOne;
+
+        $roomId = $this->playerOne->insideContainer;
+        $room = $world->getEntityById($roomId);
+
+        //@todo RC determine, implement and check for some kind of win condition
+
+        if(false){
+            return GameWon::getInstance();
+        }
+
+        if(!$this->playerOne->isAlive()){
+            return GameOver::getInstance();
+        }
+
+        $entitiesInRoom = EntityRelationManager::getInstance()->getIdsInsideCollection(EntityRelationManager::Collection_Container_Entity, $room);
+        $containsCreature = false;
+
+        foreach($entitiesInRoom as $entityId){
+            $entity = $world->getEntityById($entityId);
+
+            if(strcmp(Tools::getClassName($entity), Tools::getClassName(Creature::class)) === 0)
+            {
+                $containsCreature = true;
+                break;
+            }
+        }
+
+        if($containsCreature){
+            return Fight::getInstance();
+        }
+
+        return Exploration::getInstance();
     }
 
 }

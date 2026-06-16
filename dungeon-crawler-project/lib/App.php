@@ -27,12 +27,29 @@ class App
 
         /// register valid commands (client side) \\\
 
+        //@todo RC
+
         // game (server) commands
+        $this->registerCommand("commands", "genericCommandHandler");
+
         $this->registerCommand("time", "genericCommandHandler");
         $this->registerCommand("state", "genericCommandHandler");
 
+        $this->registerCommand("save", "genericCommandHandler");
+        $this->registerCommand("restore", "genericCommandHandler");
+
         $this->registerCommand("player", "genericCommandHandler");
         $this->registerCommand("init", "genericCommandHandler");
+
+        $this->registerCommand("look", "genericCommandHandler");
+
+        $this->registerCommand("move", "genericCommandHandler");
+        $this->registerCommand("north", "genericCommandHandler");
+        $this->registerCommand("east", "genericCommandHandler");
+        $this->registerCommand("south", "genericCommandHandler");
+        $this->registerCommand("west", "genericCommandHandler");
+
+        $this->registerCommand("fight", "genericCommandHandler");
 
 
 
@@ -46,7 +63,7 @@ class App
         $this->registerCommand("help", function (array $params) {
             $this->getPrinter()->display([
                 "usage: command [ params ]",
-                ""
+                "Type commands to get a list of all available game commands."
             ]);
         });
 

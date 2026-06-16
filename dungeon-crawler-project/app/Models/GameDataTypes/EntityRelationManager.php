@@ -10,7 +10,6 @@ class EntityRelationManager extends SingletonPattern
 {
     public const string Collection_Room_Portal = 'Collection_Portal_Portal';
     public const string Collection_Container_Entity = 'Collection_Container_Entity';
-    public const string  Collection_Room_Creature = 'Collection_Room_Creature';
 
     /**
      * To ensure 1:N collections, the 1 is the key
@@ -27,7 +26,6 @@ class EntityRelationManager extends SingletonPattern
         $this->collections = [
             self::Collection_Room_Portal => [],
             self::Collection_Container_Entity => [],
-            self::Collection_Room_Creature => [],
         ];
     }
 

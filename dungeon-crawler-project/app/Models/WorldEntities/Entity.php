@@ -114,13 +114,13 @@ class Entity {
     }
 
 
-    public function isInsideContainer()
+    public function isInsideContainer() : bool
     {
-        return $this->_insideContainer->isUnset();
+        return !($this->_insideContainer->isUnset());
     }
 
     /**
-     * Returns the names of portals, if a portal (entity) could not be found, it returns the id
+     * Returns the names of entities, if a portal (entity) could not be found, it returns the id
      *
      * @return array Array of strings
      * @throws \Exception
@@ -130,12 +130,12 @@ class Entity {
         $portalNames = [];
         $world = Game::getInstance()->getWorld();
 
-        $portalIds = EntityRelationManager::getInstance()->getIdsInsideCollection($collectionName, $this);
+        $entityIds = EntityRelationManager::getInstance()->getIdsInsideCollection($collectionName, $this);
 
-        foreach ($portalIds as $portalId) {
-            $entity = $world->getEntityById($portalId);
+        foreach ($entityIds as $entityId) {
+            $entity = $world->getEntityById($entityId);
 
-            $portalNames[$portalId] = !is_null($entity) ? $entity->name : $portalId;
+            $portalNames[$entityId] = !is_null($entity) ? $entity->name : $entityId;
         }
 
         return $portalNames;

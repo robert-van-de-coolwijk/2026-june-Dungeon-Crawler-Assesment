@@ -15,4 +15,14 @@ class Blank extends AbstractGameState
      * - implement commands / actions
      */
 
+    protected function __construct()
+    {
+        parent::__construct();
+
+        $this->name = "Blank";
+        $this->description = "Name your player, type \"player [name]\"";
+
+        //$this->registerCommand('init');
+        $this->registerCommand('player');
+    }
 }

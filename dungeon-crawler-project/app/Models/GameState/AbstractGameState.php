@@ -3,6 +3,7 @@
 namespace App\Models\GameState;
 
 use App\Models\SingletonPattern;
+use ArrayObject;
 
 /**
  * GameState describes the current state of the game
@@ -53,12 +54,32 @@ abstract class AbstractGameState extends SingletonPattern
 
     protected array $commands = [];
 
+    /**
+     * @var string Single term (fewest words possible) that describes the current game state
+     */
+    protected string $name;
+
+    /**
+     * @var string Describes what the game state is and what is expected from the player
+     */
+    protected string $description;
+
     protected function __construct()
     {
+        parent::__construct();
+
+        // admin commands
         $this->registerCommand('init');
-        $this->registerCommand('player');
-        $this->registerCommand('move', ['north', 'east', 'south', 'west']); // @todo make aliases work
+        $this->registerCommand('trouble');
+
+        // read only
+        $this->registerCommand('state');
+        $this->registerCommand('commands');
         $this->registerCommand('time');
+
+        // save / restore
+        $this->registerCommand('save');
+        $this->registerCommand('restore');
     }
 
     protected function registerCommand(string $commandName, array $aliases = []) : void
@@ -69,11 +90,33 @@ abstract class AbstractGameState extends SingletonPattern
 
         $this->commands[$commandName] = $commandName;
 
+        //@todo RC this is not a great solution, improve all register command logic
+        foreach ($aliases as $alias) {
+            $this->registerCommand($alias);
+        }
+
     }
 
+    public function validCommand(string $commandName, array $params) : bool
+    {
+        return isset($this->commands[$commandName]);
+    }
 
+    public function commandList() : array
+    {
+        $commandArrayObject = new ArrayObject($this->commands);
 
+        return $commandArrayObject->getArrayCopy();
+    }
 
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function description(): string {
+        return $this->description;
+    }
 
 }
 

@@ -52,4 +52,12 @@ class Identifier extends Text
         return true;
     }
 
+    /**
+     * Override; identifier and sub classes use a different "unset" value.
+     *
+     * @return bool
+     */
+    public function isUnset() : bool {
+        return strcmp(self::Unset, $this->data) === 0;
+    }
 }
