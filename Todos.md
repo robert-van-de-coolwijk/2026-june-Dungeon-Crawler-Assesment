@@ -10,14 +10,17 @@ V-- And reloading it on starting the game
 V- Create "monsters" and populate them at random in the rooms
 V- Make a fight mechanic
 
-- Create treasure items
-  - Populate them in rooms at random
-  - Make it so the player can pick them up
-
 - Implement proper game states
   - Explorer
   - Fight
   - Game over
+
+- Implement Redis class
+    - Make game load from memory on game entry, gracefully
+
+- Create treasure items
+  - Populate them in rooms at random
+  - Make it so the player can pick them up
 
 - Implement journal;
 The player has traversed the game and fought monsters, 
@@ -26,6 +29,10 @@ This will solidify the idea "you did something and it matters".
   - Journal command to show current entries
   - Make it so actions register an appropriate message in the journal
   - On game over, either prompt the player or just open the journal
+
+- Fix composer file
+	- run application from new context to test
+	- include auto fixer that checks for vender folder and runs composer on 
 
 
 
