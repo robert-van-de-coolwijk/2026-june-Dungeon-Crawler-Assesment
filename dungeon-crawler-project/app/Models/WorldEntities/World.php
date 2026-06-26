@@ -4,6 +4,7 @@ namespace App\Models\WorldEntities;
 
 use App\Config\MemoryCacherConfig;
 use App\Core\Data\FileCacher;
+use App\Core\Data\MemoryCacher\MemoryCacher;
 use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\MsgWrap;
 use App\Core\Tools;
@@ -15,11 +16,13 @@ use stdClass;
 
 class World
 {
+    public const StartIdentifier = 0;
+
     /**
      * @var int Stores the highest id assigned to an entity
      * Consider 0 UNSET
      */
-    private int $highestIdentifier = 0;
+    private int $highestIdentifier = self::StartIdentifier;
 
     protected array $entities = array();
 
@@ -124,9 +127,9 @@ class World
         return MemoryCacherConfig::WorldContext . $worldId;
     }
 
-    public function save() : bool
+    public function save(bool $toCache = false) : bool
     {
-        $fileCacher = FileCacher::getInstance();
+        $fileCacher = $toCache ? FileCacher::getInstance() : MemoryCacher::getMemoryCacherObject();
 
         $contextString = $this->getFileCacherContext(1); // in anticipation of being able to support multiple worlds
 
@@ -147,16 +150,16 @@ class World
      * The
      * @throws Exception
      */
-    public function restore() : bool
+    public function restore(bool $fromCache = false) : bool
     {
-        $fileCacher = FileCacher::getInstance();
+        $fileCacher = $fromCache ? FileCacher::getInstance() : MemoryCacher::getMemoryCacherObject();
 
         // @todo Make more robust
 
         $contextString = self::getFileCacherContext(1); // in anticipation of being able to support multiple worlds
 
         if(!$fileCacher->exists($contextString)){
-            throw new \Exception("Can't restore World");
+            throw new \Exception("Can't restore World. No data found.");
         }
 
         $worldObject = $fileCacher->get($contextString);
@@ -196,9 +199,24 @@ class World
         return true;
     }
 
-    public function deleteSave()
+    public function deleteSave() : bool
     {
         throw new Exception("Not implemented yet");
+    }
+
+    public function destroy(): bool
+    {
+        $entityRelationManager = EntityRelationManager::getInstance();
+
+        if(!$entityRelationManager->clear()){
+            return false;
+        }
+
+        $this->entities = array();
+
+        $this->highestIdentifier = self::StartIdentifier;
+
+        return true;
     }
 
     public function getEntityById(string $id) : ?Entity
@@ -294,6 +312,8 @@ class World
 
         return $entityArr[array_rand($entityArr, 1)];
     }
+
+
 
 
 }

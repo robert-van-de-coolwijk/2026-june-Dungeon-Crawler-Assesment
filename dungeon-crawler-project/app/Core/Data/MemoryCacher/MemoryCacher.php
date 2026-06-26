@@ -2,6 +2,7 @@
 
 namespace App\Core\Data\MemoryCacher;
 
+use App\Config\Config;
 use App\Config\MemoryCacherConfig;
 use App\Core\Data\FileCacher;
 use stdClass;
@@ -16,6 +17,8 @@ abstract class MemoryCacher
     const string MemoryProfilerPreFix = 'MemoryProfiler_';
 
     const string MemoryCacherMode_file = 'file';
+
+    // future formalization of using file cacher to a (file) path that is on RAM
     #const MemoryCacherMode_file_on_ramdisk = 'ramfile';
     const string MemoryCacherMode_apc = 'apc';
     const string MemoryCacherMode_apcu = 'apcu';
@@ -65,16 +68,17 @@ abstract class MemoryCacher
     {
         return array(
             self::MemoryCacherMode_file,
-            //self::MemoryCacherMode_shmop,
-            self::MemoryCacherMode_apc
+            self::MemoryCacherMode_apc,
+            self::MemoryCacherMode_apcu,
+            self::MemoryCacherMode_redis,
         );
     }
 
-    static public function getMemoryCacherObject() : MemoryCacherMode_file|MemoryCacherMode_apc|MemoryCacherMode_apcu|MemoryCacherMode_redis
+    static public function getMemoryCacherObject() : MemoryCacher|MemoryCacherMode_file|MemoryCacherMode_apc|MemoryCacherMode_apcu|MemoryCacherMode_redis
     {
         $memoryCacheObject = null;
 
-        $cacheMode = MemoryCacherConfig::DefaultMemoryCacherMode;
+        $cacheMode = Config::RestoreGameFromCacheMode ?? MemoryCacherConfig::DefaultMemoryCacherMode;
 
         switch ($cacheMode)
         {

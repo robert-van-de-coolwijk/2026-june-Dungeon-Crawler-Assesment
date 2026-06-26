@@ -79,5 +79,14 @@ class EntityRelationManager extends SingletonPattern
         return $returnArr;
     }
 
+    public function clear() : bool
+    {
+        foreach($this->collections as $collectionName => $collectionEntityIds){
+            $this->collections[$collectionName] = [];
+        }
+
+        return true;
+    }
+
 
 }

@@ -75,11 +75,14 @@ abstract class AbstractGameState extends SingletonPattern
         // read only
         $this->registerCommand('state');
         $this->registerCommand('commands');
+
+        $this->registerCommand('stats');
         $this->registerCommand('time');
 
         // save / restore
         $this->registerCommand('save');
         $this->registerCommand('restore');
+        $this->registerCommand('oblivion');
     }
 
     protected function registerCommand(string $commandName, array $aliases = []) : void

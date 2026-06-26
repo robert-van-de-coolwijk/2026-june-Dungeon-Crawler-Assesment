@@ -3,24 +3,23 @@
 
 namespace App\Core\Data\MemoryCacher;
 
+/**
+ * Memory cacher through (older) APC implmentation
+ */
 class MemoryCacherMode_apc extends MemoryCacher implements MemoryCacherInterface
 {
 
-    private $apcObject;
 
     protected function __construct()
     {
         parent::__construct();
-        //$this->apcObject = new pc_Shm('../data/');
     }
 
 
     public function put($fContextString, $fData, $fDebug = true) : void
     {
         $key = self::getContextPath($fContextString);
-//        $pcshmObj = $this->initShmop($key);
 
-        //$serializedData = json_encode($fData);
         $serializedData = self::serialize($fData);
 
         apc_store($key, $serializedData);
@@ -28,14 +27,14 @@ class MemoryCacherMode_apc extends MemoryCacher implements MemoryCacherInterface
         parent::put($fContextString, $fData, $fDebug);
     }
 
-    public function exists($fContextString): array|bool
+    public function exists($fContextString) : bool
     {
         $key = self::getContextPath($fContextString);
 
         return apc_exists($key);
     }
 
-    public function get($fContextString)
+    public function get($fContextString) : mixed
     {
         $key = self::getContextPath($fContextString);
 

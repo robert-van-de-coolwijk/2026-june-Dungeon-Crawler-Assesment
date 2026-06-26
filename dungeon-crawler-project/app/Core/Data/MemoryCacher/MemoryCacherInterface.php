@@ -6,10 +6,10 @@ namespace App\Core\Data\MemoryCacher;
 interface MemoryCacherInterface
 {
 
-    public function put($fContextString, $fData, $fDebug = true);
+    public function put($fContextString, $fData, $fDebug = true) : void;
 
-    public function exists($fContextString);
+    public function exists($fContextString) : bool;
 
-    public function get($fContextString);
+    public function get($fContextString) : mixed;
 
 }

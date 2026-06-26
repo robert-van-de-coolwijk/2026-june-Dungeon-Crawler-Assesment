@@ -177,8 +177,8 @@ class Game extends SingletonPattern
             // load world if exists
     }
 
-    public function save() {
-        $success = $this->world->save();
+    public function save(bool $toCache = false) : bool {
+        $success = $this->world->save($toCache);
 
         if($success && !is_null($this->playerOne)){
             $success = $success && $this->playerOne->save();
@@ -187,9 +187,9 @@ class Game extends SingletonPattern
         return $success;
     }
 
-    public function restore()
+    public function restore(bool $fromCache = false)
     {
-        $success = $this->world->restore();
+        $success = $this->world->restore($fromCache);
 
         if($success){
             $player = $this->world->get(Player::class, CollectionPosition::First);
@@ -203,20 +203,29 @@ class Game extends SingletonPattern
         return $success;
     }
 
+    public function destroy() : bool
+    {
+        $success = $this->world->destroy();
+
+        $this->playerOne = null;
+
+        return $success;
+    }
+
     public function getCurrentGameState() : AbstractGameState
     {
-        if(is_null($this->playerOne)){
-            return Blank::getInstance();
-        }
-
-        if(!$this->playerOne->isInsideContainer()){
-            return Genesis::getInstance();
-        }
-
         $world = $this->world;
         $player = $this->playerOne;
 
-        $roomId = $this->playerOne->insideContainer;
+        if(is_null($player)){
+            return Blank::getInstance();
+        }
+
+        if(!$player->isInsideContainer()){
+            return Genesis::getInstance();
+        }
+
+        $roomId = $player->insideContainer;
         $room = $world->getEntityById($roomId);
 
         //@todo RC determine, implement and check for some kind of win condition

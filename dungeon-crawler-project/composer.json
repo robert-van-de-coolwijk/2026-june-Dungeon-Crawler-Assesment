@@ -21,7 +21,10 @@
 
   "require": {
     "php": ">=8.4.0",
-    "ext-pdo": "*"
+
+    "ext-pdo": "*",
+    "ext-redis": "*",
+    "predis/predis": ">=3"
   }
 
 }

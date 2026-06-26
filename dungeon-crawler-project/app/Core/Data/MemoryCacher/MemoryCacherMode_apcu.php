@@ -26,20 +26,19 @@ class MemoryCacherMode_apcu extends MemoryCacher implements MemoryCacherInterfac
     {
         $key = self::getContextPath($fContextString);
 
-        //$serializedData = json_encode($fData);
         $serializedData = self::serialize($fData);
 
         apcu_store($key, $serializedData);
     }
 
-    public function exists($fContextString)
+    public function exists($fContextString) : bool
     {
         $key = self::getContextPath($fContextString);
 
         return apcu_exists($key);
     }
 
-    public function get($fContextString)
+    public function get($fContextString) : mixed
     {
         $key = self::getContextPath($fContextString);
 

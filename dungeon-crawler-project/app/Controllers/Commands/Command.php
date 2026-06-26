@@ -128,6 +128,13 @@ class Command extends SingletonPattern
         return $msgArr;
     }
 
+    public function stats(array $params) : array
+    {
+        $game = Game::getInstance();
+
+        return $game->getStateOfTheGame();
+    }
+
     public function time() : array
     {
 
@@ -159,7 +166,19 @@ class Command extends SingletonPattern
     {
         $game = Game::getInstance();
 
-        $restoreSuccess = $game->getWorld()->save();
+        $param0 = isset($params[0]) ? (string)$params[0] : "";
+
+        switch($param0)
+        {
+            case 'cache':
+                $restoreSuccess = $game->save(true);
+
+                return [
+                    Tools::MsgWrap($restoreSuccess ? "world saved to cache" : "Failed saving world to cache", ContType::P),
+                ];
+        }
+
+        $restoreSuccess = $game->save();
 
         return [
             Tools::MsgWrap($restoreSuccess ? "world saved to disk" : "Failed saving world to disk", ContType::P),
@@ -169,6 +188,19 @@ class Command extends SingletonPattern
     public function restore(array $params) : array
     {
         $game = Game::getInstance();
+        $world = $game->getWorld();
+
+        $param0 = isset($params[0]) ? (string)$params[0] : "";
+
+        switch($param0)
+        {
+            case 'cache':
+                $restoreSuccess = $game->restore(true);
+
+                return [
+                    Tools::MsgWrap($restoreSuccess ? "world restored from cache" : "Failed restoring world from cache", ContType::P),
+                ];
+        }
 
         $restoreSuccess = $game->restore();
 
@@ -185,6 +217,29 @@ class Command extends SingletonPattern
 
         return [
             Tools::MsgWrap($restoreSuccess ? "world deleted" : "Failed deleting world", ContType::P),
+        ];
+    }
+
+    public function oblivion(array $params) : array
+    {
+        $game = Game::getInstance();
+
+        $param0 = isset($params[0]) ? (string)$params[0] : "";
+
+        switch($param0)
+        {
+            case 'yes':
+                $restoreSuccess = $game->destroy();
+
+                return [
+                    Tools::MsgWrap($restoreSuccess ? "world and player destroyed" : "Failed deleting world", ContType::P, Sentiment::Vital),
+                ];
+        }
+
+        return [
+            Tools::MsgWrap("Oblivion will destroy both the world and player.", ContType::P, Sentiment::Important),
+            Tools::MsgWrap("Type \"oblivion yes\" if you want to go through.", ContType::P, Sentiment::Normal),
+            Tools::MsgWrap("( This action can NOT be undone ! )", ContType::P, Sentiment::Vital),
         ];
     }
 
