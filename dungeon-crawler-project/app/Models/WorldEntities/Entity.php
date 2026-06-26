@@ -3,7 +3,7 @@
 namespace App\Models\WorldEntities;
 
 use App\Config\Config;
-use App\Config\FileCacherConfig;
+use App\Config\MemoryCacherConfig;
 use App\Core\Data\FileCacher;
 use App\Core\Tools;
 use App\Models\Game;
@@ -144,7 +144,7 @@ class Entity {
     /// SAVE AND RESTORE LOGIC \\\
 
     private static function getFileCacherContext(string $id) : string {
-        return FileCacherConfig::EntityContext . '/' . $id;
+        return MemoryCacherConfig::EntityContext . '/' . $id;
     }
 
     public function save() : bool

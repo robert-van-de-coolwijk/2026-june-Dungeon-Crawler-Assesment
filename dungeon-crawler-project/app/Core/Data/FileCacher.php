@@ -3,16 +3,17 @@
 namespace App\Core\Data;
 
 use App\Config\Config;
-use App\Config\FileCacherConfig;
+use App\Config\MemoryCacherConfig;
 use App\Core\Tools;
 use App\Models\SingletonPattern;
 
-class FileCacher  extends SingletonPattern{
+class FileCacher extends SingletonPattern {
 
-    protected function __construct() {
+    public function __construct()
+    {
         parent::__construct();
 
-        $path = FileCacherConfig::DataPath;
+        $path = MemoryCacherConfig::DataPath;
 
 //        echo '<br />Init FileCacher';
 //        Tools::debugFilePath($path);
@@ -60,7 +61,7 @@ class FileCacher  extends SingletonPattern{
     private function getContextPath(string $fContextString) : string
     {
         $crc = crc32($fContextString);
-        $path = FileCacherConfig::DataPath . '/' . $fContextString . '_' . $crc . '.json';
+        $path = MemoryCacherConfig::DataPath . '/' . $fContextString . '_' . $crc . '.json';
 
         return $path;
     }

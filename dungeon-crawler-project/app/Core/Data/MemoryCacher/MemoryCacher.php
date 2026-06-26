@@ -2,7 +2,7 @@
 
 namespace App\Core\Data\MemoryCacher;
 
-use App\Config\FileCacherConfig;
+use App\Config\MemoryCacherConfig;
 use App\Core\Data\FileCacher;
 use stdClass;
 
@@ -17,13 +17,14 @@ abstract class MemoryCacher
 
     const string MemoryCacherMode_file = 'file';
     #const MemoryCacherMode_file_on_ramdisk = 'ramfile';
-    const string MemoryCacherMode_shmop = 'shmop';
     const string MemoryCacherMode_apc = 'apc';
+    const string MemoryCacherMode_apcu = 'apcu';
+    const string MemoryCacherMode_redis = 'redis';
 
     const false DebugMode = false;
     const true TraceMemoryUsage = true;
 
-    public function __construct()
+    protected function __construct()
     {
 //        if(self::TraceMemoryUsage){
 //            $this->MemoryTraceArray = array();
@@ -31,7 +32,7 @@ abstract class MemoryCacher
 
     }
 
-    public function put($fContextString, $fData, $fDebug = true): void
+    public function put($fContextString, $fData, $fDebug = true) : void
     {
 
         if (self::TraceMemoryUsage) {
@@ -51,7 +52,7 @@ abstract class MemoryCacher
 
     }
 
-    public function getMemoryProfilerReport(): string
+    public function getMemoryProfilerReport() : string
     {
         $fileCacher = new FileCacher();
         $memoryProfilerKey = self::getMemoryProfilerKey();
@@ -60,7 +61,7 @@ abstract class MemoryCacher
         return '<pre>' . var_export($data, true) . '</pre>';
     }
 
-    static public function getSupportMemoryCacherModes(): array
+    static public function getSupportMemoryCacherModes() : array
     {
         return array(
             self::MemoryCacherMode_file,
@@ -69,20 +70,26 @@ abstract class MemoryCacher
         );
     }
 
-    static public function getMemoryCacherObject(): MemoryCacherMode_apc|MemoryCacherMode_file
+    static public function getMemoryCacherObject() : MemoryCacherMode_file|MemoryCacherMode_apc|MemoryCacherMode_apcu|MemoryCacherMode_redis
     {
         $memoryCacheObject = null;
 
-        $cacheMode = FileCacherConfig::DefaultMemoryCacherMode;
+        $cacheMode = MemoryCacherConfig::DefaultMemoryCacherMode;
 
-        switch ($cacheMode) {
-
-//            case self::MemoryCacherMode_shmop:
-//                $memoryCacheObject = new MemoryCacherMode_shmop();
-//                break;
+        switch ($cacheMode)
+        {
             case self::MemoryCacherMode_apc:
                 $memoryCacheObject = new MemoryCacherMode_apc();
                 break;
+
+            case self::MemoryCacherMode_apcu:
+                $memoryCacheObject = new MemoryCacherMode_apcu();
+                break;
+
+            case self::MemoryCacherMode_redis:
+                $memoryCacheObject = new MemoryCacherMode_redis();
+                break;
+
             case self::MemoryCacherMode_file:
             default:
                 $memoryCacheObject = new MemoryCacherMode_file();

@@ -3,7 +3,7 @@
 
 namespace App\Core\Data\MemoryCacher;
 
-class MemoryCacherMode_apc extends MemoryCacher implements MemoryCacherInterface
+class MemoryCacherMode_redis extends MemoryCacher implements MemoryCacherInterface
 {
 
     private $apcObject;
@@ -11,21 +11,17 @@ class MemoryCacherMode_apc extends MemoryCacher implements MemoryCacherInterface
     protected function __construct()
     {
         parent::__construct();
-        //$this->apcObject = new pc_Shm('../data/');
     }
 
 
     public function put($fContextString, $fData, $fDebug = true) : void
     {
         $key = self::getContextPath($fContextString);
-//        $pcshmObj = $this->initShmop($key);
 
         //$serializedData = json_encode($fData);
         $serializedData = self::serialize($fData);
 
         apc_store($key, $serializedData);
-
-        parent::put($fContextString, $fData, $fDebug);
     }
 
     public function exists($fContextString): array|bool
@@ -38,6 +34,7 @@ class MemoryCacherMode_apc extends MemoryCacher implements MemoryCacherInterface
     public function get($fContextString)
     {
         $key = self::getContextPath($fContextString);
+//        $pcshmObj = $this->initShmop($key);
 
         $serializedData = apc_fetch($key);
 

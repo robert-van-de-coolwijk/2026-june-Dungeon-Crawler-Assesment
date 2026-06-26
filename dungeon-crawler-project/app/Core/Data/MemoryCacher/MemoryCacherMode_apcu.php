@@ -3,43 +3,47 @@
 
 namespace App\Core\Data\MemoryCacher;
 
-class MemoryCacherMode_apc extends MemoryCacher implements MemoryCacherInterface
+/**
+ * Implements the PHP APCu interface
+ * https://www.php.net/manual/en/book.apcu.php
+ */
+class MemoryCacherMode_apcu extends MemoryCacher implements MemoryCacherInterface
 {
-
-    private $apcObject;
 
     protected function __construct()
     {
         parent::__construct();
-        //$this->apcObject = new pc_Shm('../data/');
+
+        if(function_exists('apcu_enabled') && apcu_enabled()){
+            // everything is good (do good flow)
+        } else {
+            throw new \Exception("APCu is not available");
+        }
     }
 
 
     public function put($fContextString, $fData, $fDebug = true) : void
     {
         $key = self::getContextPath($fContextString);
-//        $pcshmObj = $this->initShmop($key);
 
         //$serializedData = json_encode($fData);
         $serializedData = self::serialize($fData);
 
-        apc_store($key, $serializedData);
-
-        parent::put($fContextString, $fData, $fDebug);
+        apcu_store($key, $serializedData);
     }
 
-    public function exists($fContextString): array|bool
+    public function exists($fContextString)
     {
         $key = self::getContextPath($fContextString);
 
-        return apc_exists($key);
+        return apcu_exists($key);
     }
 
     public function get($fContextString)
     {
         $key = self::getContextPath($fContextString);
 
-        $serializedData = apc_fetch($key);
+        $serializedData = apcu_fetch($key);
 
 
         $serializedDataTemp = trim($serializedData);

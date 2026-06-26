@@ -5,8 +5,11 @@ namespace App\Config;
 class Config
 {
 
-    const UpdateDifferenceDataPath = '../../data/update_difference/';
+    const string UpdateDifferenceDataPath = '../../data/update_difference/';
 
-    const ConfigKey = 'config';
+    const string ConfigKey = 'config';
+
+    const bool RestoreGameFromCacheOnInit = true;
+    const bool RestoreGameFromCacheMode = true;
 
 }

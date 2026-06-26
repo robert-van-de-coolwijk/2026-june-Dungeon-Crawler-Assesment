@@ -19,7 +19,7 @@ class MemoryCacherMode_file extends MemoryCacher implements MemoryCacherInterfac
         $this->fileCacherObject = new FileCacher();
     }
 
-    public function put($fContextString, $fData, $fDebug = true)
+    public function put($fContextString, $fData, $fDebug = true): void
     {
         $contextPath = $this->prefixContextPath($fContextString);
         $this->fileCacherObject->put($contextPath, $fData, $fDebug);

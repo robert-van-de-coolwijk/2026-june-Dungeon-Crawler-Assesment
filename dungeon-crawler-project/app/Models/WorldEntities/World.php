@@ -2,7 +2,7 @@
 
 namespace App\Models\WorldEntities;
 
-use App\Config\FileCacherConfig;
+use App\Config\MemoryCacherConfig;
 use App\Core\Data\FileCacher;
 use App\Core\MsgWrap\ContType;
 use App\Core\MsgWrap\MsgWrap;
@@ -121,7 +121,7 @@ class World
     /// SAVE AND RESTORE LOGIC \\\
 
     private static function getFileCacherContext(string $worldId) : string {
-        return FileCacherConfig::WorldContext . $worldId;
+        return MemoryCacherConfig::WorldContext . $worldId;
     }
 
     public function save() : bool
@@ -171,8 +171,8 @@ class World
 
             // defense against infinite loops and
             // out of memory problems due though a world being restored bigger than what the current server can support
-            if($i >  FileCacherConfig::EntityRestoreLimit){
-                throw new Exception(sprintf("Entity restore limit of %s reached", FileCacherConfig::EntityRestoreLimit));
+            if($i >  MemoryCacherConfig::EntityRestoreLimit){
+                throw new Exception(sprintf("Entity restore limit of %s reached", MemoryCacherConfig::EntityRestoreLimit));
                 break;
             }
         }
