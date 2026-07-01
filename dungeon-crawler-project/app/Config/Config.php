@@ -14,6 +14,7 @@ class Config
     const string RestoreGameFromCacheMode = "file";
 
     /// INTERNAL SETTINGS \\\
+
     const string UpdateDifferenceDataPath = '../../data/update_difference/';
 
     const string ConfigKey = 'config';

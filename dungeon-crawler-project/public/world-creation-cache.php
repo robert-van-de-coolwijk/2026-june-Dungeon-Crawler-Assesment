@@ -8,7 +8,7 @@ use App\Core\Tools;
 use App\Models\WorldEntities\Room;
 use App\Views\HtmlRenderer\HtmlRender;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../app/ClassLoader/Autoload.php';
 
 // game state monitor
 

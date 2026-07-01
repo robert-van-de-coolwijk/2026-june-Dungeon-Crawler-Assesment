@@ -1,11 +1,10 @@
 <?php
 
-
 use App\Controllers\Main;
 use App\Core\MsgWrap\MsgWrap;
 use App\Core\Tools;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../app/ClassLoader/Autoload.php';
 
 // game state monitor
 
