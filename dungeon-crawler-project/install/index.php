@@ -4,6 +4,8 @@
  * Setup Script - Executes install.sh from the same folder
  */
 
+echo "<h3>Install script</h3><pre>";
+
 echo "🚀 Starting setup via PHP...\n\n";
 
 // Get the directory where this PHP script is located
