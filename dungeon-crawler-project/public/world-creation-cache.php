@@ -1,14 +1,10 @@
 <?php
 
-
 use App\Controllers\Main;
-use App\Core\MsgWrap\ContType;
-use App\Core\MsgWrap\MsgWrap;
-use App\Core\Tools;
-use App\Models\WorldEntities\Room;
 use App\Views\HtmlRenderer\HtmlRender;
 
-require_once __DIR__ . '/../app/ClassLoader/Autoload.php';
+require_once __DIR__ . '/../app/Autoload.php';
+
 
 // game state monitor
 
