@@ -1,39 +1,48 @@
+#!/usr/bin/env php
 <?php
 
-// Source - https://stackoverflow.com/a/17244866
-// Posted by Danack, modified by community. See post 'Timeline' for change history
-// Retrieved 2026-07-01, License - CC BY-SA 3.0
+/**
+ * Setup Script - Executes install.sh from the same folder
+ */
 
-define('EXTRACT_DIRECTORY', "../var/extractedComposer");
+echo "🚀 Starting setup via PHP...\n\n";
 
+// Get the directory where this PHP script is located
+$scriptDir = dirname(__FILE__);
 
-if (file_exists(EXTRACT_DIRECTORY.'/vendor/autoload.php') == true) {
-    echo "<p>Extracted autoload already exists. Skipping phar extraction as presumably it's already extracted.</p>\n";
+// Path to install.sh
+$installScript = $scriptDir . DIRECTORY_SEPARATOR . 'install.sh';
+
+// Check if install.sh exists
+if (!file_exists($installScript)) {
+    echo "❌ Error: install.sh not found in the same folder!\n";
+    echo "Expected location: " . $installScript . "\n";
+    exit(1);
 }
-else{
-    $composerPhar = new Phar("Composer.phar");
-    //php.ini setting phar.readonly must be set to 0
-    $composerPhar->extractTo(EXTRACT_DIRECTORY);
+
+// Check if it's executable
+if (!is_executable($installScript)) {
+    echo "⚠️  Making install.sh executable...\n";
+    chmod($installScript, 0755);
 }
 
-//This requires the phar to have been extracted successfully.
-require_once (EXTRACT_DIRECTORY.'/vendor/autoload.php');
+// Execute the shell script
+echo "📂 Executing install.sh...\n\n";
 
-//Use the Composer classes
-use Composer\Console\Application;
-use Composer\Command\UpdateCommand;
-use Symfony\Component\Console\Input\ArrayInput;
+$returnCode = 0;
+$output = [];
+$lastLine = exec("bash " . escapeshellarg($installScript) . " 2>&1", $output, $returnCode);
 
-// change out of the webroot so that the vendors file is not created in
-// a place that will be visible to the intahwebz
-chdir('../');
+// Print output from the shell script
+foreach ($output as $line) {
+    echo $line . "\n";
+}
 
-//Create the commands
-$input = new ArrayInput(array('command' => 'update'));
+echo "\n";
 
-//Create the application and run it with the commands
-$application = new Application();
-$application->run($input);
-
-
-?>
+if ($returnCode === 0) {
+    echo "✅ Setup completed successfully!\n";
+} else {
+    echo "❌ Setup failed with exit code: $returnCode\n";
+    exit($returnCode);
+}
